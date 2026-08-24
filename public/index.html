@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitalPulse - Intelligent Health & Fitness Monitoring System</title>
+  <meta name="description" content="Personalized fitness and health monitoring platform with real-time BMI calculator, trend analytics, proactive notifications, and secure account management.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-container">
+        <a href="#dashboard" class="brand-logo" id="brand-link">
+          <div class="logo-icon">❤️</div>
+          <span>VitalPulse</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#dashboard" class="nav-link active" id="nav-dashboard-link">📊 Dashboard</a></li>
+          <li><a href="#calculator" class="nav-link" id="nav-calculator-link">⚖️ BMI Calculator</a></li>
+          <li><a href="#history" class="nav-link" id="nav-history-link">📈 Health Trends</a></li>
+          <li><a href="#admin" class="nav-link" id="nav-admin-link" style="display:none;">🛡️ Admin Portal</a></li>
+          <li><a href="#privacy" class="nav-link" id="nav-privacy-link">📜 Privacy Policy</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <!-- Dark / Light Theme Switcher -->
+          <button class="btn-icon" id="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Dark/Light Mode">
+            ☀️
+          </button>
+
+          <!-- Notification Drawer Trigger -->
+          <button class="btn-icon" id="nav-notifications-btn" title="Notifications" aria-label="Open Notifications">
+            🔔
+            <span class="badge-counter" id="notif-badge" style="display:none;">0</span>
+          </button>
+
+          <!-- Guest Actions (Login / Register) -->
+          <div id="nav-guest-actions" style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" onclick="App.openModal('login-modal')" id="btn-open-login">Log In</button>
+            <button class="btn btn-primary btn-sm" onclick="App.openModal('register-modal')" id="btn-open-register">Sign Up</button>
+          </div>
+
+          <!-- Authenticated User Menu Pill -->
+          <div id="nav-auth-actions" style="display: none; align-items: center; gap: 0.75rem;">
+            <a href="#profile" class="user-menu-pill" id="user-profile-link" title="My Profile & Settings">
+              <div class="user-avatar" id="user-menu-avatar">U</div>
+              <span class="user-name-text" id="user-menu-name">User</span>
+              <span class="user-role-badge" id="user-menu-role" style="display:none;">user</span>
+            </a>
+            <button class="btn btn-secondary btn-sm" id="logout-btn" title="Logout">Log Out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+
+      <!-- View 1: User Health Dashboard -->
+      <section id="view-dashboard" class="view-section">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Fitness & Health Dashboard 🏃‍♂️</h1>
+            <p>Welcome to your personal wellness center. Track your body metrics, BMI health zones, and daily reminders.</p>
+          </div>
+          <div>
+            <a href="#calculator" class="btn btn-primary">⚡ Quick BMI Check</a>
+          </div>
+        </div>
+
+        <!-- Quick Demo Switcher Alert Banner -->
+        <div class="demo-bar">
+          <div>
+            💡 <strong>Quick Demo Access:</strong> Test user accounts are pre-seeded for immediate evaluation.
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('login-identifier').value='user@healthapp.com'; document.getElementById('login-password').value='User@12345'; App.openModal('login-modal');">Demo User Login</button>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('login-identifier').value='admin@healthapp.com'; document.getElementById('login-password').value='Admin@12345'; App.openModal('login-modal');">Demo Admin Login</button>
+          </div>
+        </div>
+
+        <!-- KPI Metric Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon blue">⚖️</div>
+            <div class="kpi-info">
+              <h3 id="stat-latest-bmi">23.5</h3>
+              <p>Current BMI (<span id="stat-current-category" style="color:var(--accent-emerald); font-weight:700;">Normal</span>)</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon green">🎯</div>
+            <div class="kpi-info">
+              <h3 id="stat-weight-change">-4.5 kg</h3>
+              <p>Weight Progression Trend</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon purple">🔥</div>
+            <div class="kpi-info">
+              <h3>7 Days</h3>
+              <p>Active Fitness Streak</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon amber">📋</div>
+            <div class="kpi-info">
+              <h3 id="stat-total-logs">5</h3>
+              <p>Total Health Checkups</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature Spotlight Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚖️ Body Mass Index (BMI) Engine</div>
+              <a href="#calculator" class="btn btn-sm btn-outline">Open Tool →</a>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+              Calculate your exact BMI category (Underweight, Normal, Overweight, Obese) using metric or imperial measurements, complete with personalized nutrition guidance.
+            </p>
+            <div style="background: var(--bg-elevated); padding: 0.85rem; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-muted);">
+              ✨ Supports real-time dynamic slider recalculations and history logging.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔔 Proactive Notification Center</div>
+              <button class="btn btn-sm btn-outline" onclick="NotificationModule.openDrawer()">View Alerts →</button>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+              Stay informed with scheduled daily workout reminders, hydration checks, weekly progress milestones, and system updates.
+            </p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn btn-sm btn-secondary" data-trigger-reminder="hydration">💧 Hydration</button>
+              <button class="btn btn-sm btn-secondary" data-trigger-reminder="workout">🏋️ Workout</button>
+              <button class="btn btn-sm btn-secondary" data-trigger-reminder="posture">🧘 Posture</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 Progression Trends & Logs</div>
+              <a href="#history" class="btn btn-sm btn-outline">View Curve →</a>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+              Interactive canvas charts plotting your historical BMI logs against the optimal healthy weight band to celebrate your wellness journey.
+            </p>
+            <div style="background: var(--bg-elevated); padding: 0.85rem; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-muted);">
+              📊 Instant visual tracking with data export capabilities.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 2: Interactive BMI Calculator -->
+      <section id="view-calculator" class="view-section" style="display: none;">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Fitness Check & BMI Calculator ⚖️</h1>
+            <p>Calculate your Body Mass Index, discover your optimal weight span, and get tailored health advice.</p>
+          </div>
+          <div class="unit-toggle-group">
+            <button class="unit-btn active" id="unit-metric-btn">Metric (cm / kg)</button>
+            <button class="unit-btn" id="unit-imperial-btn">Imperial (in / lbs)</button>
+          </div>
+        </div>
+
+        <div class="bmi-grid">
+          <!-- Left Column: Inputs & Sliders -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📏 Body Measurements</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time calculation</span>
+            </div>
+
+            <!-- Height Input & Slider -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label class="form-label" for="bmi-height-input">
+                  Height (<span id="bmi-height-unit-label">cm</span>)
+                </label>
+                <div class="slider-val-box">
+                  <input type="number" id="bmi-height-input" value="175" min="40" max="300" step="1" style="background:transparent; border:none; color:inherit; font-weight:bold; width:65px; text-align:right; outline:none;">
+                </div>
+              </div>
+              <input type="range" class="custom-range" id="bmi-height-range" min="100" max="230" value="175">
+            </div>
+
+            <!-- Weight Input & Slider -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label class="form-label" for="bmi-weight-input">
+                  Weight (<span id="bmi-weight-unit-label">kg</span>)
+                </label>
+                <div class="slider-val-box">
+                  <input type="number" id="bmi-weight-input" value="70" min="10" max="500" step="0.5" style="background:transparent; border:none; color:inherit; font-weight:bold; width:65px; text-align:right; outline:none;">
+                </div>
+              </div>
+              <input type="range" class="custom-range" id="bmi-weight-range" min="30" max="180" value="70">
+            </div>
+
+            <!-- Optional Note -->
+            <div class="form-group" style="margin-top: 1.5rem;">
+              <label class="form-label" for="bmi-notes-input">Session Note / Activity Log (Optional)</label>
+              <input type="text" class="form-input" id="bmi-notes-input" placeholder="e.g. After 5k morning run, post-breakfast">
+            </div>
+
+            <!-- Save Button -->
+            <button class="btn btn-primary btn-block" id="bmi-save-btn">
+              💾 Save to My Health History
+            </button>
+          </div>
+
+          <!-- Right Column: Gauge & Health Insights -->
+          <div class="card bmi-result-card">
+            <div class="card-header" style="width: 100%;">
+              <div class="card-title">🎯 Health Category Analysis</div>
+              <span id="bmi-category-badge" class="badge badge-normal">Normal</span>
+            </div>
+
+            <!-- Radial Arc Gauge -->
+            <div class="gauge-container">
+              <canvas id="bmi-gauge-canvas" class="gauge-canvas"></canvas>
+              <div class="gauge-center-text">
+                <span class="gauge-bmi-number" id="gauge-bmi-value">22.9</span>
+                <span class="gauge-bmi-sub">BMI Score</span>
+              </div>
+            </div>
+
+            <!-- BMI Color Spectrum -->
+            <div class="bmi-spectrum-bar">
+              <div class="spectrum-seg underweight" title="Underweight (< 18.5)"></div>
+              <div class="spectrum-seg normal" title="Normal (18.5 - 24.9)"></div>
+              <div class="spectrum-seg overweight" title="Overweight (25 - 29.9)"></div>
+              <div class="spectrum-seg obese" title="Obese (>= 30)"></div>
+            </div>
+            <div class="spectrum-labels">
+              <span>Underweight &lt;18.5</span>
+              <span>Normal 18.5-24.9</span>
+              <span>Overweight 25-29.9</span>
+              <span>Obese 30+</span>
+            </div>
+
+            <!-- Personalized Health Target Box -->
+            <div class="insights-box">
+              <h4>🎯 Target Action: <span id="bmi-target-action" style="color:var(--primary); font-weight:700;">Maintain</span></h4>
+              <p id="bmi-summary-text" style="margin-bottom: 0.5rem; font-size: 0.88rem;">
+                Your BMI is within the healthy recommended zone.
+              </p>
+              <div style="font-size:0.82rem; margin-bottom:0.75rem; color:var(--text-secondary);">
+                Optimal weight range for your height: <strong id="bmi-ideal-span" style="color:var(--text-primary);">56.7 - 76.3 kg</strong>
+              </div>
+              <div style="font-weight:600; font-size:0.85rem; margin-bottom:0.35rem; color:var(--text-primary);">Key Recommendations:</div>
+              <ul id="bmi-recommendations-list">
+                <li>Maintain balanced nutrition rich in leafy vegetables, lean proteins, and whole grains.</li>
+                <li>Aim for at least 150 minutes of moderate aerobic activity weekly.</li>
+                <li>Stay consistently hydrated with 2.5 to 3 liters of water daily.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 3: Health Trends & History -->
+      <section id="view-history" class="view-section" style="display: none;">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Fitness Progression & History 📈</h1>
+            <p>Review your historical BMI checkups, weight trends, and milestones over time.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="refresh-history-btn">🔄 Refresh Data</button>
+        </div>
+
+        <!-- Interactive Canvas Trend Chart -->
+        <div class="card" style="margin-bottom: 1.75rem;">
+          <div class="card-header">
+            <div class="card-title">📊 BMI Progression Over Time</div>
+            <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.8rem; color:var(--text-muted);">
+              <span style="display:inline-block; width:12px; height:12px; background:rgba(16, 185, 129, 0.4); border-radius:2px;"></span>
+              Normal Weight Zone (18.5 - 24.9)
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="bmi-trend-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- History Records Table -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📋 Health Checkup Log History</div>
+          </div>
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Height</th>
+                  <th>Weight</th>
+                  <th>BMI</th>
+                  <th>Health Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="bmi-history-tbody">
+                <tr>
+                  <td colspan="6" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                    Loading fitness logs...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 4: Admin Portal -->
+      <section id="view-admin" class="view-section" style="display: none;">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Platform Administration & Oversight 🛡️</h1>
+            <p>Comprehensive administrative controls for user management, system broadcasts, and health analytics.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" id="admin-export-users-btn">📥 Export Registry (JSON)</button>
+            <button class="btn btn-secondary btn-sm" id="admin-refresh-btn">🔄 Refresh</button>
+          </div>
+        </div>
+
+        <!-- Admin KPI Metrics -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon blue">👥</div>
+            <div class="kpi-info">
+              <h3 id="admin-stat-total-users">0</h3>
+              <p>Total Registered Users</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon green">⚡</div>
+            <div class="kpi-info">
+              <h3 id="admin-stat-active-users">0</h3>
+              <p>Active Users</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon purple">📊</div>
+            <div class="kpi-info">
+              <h3 id="admin-stat-total-records">0</h3>
+              <p>Total BMI Records</p>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon amber">🚫</div>
+            <div class="kpi-info">
+              <h3 id="admin-stat-suspended-users">0</h3>
+              <p>Suspended Accounts</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+          <!-- BMI Distribution Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🥧 BMI Category Distribution</div>
+            </div>
+            <div style="display:flex; justify-content:center; align-items:center;">
+              <canvas id="admin-bmi-pie-canvas" style="max-width:100%; height:200px;"></canvas>
+            </div>
+          </div>
+
+          <!-- Broadcast Announcement Composer -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📢 Broadcast System Announcement</div>
+            </div>
+            <form id="admin-broadcast-form">
+              <div class="form-group">
+                <label class="form-label" for="broadcast-title-input">Announcement Title</label>
+                <input type="text" class="form-input" id="broadcast-title-input" placeholder="e.g. Platform Maintenance / Wellness Challenge" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="broadcast-msg-input">Notification Message</label>
+                <textarea class="form-input" id="broadcast-msg-input" rows="2" placeholder="Message content delivered to users' notification centers..." required></textarea>
+              </div>
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <select class="form-select" id="broadcast-target-select" style="max-width: 200px;">
+                  <option value="all">Broadcast to All Users</option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="flex:1;">Dispatch Broadcast 🚀</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- User Management Table -->
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <div class="card-header">
+            <div class="card-title">👥 User Accounts Management</div>
+          </div>
+
+          <!-- Filters Bar -->
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div class="input-wrapper" style="flex: 1; min-width: 220px;">
+              <span class="input-icon">🔍</span>
+              <input type="text" class="form-input" id="admin-user-search" placeholder="Search by name, email, username, phone...">
+            </div>
+            <select class="form-select" id="admin-status-filter" style="width: auto;">
+              <option value="all">All Statuses</option>
+              <option value="active">Active Only</option>
+              <option value="suspended">Suspended Only</option>
+              <option value="banned">Banned Only</option>
+            </select>
+            <select class="form-select" id="admin-role-filter" style="width: auto;">
+              <option value="all">All Roles</option>
+              <option value="user">Regular Users</option>
+              <option value="admin">Administrators</option>
+            </select>
+          </div>
+
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Contact</th>
+                  <th>Role</th>
+                  <th>Latest BMI</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody">
+                <tr>
+                  <td colspan="7" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                    Loading user registry...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System Audit Log Stream -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📜 System Security & Activity Audit Trail</div>
+          </div>
+          <div id="admin-audit-logs-container" style="max-height: 250px; overflow-y: auto;">
+            <!-- Rendered audit items -->
+          </div>
+        </div>
+      </section>
+
+      <!-- View 5: User Profile & Account Settings -->
+      <section id="view-profile" class="view-section" style="display: none;">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>My Health Profile & Account ⚙️</h1>
+            <p>Manage your personal vitals, update credentials, or manage privacy options.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
+          <!-- Profile Details Form -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👤 Personal Vitals & Metrics</div>
+            </div>
+            <form id="profile-edit-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="prof-name">Full Name <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="prof-name" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="prof-username">Username</label>
+                  <input type="text" class="form-input" id="prof-username" readonly style="opacity: 0.7; cursor: not-allowed;">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="prof-email">Email ID</label>
+                  <input type="email" class="form-input" id="prof-email" readonly style="opacity: 0.7; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="prof-phone">Phone Number <span class="required">*</span></label>
+                  <input type="tel" class="form-input" id="prof-phone" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="prof-age">Age (Years) <span class="required">*</span></label>
+                  <input type="number" class="form-input" id="prof-age" min="1" max="125" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="prof-gender">Gender <span class="required">*</span></label>
+                  <select class="form-select" id="prof-gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-Binary">Non-Binary</option>
+                    <option value="Other">Other</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="prof-height">Height (cm) <span class="required">*</span></label>
+                  <input type="number" class="form-input" id="prof-height" min="50" max="300" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="prof-weight">Weight (kg) <span class="required">*</span></label>
+                  <input type="number" class="form-input" id="prof-weight" step="0.1" min="10" max="500" required>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Save Profile Changes</button>
+            </form>
+          </div>
+
+          <!-- Security & Data Portability -->
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Change Password -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">🔒 Change Password</div>
+              </div>
+              <form id="change-password-form">
+                <div class="form-group">
+                  <label class="form-label" for="pass-current">Current Password</label>
+                  <input type="password" class="form-input" id="pass-current" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="pass-new">New Password (min 6 chars)</label>
+                  <input type="password" class="form-input" id="pass-new" minlength="6" required>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block">Update Password</button>
+              </form>
+            </div>
+
+            <!-- GDPR Data Portability & Rights -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">📜 Privacy & Data Portability</div>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem;">
+                Under GDPR Article 20, you have the right to receive your personal and health tracking data in a structured JSON format.
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn btn-outline" id="btn-export-my-data">📥 Download My Health Archive (JSON)</button>
+                <button class="btn btn-danger" id="btn-delete-account">⚠️ Permanently Delete My Account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 6: Privacy Policy -->
+      <section id="view-privacy" class="view-section" style="display: none;">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Privacy Policy & Data Protection 📜</h1>
+            <p>Transparency on how your personal data, contact information, and health metrics are collected, encrypted, and processed.</p>
+          </div>
+        </div>
+
+        <div class="card" style="max-width: 900px; margin: 0 auto;">
+          <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              <strong>Effective Date:</strong> August 24, 2026 | <strong>Version:</strong> 2026.1 | <strong>DPO Contact:</strong> privacy@healthapp.com
+            </p>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-header">1. Information We Collect 🔍</div>
+            <div class="privacy-content">
+              We collect information you provide directly during registration and when utilizing our health tracking tools:
+              <ul>
+                <li><strong>Personal Identifiers:</strong> Full Name, Email ID, Phone Number, Username, and Age.</li>
+                <li><strong>Health & Physical Metrics:</strong> Height (cm/ft), Weight (kg/lbs), Gender, and calculated Body Mass Index (BMI).</li>
+                <li><strong>Activity & Fitness Records:</strong> Historical BMI calculation timestamps, notes, and progress logs.</li>
+                <li><strong>Technical & Log Data:</strong> IP address, device operating system, session timestamps, and authentication audit logs.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-header">2. How We Use Your Health Metrics 🎯</div>
+            <div class="privacy-content">
+              Your health and personal metrics are strictly processed to provide personalized fitness tracking, health categorization, and system alerts:
+              <ul>
+                <li>Calculating Body Mass Index (BMI) and providing personalized health and nutrition guidance.</li>
+                <li>Delivering proactive fitness reminders, hydration alerts, and platform announcements.</li>
+                <li>Maintaining secure authentication, account recovery (3-way verification), and fraud prevention.</li>
+                <li>Generating anonymized, aggregated platform health trends for research and performance monitoring.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-header">3. Data Storage & Cryptographic Security 🛡️</div>
+            <div class="privacy-content">
+              We adhere to the highest standard of data encryption in transit and at rest:
+              <ul>
+                <li><strong>Cryptographic Password Hashing:</strong> Passwords are protected using salted PBKDF2 / SHA-512 cryptographic hashing.</li>
+                <li><strong>Session Integrity:</strong> Protected HMAC-SHA256 authenticated security tokens with automated expiration.</li>
+                <li><strong>Zero Data Monetization:</strong> We never sell, rent, or trade your personal or health data to third-party advertisers.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="privacy-section">
+            <div class="privacy-header">4. Your Data Rights (GDPR & CCPA Compliant) ⚖️</div>
+            <div class="privacy-content">
+              You maintain absolute ownership and control over your personal and health records:
+              <ul>
+                <li><strong>Right to Access & Portability:</strong> Download a complete copy of all your health records and personal data anytime via your Account Settings.</li>
+                <li><strong>Right to Rectification:</strong> Instantly update your profile metrics (height, weight, phone number) from Account Settings.</li>
+                <li><strong>Right to Erasure (To Be Forgotten):</strong> Permanently delete your account and all associated health history at any time.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Slide-in Notification Center Drawer -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <aside class="drawer" id="notifications-drawer">
+      <div class="drawer-header">
+        <div style="font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+          🔔 Notifications Center
+        </div>
+        <button class="btn-icon" id="drawer-close-btn" title="Close Drawer">✕</button>
+      </div>
+
+      <!-- Filter Tabs & Actions -->
+      <div style="padding: 0.75rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 0.35rem;">
+          <button class="btn btn-sm btn-secondary notif-filter-tab active" data-filter="all">All</button>
+          <button class="btn btn-sm btn-secondary notif-filter-tab" data-filter="reminders">Reminders</button>
+          <button class="btn btn-sm btn-secondary notif-filter-tab" data-filter="alerts">Alerts</button>
+        </div>
+        <button class="btn btn-sm btn-outline" id="notif-mark-all-btn" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+          Mark All Read
+        </div>
+      </div>
+
+      <!-- Quick Test Reminders Bar -->
+      <div style="padding: 0.65rem 1.5rem; background: var(--bg-elevated); font-size: 0.78rem; display:flex; align-items:center; justify-content:space-between;">
+        <span>⚡ Quick Trigger:</span>
+        <div style="display:flex; gap:0.35rem;">
+          <button class="btn btn-sm btn-secondary" data-trigger-reminder="hydration" title="Hydration Reminder">💧 Water</button>
+          <button class="btn btn-sm btn-secondary" data-trigger-reminder="workout" title="Workout Alert">🏋️ Workout</button>
+          <button class="btn btn-sm btn-secondary" data-trigger-reminder="bmi_check" title="Weekly BMI Check">⚖️ BMI</button>
+        </div>
+      </div>
+
+      <!-- Notifications List -->
+      <div class="drawer-body" id="notif-list-container">
+        <!-- Rendered notif items -->
+      </div>
+    </aside>
+
+    <!-- Modal 1: Registration Modal (All 7 required PRD fields) -->
+    <div class="modal-backdrop" id="register-modal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="card-title">✨ Create Health Account</div>
+          <button class="btn-icon" data-close-modal title="Close">✕</button>
+        </div>
+        <form id="register-form">
+          <div class="modal-body">
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+              Fill in your details below to activate your personalized health tracker.
+            </p>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Full Name <span class="required">*</span></label>
+              <input type="text" class="form-input" id="reg-name" placeholder="e.g. Jessica Taylor" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="reg-email">Email ID <span class="required">*</span></label>
+                <input type="email" class="form-input" id="reg-email" placeholder="jessica@example.com" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" class="form-input" id="reg-phone" placeholder="+1-555-019-2834" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="reg-age">Age (Years) <span class="required">*</span></label>
+                <input type="number" class="form-input" id="reg-age" min="1" max="125" placeholder="28" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-gender">Gender <span class="required">*</span></label>
+                <select class="form-select" id="reg-gender" required>
+                  <option value="" disabled selected>Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Non-Binary">Non-Binary</option>
+                  <option value="Other">Other</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="reg-height">Height (cm) <span class="required">*</span></label>
+                <input type="number" class="form-input" id="reg-height" min="50" max="300" placeholder="172" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-weight">Weight (kg) <span class="required">*</span></label>
+                <input type="number" class="form-input" id="reg-weight" step="0.1" min="10" max="500" placeholder="68.5" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="reg-username">Username (Optional)</label>
+                <input type="text" class="form-input" id="reg-username" placeholder="jessica_fit">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-password">Password (min 6 chars) <span class="required">*</span></label>
+                <input type="password" class="form-input" id="reg-password" minlength="6" placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem;">
+              By registering, you agree to our <a href="#privacy" onclick="App.closeModal('register-modal')">Privacy Policy</a> regarding health data handling.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+            <button type="submit" class="btn btn-primary">Complete Registration</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 2: Login Modal (Multi-identifier: Email / Username / Phone) -->
+    <div class="modal-backdrop" id="login-modal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="card-title">🔐 Log In to VitalPulse</div>
+          <button class="btn-icon" data-close-modal title="Close">✕</button>
+        </div>
+        <form id="login-form">
+          <div class="modal-body">
+            <!-- Quick Fill Demo Buttons -->
+            <div style="background:var(--bg-elevated); padding:0.75rem; border-radius:var(--radius-md); margin-bottom:1.25rem;">
+              <div style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:0.4rem; font-weight:600;">⚡ Quick Demo Login:</div>
+              <div style="display:flex; gap:0.5rem;">
+                <button type="button" class="btn btn-sm btn-secondary" id="fill-demo-user-btn" style="flex:1;">👤 Demo User</button>
+                <button type="button" class="btn btn-sm btn-secondary" id="fill-demo-admin-btn" style="flex:1;">🛡️ Administrator</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="login-identifier">Username, Email ID, or Phone Number</label>
+              <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input type="text" class="form-input" id="login-identifier" placeholder="e.g. user@healthapp.com or alex_fit" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                <label class="form-label" for="login-password" style="margin-bottom:0;">Password</label>
+                <a href="javascript:void(0)" onclick="App.closeModal('login-modal'); App.openModal('forgot-modal');" style="font-size:0.8rem;">
+                  Forgot Password?
+                </a>
+              </div>
+              <div class="input-wrapper">
+                <span class="input-icon">🔑</span>
+                <input type="password" class="form-input" id="login-password" placeholder="••••••••" required>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 3: Forgot Password (3-way recovery: Username, Email, Phone) -->
+    <div class="modal-backdrop" id="forgot-modal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="card-title">🔑 Account Recovery</div>
+          <button class="btn-icon" data-close-modal title="Close">✕</button>
+        </div>
+
+        <!-- Step 1: Identifier Input -->
+        <div id="forgot-step-1">
+          <form id="forgot-request-form">
+            <div class="modal-body">
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+                Enter your registered <strong>Username</strong>, <strong>Email ID</strong>, or <strong>Phone Number</strong> to receive a recovery verification code.
+              </p>
+              <div class="form-group">
+                <label class="form-label" for="forgot-identifier">Account Identifier</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">🔍</span>
+                  <input type="text" class="form-input" id="forgot-identifier" placeholder="user@healthapp.com or alex_fit or +1-555-014-8899" required>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+              <button type="submit" class="btn btn-primary">Request Verification Code</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step 2: OTP Verification & Reset -->
+        <div id="forgot-step-2" style="display:none;">
+          <form id="forgot-reset-form">
+            <input type="hidden" id="forgot-reset-identifier">
+            <div class="modal-body">
+              <div id="forgot-otp-preview" style="display:none; background:rgba(14,165,233,0.15); border:1px solid var(--primary); padding:0.75rem; border-radius:var(--radius-md); font-size:0.85rem; margin-bottom:1rem; color:var(--primary);"></div>
+              
+              <div class="form-group">
+                <label class="form-label" for="forgot-otp">6-Digit Verification Code (OTP)</label>
+                <input type="text" class="form-input" id="forgot-otp" placeholder="123456" maxlength="6" required style="font-size:1.2rem; letter-spacing:0.2em; text-align:center;">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="forgot-new-password">New Password (min 6 chars)</label>
+                <input type="password" class="form-input" id="forgot-new-password" minlength="6" placeholder="••••••••" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="document.getElementById('forgot-step-1').style.display='block'; document.getElementById('forgot-step-2').style.display='none';">Back</button>
+              <button type="submit" class="btn btn-primary">Reset & Set New Password</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div>
+          <strong>VitalPulse Health Monitoring System</strong> &copy; 2026. All rights reserved.
+        </div>
+        <div class="footer-links">
+          <a href="#dashboard">Dashboard</a>
+          <a href="#calculator">BMI Calculator</a>
+          <a href="#history">Health Trends</a>
+          <a href="#privacy">Privacy Policy</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/api.js"></script>
+  <script src="js/bmi.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
