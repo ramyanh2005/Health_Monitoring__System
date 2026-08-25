@@ -269,6 +269,35 @@ const API = {
     return this.request('/privacy/request-deletion', {
       method: 'POST'
     });
+  },
+
+  // Calorie & Activity Tracking Endpoints
+  async getCalorieSummary() {
+    return this.request('/calories/summary');
+  },
+
+  async getCalorieLogs() {
+    return this.request('/calories/logs');
+  },
+
+  async logCalories(calorieData) {
+    return this.request('/calories/log', {
+      method: 'POST',
+      body: JSON.stringify(calorieData)
+    });
+  },
+
+  async deleteCalorieLog(id) {
+    return this.request(`/calories/log/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  async calculateCalories(calcData) {
+    return this.request('/calories/calculate', {
+      method: 'POST',
+      body: JSON.stringify(calcData)
+    });
   }
 };
 

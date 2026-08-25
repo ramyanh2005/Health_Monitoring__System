@@ -12,6 +12,7 @@ const App = {
 
     // Initialize sub-modules
     if (window.BMIModule) BMIModule.init();
+    if (window.CalorieModule) CalorieModule.init();
     if (window.NotificationModule) NotificationModule.init();
     if (window.AdminModule) AdminModule.init();
   },
@@ -82,6 +83,9 @@ const App = {
         if (window.BMIModule) {
           BMIModule.prefillFromUser(this.currentUser);
           BMIModule.loadHistory();
+        }
+        if (window.CalorieModule) {
+          CalorieModule.loadSummaryAndLogs();
         }
         if (window.NotificationModule) {
           NotificationModule.fetchNotifications();
@@ -350,6 +354,9 @@ const App = {
             BMIModule.prefillFromUser(freshUser);
             BMIModule.loadHistory();
           }
+          if (window.CalorieModule) {
+            CalorieModule.loadSummaryAndLogs();
+          }
         }
       } catch (e) {
         console.warn('Session refresh issue:', e);
@@ -454,8 +461,12 @@ const App = {
     });
 
     // Trigger view-specific loads
-    if (targetView === 'history' && window.BMIModule) {
-      BMIModule.loadHistory();
+    if (targetView === 'dashboard') {
+      if (window.CalorieModule) CalorieModule.loadSummaryAndLogs();
+      if (window.BMIModule) BMIModule.loadHistory();
+    } else if (targetView === 'history') {
+      if (window.BMIModule) BMIModule.loadHistory();
+      if (window.CalorieModule) CalorieModule.loadSummaryAndLogs();
     } else if (targetView === 'admin' && window.AdminModule) {
       AdminModule.loadAll();
     } else if (targetView === 'calculator' && window.BMIModule) {

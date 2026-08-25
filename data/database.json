@@ -67,6 +67,40 @@
       "status": "active",
       "created_at": "2026-08-24T10:32:37.009Z",
       "updated_at": "2026-08-24T10:32:37.203Z"
+    },
+    {
+      "id": "usr_1aef82df1dfde7ec",
+      "full_name": "Emily Watson",
+      "email": "emily.watson_1787634953108@testfit.com",
+      "phone": "+15556292873",
+      "age": 27,
+      "height": 168,
+      "weight": 63.8,
+      "gender": "Female",
+      "username": "emily_3108",
+      "password_hash": "a5c548fa159bb8cca77c75ae4e5267b71b986ece70c9f1cec92d76ccb68f8b7649d5590302a9700f36eb86a76f95ed46fff946fca195d5985175f1a1bdfad63f",
+      "password_salt": "c1010edb00b901f719cb9b209bf03c10",
+      "role": "user",
+      "status": "active",
+      "created_at": "2026-08-25T05:15:53.140Z",
+      "updated_at": "2026-08-25T05:15:53.329Z"
+    },
+    {
+      "id": "usr_736dead99f9829ac",
+      "full_name": "Emily Watson",
+      "email": "emily.watson_1787635024879@testfit.com",
+      "phone": "+15554510752",
+      "age": 27,
+      "height": 168,
+      "weight": 63.8,
+      "gender": "Female",
+      "username": "emily_4879",
+      "password_hash": "6b4d3b6ff18c81b4511bf8dd04fa1a0ba66cba826a5946f84fa5f3013a5df5bb687b3edb4a05207bb0c9ad6ef50df3b7be8eebdcd5d0a6fa939191ade6a4f12a",
+      "password_salt": "591c520ec9c265541df13e591a068f9c",
+      "role": "user",
+      "status": "active",
+      "created_at": "2026-08-25T05:17:04.926Z",
+      "updated_at": "2026-08-25T05:17:05.098Z"
     }
   ],
   "bmi_logs": [
@@ -159,9 +193,239 @@
       "category": "Normal",
       "notes": "Morning test calculation after workout",
       "created_at": "2026-08-24T10:32:37.200Z"
+    },
+    {
+      "id": "bmi_37beafd2a5969715",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "height": 168,
+      "weight": 64.5,
+      "bmi_value": 22.9,
+      "category": "Normal",
+      "notes": "Initial registration baseline",
+      "created_at": "2026-08-25T05:15:53.144Z"
+    },
+    {
+      "id": "bmi_7e65bbd4acffd332",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "height": 168,
+      "weight": 63.8,
+      "bmi_value": 22.6,
+      "category": "Normal",
+      "notes": "Morning test calculation after workout",
+      "created_at": "2026-08-25T05:15:53.326Z"
+    },
+    {
+      "id": "bmi_e5098061c0cdbd08",
+      "user_id": "usr_736dead99f9829ac",
+      "height": 168,
+      "weight": 64.5,
+      "bmi_value": 22.9,
+      "category": "Normal",
+      "notes": "Initial registration baseline",
+      "created_at": "2026-08-25T05:17:04.929Z"
+    },
+    {
+      "id": "bmi_3eef7a4e86f1cc39",
+      "user_id": "usr_736dead99f9829ac",
+      "height": 168,
+      "weight": 63.8,
+      "bmi_value": 22.6,
+      "category": "Normal",
+      "notes": "Morning test calculation after workout",
+      "created_at": "2026-08-25T05:17:05.095Z"
     }
   ],
   "notifications": [
+    {
+      "id": "notif_0687afd881bcbe7f",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.170Z",
+      "user_id": "usr_736dead99f9829ac",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_75db44d180d59312",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.168Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_6a8f4f1dc01830c1",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.166Z",
+      "user_id": "usr_e4b045813fe7565f",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_bfc46cdf73bd9502",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.164Z",
+      "user_id": "usr_bc6864d0c13f388f",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_c1c2e04eab2c9c05",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.161Z",
+      "user_id": "usr_demo_002",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_368a5230ce5fa00b",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.126Z",
+      "user_id": "usr_736dead99f9829ac",
+      "type": "reminder",
+      "title": "Hydration Reminder 💧",
+      "message": "Drink a refreshing glass of water now. Proper hydration boosts energy and recovery!",
+      "link": "#dashboard"
+    },
+    {
+      "id": "notif_cdfded6823804628",
+      "is_read": true,
+      "created_at": "2026-08-25T05:17:05.100Z",
+      "user_id": "usr_736dead99f9829ac",
+      "type": "health_alert",
+      "title": "BMI Check Recorded ✨",
+      "message": "Your BMI is 22.6 (Normal). You are right in the optimal healthy weight zone!",
+      "link": "#history"
+    },
+    {
+      "id": "notif_abc5dbd80b0d96db",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.047Z",
+      "user_id": "usr_736dead99f9829ac",
+      "type": "health_alert",
+      "title": "Password Successfully Changed 🔒",
+      "message": "Your account password has been successfully updated. If this was not you, please contact support immediately.",
+      "link": "#profile"
+    },
+    {
+      "id": "notif_e37626935bb0297f",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:05.014Z",
+      "user_id": "usr_736dead99f9829ac",
+      "type": "health_alert",
+      "title": "Security Alert: Password Recovery",
+      "message": "A password recovery OTP (283097) was generated for your account. Valid for 15 minutes.",
+      "link": "#profile"
+    },
+    {
+      "id": "notif_fb13fde6efaa940b",
+      "is_read": false,
+      "created_at": "2026-08-25T05:17:04.931Z",
+      "user_id": "usr_736dead99f9829ac",
+      "type": "health_alert",
+      "title": "Welcome to Health Monitoring System! 🎉",
+      "message": "Hi Emily Watson, your account is ready. Your initial BMI is 22.9 (Normal). Track your progress anytime!",
+      "link": "#calculator"
+    },
+    {
+      "id": "notif_d278cc491bb59073",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.407Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_00a1f83af3571b2c",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.405Z",
+      "user_id": "usr_e4b045813fe7565f",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_d8a36ea77cfe917c",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.403Z",
+      "user_id": "usr_bc6864d0c13f388f",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_62fa5f6f1239e98d",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.400Z",
+      "user_id": "usr_demo_002",
+      "type": "admin_broadcast",
+      "title": "📢 Fitness Sprint 2026",
+      "message": "Weekly community hydration challenge begins today!",
+      "link": "#privacy"
+    },
+    {
+      "id": "notif_0eca7a7309df8059",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.359Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "reminder",
+      "title": "Hydration Reminder 💧",
+      "message": "Drink a refreshing glass of water now. Proper hydration boosts energy and recovery!",
+      "link": "#dashboard"
+    },
+    {
+      "id": "notif_fe1269fc57ab21fc",
+      "is_read": true,
+      "created_at": "2026-08-25T05:15:53.331Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "health_alert",
+      "title": "BMI Check Recorded ✨",
+      "message": "Your BMI is 22.6 (Normal). You are right in the optimal healthy weight zone!",
+      "link": "#history"
+    },
+    {
+      "id": "notif_32610b6641bc74fe",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.267Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "health_alert",
+      "title": "Password Successfully Changed 🔒",
+      "message": "Your account password has been successfully updated. If this was not you, please contact support immediately.",
+      "link": "#profile"
+    },
+    {
+      "id": "notif_372a172237706f4c",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.231Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "health_alert",
+      "title": "Security Alert: Password Recovery",
+      "message": "A password recovery OTP (102783) was generated for your account. Valid for 15 minutes.",
+      "link": "#profile"
+    },
+    {
+      "id": "notif_cd5752b4fa8a2efb",
+      "is_read": false,
+      "created_at": "2026-08-25T05:15:53.147Z",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "type": "health_alert",
+      "title": "Welcome to Health Monitoring System! 🎉",
+      "message": "Hi Emily Watson, your account is ready. Your initial BMI is 22.9 (Normal). Track your progress anytime!",
+      "link": "#calculator"
+    },
     {
       "id": "notif_0bf66bee31c9e64a",
       "is_read": false,
@@ -373,10 +637,198 @@
       "expires_at": "2026-08-24T10:47:37.103Z",
       "used": true,
       "created_at": "2026-08-24T10:32:37.103Z"
+    },
+    {
+      "id": "rst_8ba53784fe66",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "identifier": "emily.watson_1787634953108@testfit.com",
+      "otp_code": "102783",
+      "reset_token": "dbc2051c326d1655664e72f84abddd28c118c42be460cf81",
+      "expires_at": "2026-08-25T05:30:53.226Z",
+      "used": true,
+      "created_at": "2026-08-25T05:15:53.227Z"
+    },
+    {
+      "id": "rst_07d4045402a0",
+      "user_id": "usr_736dead99f9829ac",
+      "identifier": "emily.watson_1787635024879@testfit.com",
+      "otp_code": "283097",
+      "reset_token": "5fcb1aabe90d2376e941084d772ca782c3d81af40b011d43",
+      "expires_at": "2026-08-25T05:32:05.006Z",
+      "used": true,
+      "created_at": "2026-08-25T05:17:05.006Z"
     }
   ],
   "notification_preferences": {},
   "audit_logs": [
+    {
+      "id": "aud_fb5c79a05ce7",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "CALORIES_LOGGED",
+      "details": "Burned 360 kcal via Outdoor Cycling 🚴 (45 mins)",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.199Z"
+    },
+    {
+      "id": "aud_ee3129f987d2",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "DATA_EXPORT_REQUESTED",
+      "details": "User exported personal health archives",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.189Z"
+    },
+    {
+      "id": "aud_77b6c49dbfe9",
+      "user_id": "usr_admin_001",
+      "action": "BROADCAST_SENT",
+      "details": "Broadcast \"Fitness Sprint 2026\" sent to 5 users",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.173Z"
+    },
+    {
+      "id": "aud_6e5f0251bc14",
+      "user_id": "usr_admin_001",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: admin@healthapp.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.148Z"
+    },
+    {
+      "id": "aud_872b49dc2f2b",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "BMI_LOGGED",
+      "details": "BMI logged: 22.6 (Normal)",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.102Z"
+    },
+    {
+      "id": "aud_c4f6fac2fa1f",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: emily.watson_1787635024879@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.073Z"
+    },
+    {
+      "id": "aud_57586117a88f",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "PASSWORD_RESET_SUCCESS",
+      "details": "Password successfully reset for emily.watson_1787635024879@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.046Z"
+    },
+    {
+      "id": "aud_dfc989f21bd5",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "FORGOT_PASSWORD_REQUEST",
+      "details": "Password recovery requested for emily.watson_1787635024879@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:05.009Z"
+    },
+    {
+      "id": "aud_deb1c3febd27",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: +15554510752",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:04.996Z"
+    },
+    {
+      "id": "aud_ab2fe544976f",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: emily.watson_1787635024879@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:04.970Z"
+    },
+    {
+      "id": "aud_d95515f0b9f1",
+      "user_id": "usr_736dead99f9829ac",
+      "action": "USER_REGISTERED",
+      "details": "User registered with email emily.watson_1787635024879@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:17:04.934Z"
+    },
+    {
+      "id": "aud_1d4c4219c4f4",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "DATA_EXPORT_REQUESTED",
+      "details": "User exported personal health archives",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.426Z"
+    },
+    {
+      "id": "aud_e5ea00d2aad4",
+      "user_id": "usr_admin_001",
+      "action": "BROADCAST_SENT",
+      "details": "Broadcast \"Fitness Sprint 2026\" sent to 4 users",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.409Z"
+    },
+    {
+      "id": "aud_8bb4e968a7e1",
+      "user_id": "usr_admin_001",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: admin@healthapp.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.386Z"
+    },
+    {
+      "id": "aud_805b330a4833",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "BMI_LOGGED",
+      "details": "BMI logged: 22.6 (Normal)",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.333Z"
+    },
+    {
+      "id": "aud_2d36163ac7a3",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: emily.watson_1787634953108@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.300Z"
+    },
+    {
+      "id": "aud_f7dabf9e6336",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "PASSWORD_RESET_SUCCESS",
+      "details": "Password successfully reset for emily.watson_1787634953108@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.264Z"
+    },
+    {
+      "id": "aud_feceecf0973e",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "FORGOT_PASSWORD_REQUEST",
+      "details": "Password recovery requested for emily.watson_1787634953108@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.229Z"
+    },
+    {
+      "id": "aud_bec2b84c2a3c",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: +15556292873",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.215Z"
+    },
+    {
+      "id": "aud_ecdee6684164",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "USER_LOGIN",
+      "details": "User logged in via identifier: emily.watson_1787634953108@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.188Z"
+    },
+    {
+      "id": "aud_f9078f1ad41e",
+      "user_id": "usr_1aef82df1dfde7ec",
+      "action": "USER_REGISTERED",
+      "details": "User registered with email emily.watson_1787634953108@testfit.com",
+      "ip_address": "::ffff:127.0.0.1",
+      "timestamp": "2026-08-25T05:15:53.150Z"
+    },
     {
       "id": "aud_184e6d028c7e",
       "user_id": "usr_e4b045813fe7565f",
@@ -553,5 +1005,133 @@
     "registration_enabled": true,
     "policy_version": "2026.1",
     "last_updated": "2026-08-24T10:28:51.279Z"
-  }
+  },
+  "calorie_logs": [
+    {
+      "id": "cal_5aa07b785685",
+      "user_id": "usr_demo_002",
+      "activity": "Morning Jogging 🏃",
+      "duration_mins": 30,
+      "calories_burned": 280,
+      "notes": "Outdoor park run, steady 5:30/km pace",
+      "created_at": "2026-08-25T03:16:50.451Z"
+    },
+    {
+      "id": "cal_a0ba691c92b1",
+      "user_id": "usr_demo_002",
+      "activity": "Brisk Walking 🚶",
+      "duration_mins": 25,
+      "calories_burned": 110,
+      "notes": "Post-lunch walk in sunny weather",
+      "created_at": "2026-08-25T00:16:50.451Z"
+    },
+    {
+      "id": "cal_797bb1e0e320",
+      "user_id": "usr_demo_002",
+      "activity": "Evening Cycling 🚴",
+      "duration_mins": 45,
+      "calories_burned": 360,
+      "notes": "River trail cardio ride",
+      "created_at": "2026-08-23T11:16:50.451Z"
+    },
+    {
+      "id": "cal_4c9d1f67adb4",
+      "user_id": "usr_demo_002",
+      "activity": "Swimming Laps 🏊",
+      "duration_mins": 40,
+      "calories_burned": 380,
+      "notes": "Freestyle and breaststroke drills",
+      "created_at": "2026-08-22T19:16:50.451Z"
+    },
+    {
+      "id": "cal_460a2a11a8b0",
+      "user_id": "usr_demo_002",
+      "activity": "HIIT Circuit Workout ⚡",
+      "duration_mins": 35,
+      "calories_burned": 340,
+      "notes": "High intensity interval training session",
+      "created_at": "2026-08-21T15:16:50.451Z"
+    },
+    {
+      "id": "cal_b6f42729ee85",
+      "user_id": "usr_demo_002",
+      "activity": "Gym Strength Training 🏋️",
+      "duration_mins": 50,
+      "calories_burned": 310,
+      "notes": "Upper body push & pull compound lifts",
+      "created_at": "2026-08-20T21:16:50.451Z"
+    },
+    {
+      "id": "cal_b39d6a1deabc",
+      "user_id": "usr_demo_002",
+      "activity": "Trail Running 🌲",
+      "duration_mins": 45,
+      "calories_burned": 420,
+      "notes": "Hill climbs and nature trail cardio",
+      "created_at": "2026-08-19T17:16:50.451Z"
+    },
+    {
+      "id": "cal_6331968ecd2a",
+      "user_id": "usr_demo_002",
+      "activity": "Yoga & Core Stretching 🧘",
+      "duration_mins": 40,
+      "calories_burned": 140,
+      "notes": "Flexibility and core stability routines",
+      "created_at": "2026-08-18T13:16:50.451Z"
+    },
+    {
+      "id": "cal_9982b60753e0",
+      "user_id": "usr_demo_002",
+      "activity": "Outdoor Cycling 🚴",
+      "duration_mins": 50,
+      "calories_burned": 410,
+      "notes": "Long endurance distance ride",
+      "created_at": "2026-08-16T20:16:50.452Z"
+    },
+    {
+      "id": "cal_e44e1200c208",
+      "user_id": "usr_demo_002",
+      "activity": "Bodyweight Circuit 🤸",
+      "duration_mins": 35,
+      "calories_burned": 290,
+      "notes": "Calisthenics, burpees, and planks",
+      "created_at": "2026-08-13T18:16:50.452Z"
+    },
+    {
+      "id": "cal_b492dc4e9454",
+      "user_id": "usr_demo_002",
+      "activity": "Morning Run 🏃",
+      "duration_mins": 40,
+      "calories_burned": 390,
+      "notes": "5K morning cardio workout",
+      "created_at": "2026-08-09T14:16:50.452Z"
+    },
+    {
+      "id": "cal_68f0ace126e5",
+      "user_id": "usr_demo_002",
+      "activity": "Gym Leg Day 🏋️",
+      "duration_mins": 55,
+      "calories_burned": 380,
+      "notes": "Squats, lunges, and calf raises",
+      "created_at": "2026-08-05T19:16:50.452Z"
+    },
+    {
+      "id": "cal_bd7a2689c172",
+      "user_id": "usr_demo_002",
+      "activity": "Rowing Machine & Cardio 🚣",
+      "duration_mins": 45,
+      "calories_burned": 420,
+      "notes": "Interval rowing intervals",
+      "created_at": "2026-08-01T15:16:50.452Z"
+    },
+    {
+      "id": "cal_fb332678dadf29c2",
+      "activity": "Outdoor Cycling 🚴",
+      "duration_mins": 45,
+      "calories_burned": 360,
+      "notes": "Evening tempo ride",
+      "created_at": "2026-08-25T05:17:05.196Z",
+      "user_id": "usr_736dead99f9829ac"
+    }
+  ]
 }

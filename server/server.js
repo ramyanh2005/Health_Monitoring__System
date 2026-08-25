@@ -4,6 +4,7 @@ const path = require('path');
 
 const authRoutes = require('./routes/authRoutes');
 const bmiRoutes = require('./routes/bmiRoutes');
+const calorieRoutes = require('./routes/calorieRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const privacyRoutes = require('./routes/privacyRoutes');
@@ -41,6 +42,7 @@ app.get('/api/health', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bmi', bmiRoutes);
+app.use('/api/calories', calorieRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/privacy', privacyRoutes);

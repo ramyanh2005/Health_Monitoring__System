@@ -213,6 +213,62 @@ const BMIModule = {
       recsListEl.innerHTML = data.recommendations.map(r => `<li>${r}</li>`).join('');
     }
 
+    // Dynamic Calorie & Energy Target Calculations
+    const height = parseFloat(document.getElementById('bmi-height-input').value);
+    const weight = parseFloat(document.getElementById('bmi-weight-input').value);
+    const heightCm = this.currentUnit === 'imperial' ? height * 2.54 : height;
+    const weightKg = this.currentUnit === 'imperial' ? weight * 0.45359237 : weight;
+
+    const user = (window.App && window.App.currentUser) ? window.App.currentUser : null;
+    const age = user ? (Number(user.age) || 28) : 28;
+    const gender = user ? (user.gender || 'Male') : 'Male';
+
+    // Mifflin-St Jeor equation
+    let bmr = 10 * weightKg + 6.25 * heightCm - 5 * age;
+    if (gender.toLowerCase() === 'female') bmr -= 161;
+    else if (gender.toLowerCase() === 'male') bmr += 5;
+    else bmr -= 78;
+    bmr = Math.round(bmr);
+    const tdee = Math.round(bmr * 1.4);
+
+    const hM = heightCm / 100;
+    const maxIdealW = Number((24.9 * hM * hM).toFixed(1));
+    const minIdealW = Number((18.5 * hM * hM).toFixed(1));
+
+    let dailyTargetBurn = 450;
+    let totalGoalBurn = 0;
+    let burnGoalDesc = 'Daily active burn for healthy vitality & cardiovascular fitness.';
+
+    if (data.bmi >= 25.0) {
+      const deltaKg = Number((weightKg - maxIdealW).toFixed(1));
+      totalGoalBurn = Math.round(deltaKg * 7700);
+      dailyTargetBurn = 550;
+      burnGoalDesc = `Target: Burn 550 kcal/day through exercise (~${deltaKg} kg target reduction to reach normal BMI).`;
+    } else if (data.bmi < 18.5) {
+      const deltaKg = Number((minIdealW - weightKg).toFixed(1));
+      totalGoalBurn = 0;
+      dailyTargetBurn = 300;
+      burnGoalDesc = `Target: Light 300 kcal/day strength exercise focused on healthy muscle gain (+${deltaKg} kg).`;
+    } else {
+      totalGoalBurn = 0;
+      dailyTargetBurn = 450;
+      burnGoalDesc = 'Target: 450 kcal/day active burn to maintain ideal body composition and energy levels.';
+    }
+
+    const calcBmrEl = document.getElementById('calc-bmr-val');
+    const calcTdeeEl = document.getElementById('calc-tdee-val');
+    const calcDailyBurnEl = document.getElementById('calc-daily-burn-target');
+    const calcTotalGoalBurnEl = document.getElementById('calc-total-goal-burn');
+    const calcBurnDescEl = document.getElementById('calc-burn-goal-desc');
+
+    if (calcBmrEl) calcBmrEl.textContent = `${bmr} kcal`;
+    if (calcTdeeEl) calcTdeeEl.textContent = `${tdee} kcal`;
+    if (calcDailyBurnEl) calcDailyBurnEl.textContent = `${dailyTargetBurn} kcal/day`;
+    if (calcTotalGoalBurnEl) {
+      calcTotalGoalBurnEl.textContent = totalGoalBurn > 0 ? `${totalGoalBurn.toLocaleString()} kcal` : 'Goal Reached ✨';
+    }
+    if (calcBurnDescEl) calcBurnDescEl.textContent = burnGoalDesc;
+
     this.drawGauge(data.bmi);
   },
 

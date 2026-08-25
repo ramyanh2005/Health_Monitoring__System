@@ -26,6 +26,7 @@ function verifyPassword(password, hash, salt) {
 const initialData = {
   users: [],
   bmi_logs: [],
+  calorie_logs: [],
   notifications: [],
   password_resets: [],
   notification_preferences: {},
@@ -50,12 +51,16 @@ class Database {
     try {
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf8');
-        return JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        parsed.calorie_logs = parsed.calorie_logs || [];
+        return parsed;
       }
     } catch (err) {
       console.error('Error loading database file, initializing fresh store:', err);
     }
-    return JSON.parse(JSON.stringify(initialData));
+    const fresh = JSON.parse(JSON.stringify(initialData));
+    fresh.calorie_logs = fresh.calorie_logs || [];
+    return fresh;
   }
 
   save() {
@@ -198,6 +203,40 @@ class Database {
       modified = true;
     }
 
+    // Seed Sample Calorie / Activity Logs for Demo User
+    if (!this.data.calorie_logs || this.data.calorie_logs.length === 0) {
+      this.data.calorie_logs = [];
+      const sampleActivities = [
+        { daysAgo: 0, hoursAgo: 2, activity: 'Morning Jogging 🏃', duration: 30, calories: 280, notes: 'Outdoor park run, steady 5:30/km pace' },
+        { daysAgo: 0, hoursAgo: 5, activity: 'Brisk Walking 🚶', duration: 25, calories: 110, notes: 'Post-lunch walk in sunny weather' },
+        { daysAgo: 1, hoursAgo: 18, activity: 'Evening Cycling 🚴', duration: 45, calories: 360, notes: 'River trail cardio ride' },
+        { daysAgo: 2, hoursAgo: 10, activity: 'Swimming Laps 🏊', duration: 40, calories: 380, notes: 'Freestyle and breaststroke drills' },
+        { daysAgo: 3, hoursAgo: 14, activity: 'HIIT Circuit Workout ⚡', duration: 35, calories: 340, notes: 'High intensity interval training session' },
+        { daysAgo: 4, hoursAgo: 8, activity: 'Gym Strength Training 🏋️', duration: 50, calories: 310, notes: 'Upper body push & pull compound lifts' },
+        { daysAgo: 5, hoursAgo: 12, activity: 'Trail Running 🌲', duration: 45, calories: 420, notes: 'Hill climbs and nature trail cardio' },
+        { daysAgo: 6, hoursAgo: 16, activity: 'Yoga & Core Stretching 🧘', duration: 40, calories: 140, notes: 'Flexibility and core stability routines' },
+        { daysAgo: 8, hoursAgo: 9, activity: 'Outdoor Cycling 🚴', duration: 50, calories: 410, notes: 'Long endurance distance ride' },
+        { daysAgo: 11, hoursAgo: 11, activity: 'Bodyweight Circuit 🤸', duration: 35, calories: 290, notes: 'Calisthenics, burpees, and planks' },
+        { daysAgo: 15, hoursAgo: 15, activity: 'Morning Run 🏃', duration: 40, calories: 390, notes: '5K morning cardio workout' },
+        { daysAgo: 19, hoursAgo: 10, activity: 'Gym Leg Day 🏋️', duration: 55, calories: 380, notes: 'Squats, lunges, and calf raises' },
+        { daysAgo: 23, hoursAgo: 14, activity: 'Rowing Machine & Cardio 🚣', duration: 45, calories: 420, notes: 'Interval rowing intervals' }
+      ];
+
+      for (let act of sampleActivities) {
+        const timestamp = new Date(Date.now() - (act.daysAgo * 24 + act.hoursAgo) * 3600 * 1000).toISOString();
+        this.data.calorie_logs.push({
+          id: 'cal_' + crypto.randomBytes(6).toString('hex'),
+          user_id: demoUser.id,
+          activity: act.activity,
+          duration_mins: act.duration,
+          calories_burned: act.calories,
+          notes: act.notes,
+          created_at: timestamp
+        });
+      }
+      modified = true;
+    }
+
     // Seed initial audit log
     if (this.data.audit_logs.length === 0) {
       this.data.audit_logs.push({
@@ -320,6 +359,131 @@ class Database {
     this.data.bmi_logs.splice(index, 1);
     this.save();
     return true;
+  }
+
+  // Calorie & Activity Tracking Methods
+  addCalorieLog(logData) {
+    const log = {
+      id: 'cal_' + crypto.randomBytes(8).toString('hex'),
+      activity: logData.activity || 'General Workout',
+      duration_mins: Number(logData.duration_mins) || 30,
+      calories_burned: Number(logData.calories_burned) || 0,
+      notes: (logData.notes || '').trim(),
+      created_at: logData.created_at || new Date().toISOString(),
+      user_id: logData.user_id
+    };
+    if (!this.data.calorie_logs) this.data.calorie_logs = [];
+    this.data.calorie_logs.push(log);
+    this.save();
+    return log;
+  }
+
+  getCalorieLogsByUserId(userId) {
+    return (this.data.calorie_logs || [])
+      .filter(c => c.user_id === userId)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
+
+  deleteCalorieLog(id, userId) {
+    if (!this.data.calorie_logs) return false;
+    const index = this.data.calorie_logs.findIndex(c => c.id === id && (userId === null || c.user_id === userId));
+    if (index === -1) return false;
+    this.data.calorie_logs.splice(index, 1);
+    this.save();
+    return true;
+  }
+
+  getCalorieSummary(userId) {
+    const user = this.findUserById(userId);
+    const logs = this.getCalorieLogsByUserId(userId);
+
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 3600 * 1000);
+
+    let todayBurnt = 0;
+    let weekBurnt = 0;
+    let totalBurntTillNow = 0;
+
+    logs.forEach(l => {
+      const burn = Number(l.calories_burned) || 0;
+      totalBurntTillNow += burn;
+      const lDate = new Date(l.created_at);
+      if (l.created_at.startsWith(todayStr) || lDate.toDateString() === now.toDateString()) {
+        todayBurnt += burn;
+      }
+      if (lDate >= sevenDaysAgo) {
+        weekBurnt += burn;
+      }
+    });
+
+    // Compute BMR & Energy Expenditure
+    const age = user ? (Number(user.age) || 28) : 28;
+    const height = user ? (Number(user.height) || 175) : 175;
+    const weight = user ? (Number(user.weight) || 70) : 70;
+    const gender = user ? (user.gender || 'Male') : 'Male';
+
+    // Mifflin-St Jeor equation
+    let bmr = 10 * weight + 6.25 * height - 5 * age;
+    if (gender.toLowerCase() === 'female') {
+      bmr -= 161;
+    } else if (gender.toLowerCase() === 'male') {
+      bmr += 5;
+    } else {
+      bmr -= 78;
+    }
+    bmr = Math.round(bmr);
+
+    // TDEE with moderate activity factor (1.4)
+    const tdee = Math.round(bmr * 1.4);
+
+    // BMI and ideal weight bounds
+    const hM = height / 100;
+    const currentBmi = Number((weight / (hM * hM)).toFixed(1));
+    const minIdealWeight = Number((18.5 * hM * hM).toFixed(1));
+    const maxIdealWeight = Number((24.9 * hM * hM).toFixed(1));
+
+    let weightDelta = 0;
+    let dailyTargetBurn = 500; // default active calorie burn goal
+    let totalCaloriesToBurnForGoal = 0;
+    let goalType = 'maintain';
+
+    if (currentBmi >= 25.0) {
+      weightDelta = Number((weight - maxIdealWeight).toFixed(1));
+      totalCaloriesToBurnForGoal = Math.round(weightDelta * 7700); // 7700 kcal per kg fat
+      dailyTargetBurn = 550; // Active deficit goal
+      goalType = 'weight_loss';
+    } else if (currentBmi < 18.5) {
+      weightDelta = Number((minIdealWeight - weight).toFixed(1));
+      totalCaloriesToBurnForGoal = 0;
+      dailyTargetBurn = 300; // Active strength goal
+      goalType = 'weight_gain';
+    } else {
+      weightDelta = 0;
+      totalCaloriesToBurnForGoal = 0;
+      dailyTargetBurn = 450; // Active wellness maintenance
+      goalType = 'maintain';
+    }
+
+    const remainingTodayToBurn = Math.max(0, dailyTargetBurn - todayBurnt);
+    const progressPercent = Math.min(100, Math.round((todayBurnt / dailyTargetBurn) * 100));
+
+    return {
+      today_burnt: todayBurnt,
+      total_burnt_till_now: totalBurntTillNow,
+      week_burnt: weekBurnt,
+      daily_target_burn: dailyTargetBurn,
+      remaining_today_to_burn: remainingTodayToBurn,
+      progress_percent: progressPercent,
+      total_calories_to_burn_for_goal: totalCaloriesToBurnForGoal,
+      weight_delta_kg: weightDelta,
+      goal_type: goalType,
+      bmr,
+      tdee,
+      current_bmi: currentBmi,
+      ideal_weight_range: { min: minIdealWeight, max: maxIdealWeight, unit: 'kg' },
+      logs_count: logs.length
+    };
   }
 
   // Notification methods

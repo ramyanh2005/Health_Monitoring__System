@@ -84,37 +84,126 @@
           </div>
         </div>
 
-        <!-- KPI Metric Cards -->
+        <!-- KPI Metric Cards (Burnt Calories, Daily Goal, Total Burnt Till Now, BMI Status) -->
         <div class="kpi-grid">
+          <!-- Card 1: Today's Burnt Calories -->
+          <div class="kpi-card calorie-kpi">
+            <div class="kpi-icon orange">🔥</div>
+            <div class="kpi-info" style="width: 100%;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <h3 id="stat-today-burnt">0 kcal</h3>
+                <span style="font-size:0.8rem; font-weight:700; color:var(--accent-amber);" id="stat-burn-progress-percent">0%</span>
+              </div>
+              <p style="margin-bottom:0.35rem;">Today's Burnt Calories (Target: <strong id="stat-today-target">500 kcal</strong>)</p>
+              <div class="progress-track" style="margin-bottom:0.25rem;">
+                <div class="progress-fill orange" id="stat-burn-progress-bar" style="width: 0%;"></div>
+              </div>
+              <p id="stat-remaining-today-burn" style="font-size:0.75rem; color:var(--text-muted);">
+                Calculating daily burn...
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: Calories To Burn (Goal & Targets) -->
+          <div class="kpi-card">
+            <div class="kpi-icon amber">🎯</div>
+            <div class="kpi-info">
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.2rem;">
+                <h3 id="stat-daily-burn-goal">500 kcal/day</h3>
+              </div>
+              <p>Calories To Burn (Goal)</p>
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.35rem;">
+                <span id="stat-goal-type-badge" class="badge badge-normal" style="font-size:0.72rem;">Active Goal</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Total to Ideal: <strong id="stat-total-calories-to-burn" style="color:var(--text-primary);">0 kcal</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Total Burnt Calories Till Now -->
+          <div class="kpi-card">
+            <div class="kpi-icon purple">⚡</div>
+            <div class="kpi-info">
+              <h3 id="stat-total-burnt-till-now">0 kcal</h3>
+              <p>Total Burnt Calories Till Now</p>
+              <p id="stat-weekly-burnt" style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.25rem;">
+                0 kcal this week
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 4: Current BMI & Health Zone -->
           <div class="kpi-card">
             <div class="kpi-icon blue">⚖️</div>
             <div class="kpi-info">
               <h3 id="stat-latest-bmi">23.5</h3>
               <p>Current BMI (<span id="stat-current-category" style="color:var(--accent-emerald); font-weight:700;">Normal</span>)</p>
+              <p id="stat-weight-change" style="font-size:0.75rem; color:var(--accent-emerald); margin-top:0.25rem;">
+                Baseline active
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calorie Energy Hub & Workout Activity Logger Banner -->
+        <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 1.5rem; margin-top: 1.5rem;">
+          <!-- Left: Daily Energy Expenditure & Burn Ring -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔥 Daily Energy & Calorie Burn</div>
+              <button class="btn btn-sm btn-primary" data-open-log-activity>+ Log Workout</button>
+            </div>
+            
+            <div style="display:flex; align-items:center; justify-content:space-around; gap:1rem; flex-wrap:wrap; padding:0.5rem 0;">
+              <div style="position:relative; width:160px; height:160px; display:flex; align-items:center; justify-content:center;">
+                <canvas id="dash-burn-ring-canvas" width="160" height="160"></canvas>
+                <div style="position:absolute; text-align:center;">
+                  <span style="font-size:1.4rem;">🔥</span>
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Daily Burn</div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.6rem; min-width:160px;">
+                <div class="energy-metric-row">
+                  <span style="font-size:0.82rem; color:var(--text-secondary);">Resting BMR:</span>
+                  <strong id="dash-bmr-value" style="font-size:0.9rem; color:var(--text-primary);">1,720 kcal</strong>
+                </div>
+                <div class="energy-metric-row">
+                  <span style="font-size:0.82rem; color:var(--text-secondary);">Total TDEE:</span>
+                  <strong id="dash-tdee-value" style="font-size:0.9rem; color:var(--text-primary);">2,410 kcal</strong>
+                </div>
+                <div class="energy-metric-row">
+                  <span style="font-size:0.82rem; color:var(--text-secondary);">Target Active Burn:</span>
+                  <strong id="dash-target-burn-value" style="font-size:0.9rem; color:var(--accent-amber);">500 kcal</strong>
+                </div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">
+                  ✨ Scientific Mifflin-St Jeor metabolic calculation.
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Preset Activity Logging Chips -->
+            <div style="margin-top:1rem; padding-top:0.75rem; border-top:1px solid var(--border-color);">
+              <div style="font-size:0.78rem; font-weight:600; color:var(--text-secondary); margin-bottom:0.5rem;">⚡ Quick Log Activity:</div>
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                <button class="activity-chip" data-quick-activity="Running">🏃 Run</button>
+                <button class="activity-chip" data-quick-activity="Walking">🚶 Walk</button>
+                <button class="activity-chip" data-quick-activity="Cycling">🚴 Cycle</button>
+                <button class="activity-chip" data-quick-activity="Gym">🏋️ Gym</button>
+                <button class="activity-chip" data-quick-activity="Swimming">🏊 Swim</button>
+                <button class="activity-chip" data-quick-activity="HIIT">⚡ HIIT</button>
+                <button class="activity-chip" data-quick-activity="Yoga">🧘 Yoga</button>
+              </div>
             </div>
           </div>
 
-          <div class="kpi-card">
-            <div class="kpi-icon green">🎯</div>
-            <div class="kpi-info">
-              <h3 id="stat-weight-change">-4.5 kg</h3>
-              <p>Weight Progression Trend</p>
+          <!-- Right: Recent Activity & Burnt Calories Feed -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏃 Today's Activity & Burnt Calories Feed</div>
+              <a href="#history" class="btn btn-sm btn-outline">All Logs →</a>
             </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-icon purple">🔥</div>
-            <div class="kpi-info">
-              <h3>7 Days</h3>
-              <p>Active Fitness Streak</p>
-            </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-icon amber">📋</div>
-            <div class="kpi-info">
-              <h3 id="stat-total-logs">5</h3>
-              <p>Total Health Checkups</p>
+            <div id="dash-recent-activities-list" style="display:flex; flex-direction:column; gap:0.75rem; max-height:290px; overflow-y:auto; padding-right:0.25rem;">
+              <!-- Rendered activity items -->
             </div>
           </div>
         </div>
@@ -127,10 +216,10 @@
               <a href="#calculator" class="btn btn-sm btn-outline">Open Tool →</a>
             </div>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
-              Calculate your exact BMI category (Underweight, Normal, Overweight, Obese) using metric or imperial measurements, complete with personalized nutrition guidance.
+              Calculate your exact BMI category (Underweight, Normal, Overweight, Obese), ideal weight span, and customized daily calories to burn.
             </p>
             <div style="background: var(--bg-elevated); padding: 0.85rem; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-muted);">
-              ✨ Supports real-time dynamic slider recalculations and history logging.
+              ✨ Supports real-time dynamic slider recalculations and BMR/TDEE energy targets.
             </div>
           </div>
 
@@ -155,10 +244,10 @@
               <a href="#history" class="btn btn-sm btn-outline">View Curve →</a>
             </div>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
-              Interactive canvas charts plotting your historical BMI logs against the optimal healthy weight band to celebrate your wellness journey.
+              Interactive canvas charts plotting your historical BMI logs and daily calorie burn curves against wellness targets.
             </p>
             <div style="background: var(--bg-elevated); padding: 0.85rem; border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-muted);">
-              📊 Instant visual tracking with data export capabilities.
+              📊 Instant visual tracking for both BMI and Calories Burned.
             </div>
           </div>
         </div>
@@ -268,6 +357,39 @@
                 <li>Aim for at least 150 minutes of moderate aerobic activity weekly.</li>
                 <li>Stay consistently hydrated with 2.5 to 3 liters of water daily.</li>
               </ul>
+
+              <!-- Caloric & Energy Target Breakdown -->
+              <div style="margin-top:1rem; padding-top:0.85rem; border-top:1px solid rgba(255,255,255,0.08);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <div style="font-weight:700; font-size:0.88rem; color:#f97316; display:flex; align-items:center; gap:0.35rem;">
+                    🔥 Energy & Calories To Burn
+                  </div>
+                  <button class="btn btn-sm btn-secondary" style="font-size:0.75rem; padding:0.25rem 0.55rem;" data-open-log-activity>+ Log Burn</button>
+                </div>
+                
+                <div class="calorie-calc-grid">
+                  <div class="calorie-calc-item">
+                    <span class="calc-label">Basal BMR:</span>
+                    <strong class="calc-val" id="calc-bmr-val">1,720 kcal</strong>
+                  </div>
+                  <div class="calorie-calc-item">
+                    <span class="calc-label">Maintenance TDEE:</span>
+                    <strong class="calc-val" id="calc-tdee-val">2,410 kcal</strong>
+                  </div>
+                  <div class="calorie-calc-item">
+                    <span class="calc-label">Daily Burn Target:</span>
+                    <strong class="calc-val" id="calc-daily-burn-target" style="color:var(--accent-amber);">500 kcal/day</strong>
+                  </div>
+                  <div class="calorie-calc-item">
+                    <span class="calc-label">Total Goal Burn:</span>
+                    <strong class="calc-val" id="calc-total-goal-burn" style="color:var(--accent-emerald);">Goal Reached ✨</strong>
+                  </div>
+                </div>
+
+                <p id="calc-burn-goal-desc" style="font-size:0.78rem; color:var(--text-muted); margin-top:0.45rem;">
+                  Target: 450 kcal/day active burn to maintain ideal body composition and energy levels.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -278,29 +400,53 @@
         <div class="view-header">
           <div class="view-title-group">
             <h1>Fitness Progression & History 📈</h1>
-            <p>Review your historical BMI checkups, weight trends, and milestones over time.</p>
+            <p>Review your historical BMI checkups, weight trends, and daily burnt calories over time.</p>
           </div>
-          <button class="btn btn-secondary btn-sm" id="refresh-history-btn">🔄 Refresh Data</button>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <div class="unit-toggle-group" style="margin-bottom:0;">
+              <button class="unit-btn active" id="btn-trend-tab-bmi">📊 BMI Trend</button>
+              <button class="unit-btn" id="btn-trend-tab-calories">🔥 Daily Burnt Calories</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="refresh-history-btn">🔄 Refresh</button>
+            <button class="btn btn-primary btn-sm" data-open-log-activity>+ Log Activity</button>
+          </div>
         </div>
 
-        <!-- Interactive Canvas Trend Chart -->
+        <!-- Interactive Canvas Trend Charts -->
         <div class="card" style="margin-bottom: 1.75rem;">
-          <div class="card-header">
-            <div class="card-title">📊 BMI Progression Over Time</div>
-            <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.8rem; color:var(--text-muted);">
-              <span style="display:inline-block; width:12px; height:12px; background:rgba(16, 185, 129, 0.4); border-radius:2px;"></span>
-              Normal Weight Zone (18.5 - 24.9)
+          <!-- BMI Trend Chart Wrapper -->
+          <div id="trend-bmi-wrapper">
+            <div class="card-header">
+              <div class="card-title">📊 BMI Progression Over Time</div>
+              <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.8rem; color:var(--text-muted);">
+                <span style="display:inline-block; width:12px; height:12px; background:rgba(16, 185, 129, 0.4); border-radius:2px;"></span>
+                Normal Weight Zone (18.5 - 24.9)
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="bmi-trend-canvas"></canvas>
             </div>
           </div>
-          <div class="chart-container">
-            <canvas id="bmi-trend-canvas"></canvas>
+
+          <!-- Daily Calorie Burn Chart Wrapper -->
+          <div id="trend-cal-wrapper" style="display:none;">
+            <div class="card-header">
+              <div class="card-title">🔥 Daily Burnt Calories Progression</div>
+              <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.8rem; color:var(--text-muted);">
+                <span style="display:inline-block; width:12px; height:12px; background:rgba(249, 115, 22, 0.5); border-radius:2px;"></span>
+                Daily Target Goal Line
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="calorie-trend-canvas"></canvas>
+            </div>
           </div>
         </div>
 
-        <!-- History Records Table -->
-        <div class="card">
+        <!-- History Records Table: BMI Logs -->
+        <div class="card" style="margin-bottom: 1.75rem;">
           <div class="card-header">
-            <div class="card-title">📋 Health Checkup Log History</div>
+            <div class="card-title">📋 Health Checkup & BMI Log History</div>
           </div>
           <div class="data-table-container">
             <table class="data-table">
@@ -318,6 +464,35 @@
                 <tr>
                   <td colspan="6" style="text-align:center; padding: 2rem; color: var(--text-muted);">
                     Loading fitness logs...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- History Records Table: Calorie & Activity Logs -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🔥 Workout Activity & Burnt Calories History</div>
+            <button class="btn btn-sm btn-primary" data-open-log-activity>+ Log New Activity</button>
+          </div>
+          <div class="data-table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Activity</th>
+                  <th>Duration</th>
+                  <th>Calories Burned</th>
+                  <th>Notes</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="calorie-history-tbody">
+                <tr>
+                  <td colspan="6" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                    Loading activity records...
                   </td>
                 </tr>
               </tbody>
@@ -868,6 +1043,61 @@
       </div>
     </div>
 
+    <!-- Modal 4: Log Burnt Calories / Workout Session -->
+    <div class="modal-backdrop" id="log-activity-modal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="card-title">🔥 Log Workout & Burnt Calories</div>
+          <button class="btn-icon" data-close-modal title="Close">✕</button>
+        </div>
+        <form id="log-activity-form">
+          <div class="modal-body">
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.25rem;">
+              Record your fitness activity to track today's burnt calories and progress toward your goal.
+            </p>
+
+            <div class="form-group">
+              <label class="form-label" for="log-act-type">Activity Type <span class="required">*</span></label>
+              <select class="form-select" id="log-act-type" required>
+                <option value="Running 🏃">Running / Jogging 🏃 (High Burn)</option>
+                <option value="Brisk Walking 🚶">Brisk Walking 🚶 (Low Impact)</option>
+                <option value="Cycling 🚴">Cycling / Spin Class 🚴 (Cardio)</option>
+                <option value="Gym Strength 🏋️">Gym & Strength Training 🏋️ (Muscle)</option>
+                <option value="Swimming 🏊">Swimming Laps 🏊 (Full Body)</option>
+                <option value="HIIT Cardio ⚡">HIIT Circuit ⚡ (Intense Burn)</option>
+                <option value="Yoga & Stretch 🧘">Yoga & Flexibility 🧘 (Mind-Body)</option>
+                <option value="Rowing 🚣">Rowing Machine 🚣 (Endurance)</option>
+                <option value="Sports & Dance ⚽">Sports & Dance ⚽ (Agility)</option>
+                <option value="Custom Workout ✨">Custom Workout ✨</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="log-act-duration">Duration (Minutes) <span class="required">*</span></label>
+                <input type="number" class="form-input" id="log-act-duration" min="1" max="600" value="30" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="log-act-calories">
+                  Burnt Calories (kcal) <span class="required">*</span>
+                </label>
+                <input type="number" class="form-input" id="log-act-calories" min="1" max="5000" value="280" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="log-act-notes">Workout Notes (Optional)</label>
+              <input type="text" class="form-input" id="log-act-notes" placeholder="e.g. 5k outdoor run, high energy session">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+            <button type="submit" class="btn btn-primary">🔥 Save Calorie Burn</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Toast Notification Container -->
     <div class="toast-container" id="toast-container"></div>
 
@@ -891,6 +1121,7 @@
   <!-- JavaScript Modules -->
   <script src="js/api.js"></script>
   <script src="js/bmi.js"></script>
+  <script src="js/calories.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/admin.js"></script>
   <script src="js/app.js"></script>

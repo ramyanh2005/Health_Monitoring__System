@@ -208,6 +208,48 @@ async function runTests() {
     assert(exportData.status === 200, 'Personal health data export succeeds');
     assert(exportData.body.user_profile.email === testEmail, 'Exported data matches user profile');
 
+    // 9. Calorie & Activity Tracking ("Calories to Burn" & "Burnt Calories Till Now")
+    console.log('\n[9] Calorie Burn & Energy Tracking');
+    const calCalc = await request('POST', '/api/calories/calculate', {
+      height: 175,
+      weight: 70,
+      age: 28,
+      gender: 'Male'
+    });
+    assert(calCalc.status === 200, 'Calorie calculation returns 200');
+    assert(calCalc.body.data.bmr > 1500, 'BMR calculated properly');
+    assert(calCalc.body.data.tdee > calCalc.body.data.bmr, 'TDEE is greater than resting BMR');
+    assert(calCalc.body.data.daily_target_burn > 0, 'Daily target calories to burn returned');
+
+    const logCal = await request('POST', '/api/calories/log', {
+      activity: 'Running 🏃',
+      duration_mins: 35,
+      calories_burned: 320,
+      notes: 'Morning park run'
+    }, { Authorization: `Bearer ${userToken}` });
+    assert(logCal.status === 201, 'Calorie burn activity logged with 201 Created');
+    assert(logCal.body.log.calories_burned === 320, 'Logged calories match input (320 kcal)');
+    const createdCalLogId = logCal.body.log.id;
+
+    const calSummary = await request('GET', '/api/calories/summary', null, {
+      Authorization: `Bearer ${userToken}`
+    });
+    assert(calSummary.status === 200, 'Calorie summary fetched successfully');
+    assert(calSummary.body.data.today_burnt >= 320, 'Today\'s burnt calories reflect logged workout');
+    assert(calSummary.body.data.total_burnt_till_now >= 320, 'Total burnt calories till now computed');
+    assert(calSummary.body.data.daily_target_burn > 0, 'Target daily calories to burn provided');
+
+    const calLogs = await request('GET', '/api/calories/logs', null, {
+      Authorization: `Bearer ${userToken}`
+    });
+    assert(calLogs.status === 200, 'User activity logs fetched');
+    assert(calLogs.body.logs.some(l => l.id === createdCalLogId), 'Logs contain created activity');
+
+    const deleteCal = await request('DELETE', `/api/calories/log/${createdCalLogId}`, null, {
+      Authorization: `Bearer ${userToken}`
+    });
+    assert(deleteCal.status === 200, 'Calorie log deleted successfully');
+
     console.log('\n=========================================');
     console.log('🎉 ALL BACKEND API & LOGIC TESTS PASSED!');
     console.log('=========================================\n');

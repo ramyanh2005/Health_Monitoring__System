@@ -65,7 +65,7 @@ async function verifyEndToEnd() {
     assert(cssRes.status === 200, 'style.css served with 200 OK');
     assert(cssRes.raw.includes('--bg-primary'), 'style.css contains design system variables');
 
-    const jsModules = ['api.js', 'bmi.js', 'notifications.js', 'admin.js', 'app.js'];
+    const jsModules = ['api.js', 'bmi.js', 'calories.js', 'notifications.js', 'admin.js', 'app.js'];
     for (const mod of jsModules) {
       const modRes = await request('GET', `/js/${mod}`);
       assert(modRes.status === 200, `js/${mod} served with 200 OK`);
@@ -219,6 +219,25 @@ async function verifyEndToEnd() {
     });
     assert(exportData.status === 200, 'Personal health archive exported (GDPR Article 20)');
     assert(exportData.body.fitness_records.length > 0, 'Exported payload contains fitness records');
+
+    // 8. Calorie & Activity Tracking: Calories to Burn & Burnt Calories Till Now
+    console.log('\n[Phase 8] Calorie Tracking & Energy Expenditure (Calories to Burn & Burnt Calories Till Now)');
+    const calLogRes = await request('POST', '/api/calories/log', {
+      activity: 'Outdoor Cycling 🚴',
+      duration_mins: 45,
+      calories_burned: 360,
+      notes: 'Evening tempo ride'
+    }, { Authorization: `Bearer ${emilyToken}` });
+    assert(calLogRes.status === 201, 'Outdoor cycling logged successfully (360 kcal burned)');
+
+    const summaryRes = await request('GET', '/api/calories/summary', null, {
+      Authorization: `Bearer ${emilyToken}`
+    });
+    assert(summaryRes.status === 200, 'Calorie summary fetched with 200 OK');
+    assert(summaryRes.body.data.today_burnt >= 360, 'Today\'s burnt calories tracked correctly');
+    assert(summaryRes.body.data.total_burnt_till_now >= 360, 'Total burnt calories till now computed');
+    assert(summaryRes.body.data.daily_target_burn > 0, 'Daily target calories to burn computed from user vitals');
+    assert(summaryRes.body.data.bmr > 1200, 'Resting BMR calculated via Mifflin-St Jeor');
 
     console.log('\n===========================================================');
     console.log('🎉 ALL END-TO-END SYSTEM FUNCTIONALITY VERIFIED 100%!');
