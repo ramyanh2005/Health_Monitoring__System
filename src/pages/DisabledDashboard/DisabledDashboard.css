@@ -1,0 +1,87 @@
+/* Disabled Citizen Health Dashboard Module Styles */
+
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+}
+
+.dashboard-main {
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Two-column layout rows */
+.dashboard-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .dashboard-grid-2col {
+    grid-template-columns: 1.5fr 1fr;
+  }
+}
+
+.dashboard-grid-equal {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .dashboard-grid-equal {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+  background-color: var(--color-bg-card);
+  border-top: 1px solid var(--color-border);
+  padding: 2rem 1.5rem;
+  margin-top: auto;
+}
+
+.dashboard-footer-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dashboard-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+}
+
+/* Desktop user name visibility helper */
+@media (min-width: 640px) {
+  .user-name-desktop {
+    display: block !important;
+  }
+}
+
+/* Responsive mobile adjustments */
+@media (max-width: 640px) {
+  .dashboard-main {
+    padding: 1rem 0.75rem 2rem;
+    gap: 1.5rem;
+  }
+}
