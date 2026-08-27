@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your account securely with instant phone OTP verification, responsive design, and seamless onboarding.">
+  <meta name="theme-color" content="#4f46e5">
+  <title>Create Account | User Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Top Utilities Control Bar -->
+  <header class="top-controls-bar">
+    <div class="brand-badge">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+      <span>AppPortal</span>
+    </div>
+    
+    <div class="controls-group">
+      <!-- Layout Mode Toggle (Mobile Device Frame vs Fluid Desktop) -->
+      <div class="toggle-control-wrapper" title="Toggle device mockup layout">
+        <button id="view-mode-toggle" class="control-btn" aria-label="Toggle mobile device frame preview">
+          <svg class="icon-device" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+          <span class="btn-text">Device View</span>
+        </button>
+      </div>
+
+      <!-- Theme Switcher (Dark / Light) -->
+      <button id="theme-toggle-btn" class="control-btn" aria-label="Toggle dark and light theme">
+        <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container / App Screen Shell -->
+  <main class="app-viewport-wrapper">
+    <div id="device-container" class="device-frame">
+      
+      <!-- Mobile Frame Speaker & Status Bar Elements -->
+      <div class="mobile-notch-bar" aria-hidden="true">
+        <span class="notch-time" id="notch-time-display">09:41</span>
+        <div class="notch-pill"></div>
+        <div class="notch-icons">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"/></svg>
+        </div>
+      </div>
+
+      <!-- VIEW 1: REGISTRATION SCREEN -->
+      <section id="registration-view" class="app-screen active-screen" aria-labelledby="screen-heading">
+        
+        <!-- Navigation & Header -->
+        <div class="screen-header">
+          <button type="button" id="back-nav-btn" class="nav-back-button" aria-label="Go back to previous screen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          
+          <div class="header-titles">
+            <h1 id="screen-heading" class="title-main">Create Account</h1>
+            <p class="subtitle-text">Please fill in your details to get started</p>
+          </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="create-account-form" class="registration-form" novalidate autocomplete="on">
+          
+          <!-- First Name Field (Required) -->
+          <div class="form-group" id="group-first-name">
+            <label for="first-name" class="field-label">
+              First Name <span class="required-asterisk" aria-hidden="true">*</span>
+            </label>
+            <div class="input-container">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input 
+                type="text" 
+                id="first-name" 
+                name="firstName" 
+                class="form-input" 
+                placeholder="John" 
+                maxlength="50"
+                autocomplete="given-name" 
+                required 
+                aria-required="true"
+                aria-describedby="first-name-error"
+              />
+              <span class="validation-status-icon" aria-hidden="true"></span>
+            </div>
+            <div id="first-name-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- Middle Name Field (Optional) -->
+          <div class="form-group" id="group-middle-name">
+            <label for="middle-name" class="field-label">
+              Middle Name <span class="optional-tag">(Optional)</span>
+            </label>
+            <div class="input-container">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input 
+                type="text" 
+                id="middle-name" 
+                name="middleName" 
+                class="form-input" 
+                placeholder="Robert" 
+                maxlength="50"
+                autocomplete="additional-name"
+                aria-describedby="middle-name-error"
+              />
+              <span class="validation-status-icon" aria-hidden="true"></span>
+            </div>
+            <div id="middle-name-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- Last Name Field (Required) -->
+          <div class="form-group" id="group-last-name">
+            <label for="last-name" class="field-label">
+              Last Name <span class="required-asterisk" aria-hidden="true">*</span>
+            </label>
+            <div class="input-container">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input 
+                type="text" 
+                id="last-name" 
+                name="lastName" 
+                class="form-input" 
+                placeholder="Doe" 
+                maxlength="50"
+                autocomplete="family-name" 
+                required 
+                aria-required="true"
+                aria-describedby="last-name-error"
+              />
+              <span class="validation-status-icon" aria-hidden="true"></span>
+            </div>
+            <div id="last-name-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- Email ID Field -->
+          <div class="form-group" id="group-email">
+            <label for="email" class="field-label">
+              Email ID <span class="optional-tag">(Optional)</span>
+            </label>
+            <div class="input-container">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="form-input" 
+                placeholder="john@example.com" 
+                autocomplete="email"
+                aria-describedby="email-error"
+              />
+              <span class="validation-status-icon" aria-hidden="true"></span>
+            </div>
+            <div id="email-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- Phone Number Field with Country Code -->
+          <div class="form-group" id="group-phone">
+            <label for="phone" class="field-label">
+              Phone Number <span class="optional-tag">(Required for OTP)</span>
+            </label>
+            <div class="phone-input-combo">
+              
+              <!-- Custom Country Code Selector -->
+              <div class="country-code-selector" id="country-code-dropdown">
+                <button type="button" id="country-select-btn" class="country-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Select Country Code">
+                  <span class="flag-icon" id="selected-flag">🇺🇸</span>
+                  <span class="dial-code" id="selected-dial-code">+1</span>
+                  <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                <div class="country-menu hidden" id="country-menu-list" role="listbox" aria-label="Country Codes">
+                  <div class="country-search-box">
+                    <input type="text" id="country-search-input" placeholder="Search country or code..." autocomplete="off" />
+                  </div>
+                  <ul class="country-options" id="country-options-list">
+                    <!-- Populated dynamically via app.js -->
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Phone Input -->
+              <div class="input-container phone-input-box">
+                <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  name="phone" 
+                  class="form-input" 
+                  placeholder="(555) 000-0000" 
+                  autocomplete="tel-national"
+                  aria-describedby="phone-error"
+                />
+                <span class="validation-status-icon" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div id="phone-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- OTP Verification Section -->
+          <div class="otp-card-section" id="otp-section">
+            <div class="otp-header">
+              <div class="otp-title-group">
+                <label class="field-label" id="otp-label">
+                  OTP Verification
+                </label>
+                <span class="otp-status-badge" id="otp-status-badge">Required</span>
+              </div>
+              
+              <button type="button" id="send-otp-btn" class="send-otp-action-btn" aria-label="Send OTP Verification Code">
+                <svg class="send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span id="send-otp-btn-text">Send OTP</span>
+              </button>
+            </div>
+
+            <!-- OTP Digit Input Boxes -->
+            <div class="otp-inputs-wrapper" id="otp-inputs-group" aria-labelledby="otp-label">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-1" aria-label="OTP Digit 1" autocomplete="one-time-code" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-2" aria-label="OTP Digit 2" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-3" aria-label="OTP Digit 3" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-4" aria-label="OTP Digit 4" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-5" aria-label="OTP Digit 5" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-6" aria-label="OTP Digit 6" />
+            </div>
+
+            <!-- OTP Helper & Timer Row -->
+            <div class="otp-footer-row">
+              <span id="otp-timer-text" class="otp-timer hidden">
+                Resend in <strong id="timer-countdown">00:60</strong>
+              </span>
+              <button type="button" id="resend-otp-btn" class="resend-link-btn hidden">
+                Resend OTP
+              </button>
+            </div>
+            <div id="otp-error" class="error-message" role="alert" aria-live="polite"></div>
+          </div>
+
+          <!-- Submit Action Button -->
+          <div class="form-action-group">
+            <button type="submit" id="register-btn" class="primary-btn submit-btn" aria-label="Complete Registration">
+              <span class="btn-spinner hidden" id="submit-spinner"></span>
+              <span class="btn-label" id="submit-label">Register</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Form Footer: Log In Navigation -->
+          <div class="form-footer-nav">
+            <p class="login-prompt">
+              Already have an account? 
+              <a href="#login" id="login-link" class="login-text-link">Log in</a>
+            </p>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- VIEW 2: SIMULATED LOGIN SCREEN (For navigation testing) -->
+      <section id="login-view" class="app-screen hidden-screen" aria-labelledby="login-heading">
+        <div class="screen-header">
+          <button type="button" id="back-to-register-btn" class="nav-back-button" aria-label="Back to Create Account">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div class="header-titles">
+            <h1 id="login-heading" class="title-main">Welcome Back</h1>
+            <p class="subtitle-text">Log in to continue to your account</p>
+          </div>
+        </div>
+
+        <div class="simulated-login-content">
+          <div class="login-card">
+            <div class="login-icon-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10 17 15 12 10 7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+            </div>
+            <h3>Existing Account Login</h3>
+            <p>Enter your phone number or email to receive a secure login code.</p>
+            <div class="mock-login-field">
+              <input type="text" placeholder="Email or Phone number" class="form-input" />
+            </div>
+            <button type="button" class="primary-btn login-submit-btn">Send Login Code</button>
+          </div>
+          
+          <div class="form-footer-nav">
+            <p class="login-prompt">
+              Don't have an account? 
+              <a href="#register" id="go-to-register-link" class="login-text-link">Create Account</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: REGISTRATION SUCCESS SCREEN -->
+      <section id="success-view" class="app-screen hidden-screen" aria-labelledby="success-heading">
+        <div class="success-content">
+          <div class="success-badge-wrapper">
+            <div class="success-ring-pulse"></div>
+            <div class="success-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <h1 id="success-heading" class="success-title">Account Created!</h1>
+          <p class="success-desc">Welcome aboard! Your profile and phone number have been verified successfully.</p>
+
+          <div class="user-summary-card">
+            <div class="summary-row">
+              <span class="summary-label">Full Name</span>
+              <span class="summary-value" id="summary-name">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Phone</span>
+              <span class="summary-value" id="summary-phone">—</span>
+            </div>
+            <div class="summary-row" id="summary-email-row">
+              <span class="summary-label">Email</span>
+              <span class="summary-value" id="summary-email">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Status</span>
+              <span class="summary-value verified-tag">✓ Phone Verified</span>
+            </div>
+          </div>
+
+          <div class="success-action-btns">
+            <button type="button" id="continue-dashboard-btn" class="primary-btn">
+              <span>Go to Dashboard</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <button type="button" id="register-another-btn" class="secondary-btn">
+              Create Another Account
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- SMS NOTIFICATION SIMULATOR HUD -->
+  <aside id="sms-toast" class="sms-notification-hud hidden" role="status" aria-live="assertive" aria-label="Incoming SMS Notification">
+    <div class="sms-card">
+      <div class="sms-header">
+        <div class="sms-app-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
+          </svg>
+          <span>MESSAGES • Just now</span>
+        </div>
+        <button type="button" class="close-sms-btn" id="close-sms-btn" aria-label="Dismiss SMS notification">✕</button>
+      </div>
+      <div class="sms-body">
+        <p class="sms-text">Your AppPortal verification code is: <strong id="sms-otp-code" class="sms-code-highlight">123456</strong>. Valid for 10 minutes.</p>
+        <button type="button" id="autofill-otp-btn" class="sms-autofill-action">
+          ⚡ Tap to Autofill OTP
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- UNSAVED CHANGES MODAL -->
+  <div id="unsaved-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-icon warning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+      <h2 id="modal-title" class="modal-title">Discard unsaved changes?</h2>
+      <p class="modal-message">You have entered details on this form. Leaving will reset your registration progress.</p>
+      <div class="modal-actions">
+        <button type="button" id="modal-cancel-btn" class="secondary-btn">Keep Editing</button>
+        <button type="button" id="modal-discard-btn" class="danger-btn">Discard & Leave</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
