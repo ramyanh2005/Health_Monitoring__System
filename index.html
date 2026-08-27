@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Bloom Health — Nurturing Pregnancy Companion</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <!-- Tailwind CDN with custom brand token configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4a654a',
+            'on-primary': '#ffffff',
+            'primary-container': '#8ba889',
+            'on-primary-container': '#243d25',
+            'primary-fixed': '#ccebc8',
+            'primary-fixed-dim': '#b0ceae',
+            secondary: '#7c5357',
+            'secondary-container': '#fdc7cb',
+            'on-secondary-container': '#795154',
+            tertiary: '#5f5e5a',
+            'tertiary-container': '#a2a09b',
+            background: '#f6fbf4',
+            surface: '#f6fbf4',
+            'surface-container-lowest': '#ffffff',
+            'surface-container-low': '#f1f5ee',
+            'surface-container': '#ebefe8',
+            'surface-container-high': '#e5e9e2',
+            'surface-container-highest': '#dfe4dd',
+            'on-surface': '#181d19',
+            'on-surface-variant': '#434841',
+            outline: '#737971',
+            'outline-variant': '#c3c8bf',
+            error: '#ba1a1a',
+            'error-container': '#ffdad6'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="public/styles.css">
+</head>
+<body class="bg-[#f6fbf4] text-[#181d19]">
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="flex items-center gap-2"></div>
+
+  <!-- Fullscreen Responsive App Shell -->
+  <div id="app-container" class="relative pb-28 md:pb-24">
+
+    <!-- Ambient Decorative Blobs -->
+    <div class="ambient-blob w-96 h-96 bg-[#4a654a]/10 -top-20 -left-20"></div>
+    <div class="ambient-blob w-80 h-80 bg-[#fdc7cb]/25 top-64 right-10"></div>
+    <div class="ambient-blob w-96 h-96 bg-[#ccebc8]/30 bottom-20 left-1/3"></div>
+
+    <!-- Fixed App Header (Responsive Widescreen) -->
+    <header class="glass-header">
+      <div class="max-w-7xl mx-auto w-full flex items-center justify-between">
+        
+        <!-- Left: Logo & Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-[#fdc7cb] flex items-center justify-center shadow-xs">
+            <span class="material-symbols-outlined text-[#4a654a] text-xl">spa</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-heading font-extrabold text-base tracking-wider text-[#4a654a] block leading-none">BLOOM</span>
+              <span class="hidden sm:inline-block bg-[#ccebc8]/70 text-[#243d25] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Week 24</span>
+            </div>
+            <span id="header-title" class="font-heading text-xs font-semibold text-[#434841] block sm:hidden">Dashboard</span>
+          </div>
+        </div>
+
+        <!-- Center: Desktop Nav Links (Visible on md+) -->
+        <div class="hidden md:flex items-center gap-1.5 bg-[#ebefe8]/80 p-1.5 rounded-full border border-[#dfe4dd]">
+          <button onclick="showView('dashboard')" data-view="dashboard" class="nav-tab-item px-3.5 py-2 text-xs font-semibold rounded-full active">
+            Home
+          </button>
+          <button onclick="showView('activity')" data-view="activity" class="nav-tab-item px-3.5 py-2 text-xs font-semibold rounded-full">
+            Activity
+          </button>
+          <button onclick="showView('exercises')" data-view="exercises" class="nav-tab-item px-3.5 py-2 text-xs font-semibold rounded-full">
+            Exercises
+          </button>
+          <button onclick="showView('nutrition')" data-view="nutrition" class="nav-tab-item px-3.5 py-2 text-xs font-semibold rounded-full">
+            Nutrition & Dishes
+          </button>
+          <button onclick="showView('clinics')" data-view="clinics" class="nav-tab-item px-3.5 py-2 text-xs font-semibold rounded-full">
+            Clinics & Doctors
+          </button>
+          <button onclick="showView('profile')" data-view="profile" class="nav-tab-item px-3.5 py-2 text-xs font-semibold rounded-full">
+            Profile
+          </button>
+        </div>
+
+        <!-- Right: Theme Switcher, Notification Bell & Profile Pill -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Starlight Theme Switcher Button -->
+          <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-[#ebefe8] text-on-surface-variant transition-colors cursor-pointer" title="Toggle Starlight Dark/Light Theme">
+            <span id="theme-toggle-icon" class="material-symbols-outlined text-2xl text-[#434841]">dark_mode</span>
+          </button>
+
+          <!-- Notification Bell Button -->
+          <button onclick="openNotificationDrawer()" class="relative p-2 rounded-full hover:bg-[#ebefe8] text-on-surface-variant transition-colors cursor-pointer" title="Notifications & Reminders">
+            <span class="material-symbols-outlined text-2xl text-[#434841]">notifications</span>
+            <span id="notif-badge" class="hidden absolute top-1 right-1 w-4 h-4 bg-[#7c5357] text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">1</span>
+          </button>
+
+          <div class="hidden sm:block text-right">
+            <span class="font-heading text-xs font-bold text-[#181d19] block">Sarah Miller</span>
+            <span class="text-[11px] text-[#4a654a] font-medium">Trimester 2 • Due Nov 15</span>
+          </div>
+
+          <button onclick="showView('profile')" class="relative group cursor-pointer" title="View Profile">
+            <div class="w-10 h-10 rounded-full ring-2 ring-[#4a654a]/30 p-0.5 overflow-hidden bg-white shadow-xs group-hover:ring-[#4a654a] transition-all">
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="Sarah Miller" class="w-full h-full object-cover rounded-full" />
+            </div>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Main Content Views Container -->
+    <main class="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full relative z-10">
+
+      <!-- ========================================================= -->
+      <!-- VIEW 1: DASHBOARD (FULLSCREEN MULTI-COLUMN) -->
+      <!-- ========================================================= -->
+      <section id="view-dashboard" data-view="dashboard" class="space-y-6 w-full">
+        
+        <!-- Active Smart Alert / Reminder Banner -->
+        <div id="dash-alert-banner" class="w-full hidden">
+          <!-- Dynamically populated alert -->
+        </div>
+
+        <!-- Daily Mood & Symptom Check-in Strip -->
+        <div class="card-white p-4 border border-[#ebefe8] shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-[#ccebc8]/60 text-[#243d25] flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-base">sentiment_satisfied</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-[#181d19]">Daily Check-in</h4>
+              <p class="text-[11px] text-on-surface-variant">How is your maternal energy today?</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 text-xs">
+            <button onclick="checkInMood('Energized')" data-mood="Energized" class="mood-btn px-3 py-1.5 rounded-full bg-[#f6fbf4] border border-[#ebefe8] hover:bg-[#ccebc8]/50 font-medium text-xs flex items-center gap-1 cursor-pointer transition-all">
+              <span>🌸</span> Energized
+            </button>
+            <button onclick="checkInMood('Calm')" data-mood="Calm" class="mood-btn px-3 py-1.5 rounded-full bg-[#f6fbf4] border border-[#ebefe8] hover:bg-[#ccebc8]/50 font-medium text-xs flex items-center gap-1 cursor-pointer transition-all">
+              <span>🌿</span> Calm
+            </button>
+            <button onclick="checkInMood('Tender')" data-mood="Tender" class="mood-btn px-3 py-1.5 rounded-full bg-[#f6fbf4] border border-[#ebefe8] hover:bg-[#fdc7cb]/50 font-medium text-xs flex items-center gap-1 cursor-pointer transition-all">
+              <span>🤍</span> Tender
+            </button>
+            <button onclick="checkInMood('Fatigued')" data-mood="Fatigued" class="mood-btn px-3 py-1.5 rounded-full bg-[#f6fbf4] border border-[#ebefe8] hover:bg-[#dfe4dd] font-medium text-xs flex items-center gap-1 cursor-pointer transition-all">
+              <span>🌙</span> Fatigued
+            </button>
+          </div>
+        </div>
+
+        <!-- 2-Column Responsive Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+          
+          <!-- LEFT COLUMN (Span 5 on Desktop): Hero, Kick Counter, Nurturing Tip -->
+          <div class="lg:col-span-5 space-y-6">
+            
+            <!-- 1. Hero Pregnancy Progress Card -->
+            <div class="card-low p-6 relative overflow-hidden text-center border border-[#ebefe8] shadow-xs">
+              <div class="ambient-blob w-44 h-44 bg-[#ccebc8]/50 -top-8 -right-8"></div>
+              
+              <div class="relative z-10 flex flex-col items-center">
+                <span class="label-sm text-[#4a654a] font-semibold tracking-wider uppercase mb-1">Pregnancy Journey</span>
+                <h2 id="dash-hero-week" class="display-lg text-[#181d19] mb-1">Week 24</h2>
+                <p id="dash-hero-baby" class="body-md text-[#434841] text-sm mb-4">Baby is the size of an ear of corn</p>
+
+                <!-- Circular Progress Ring (192px) -->
+                <div class="relative w-48 h-48 my-2 flex items-center justify-center">
+                  <svg class="w-full h-full" viewBox="0 0 192 192">
+                    <!-- Background Track -->
+                    <circle cx="96" cy="96" r="80" stroke="#dfe4dd" stroke-width="12" fill="none" />
+                    <!-- Active Animated Progress Ring -->
+                    <circle id="dash-hero-ring" class="progress-ring-circle" cx="96" cy="96" r="80" 
+                      stroke="#4a654a" stroke-width="12" stroke-linecap="round" fill="none" 
+                      style="stroke-dasharray: 502.65; stroke-dashoffset: 502.65;" />
+                  </svg>
+                  <!-- Center Slot -->
+                  <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="dash-hero-percent" class="font-heading text-3xl font-bold text-[#181d19]">60%</span>
+                    <span class="text-xs font-medium text-[#434841]">There</span>
+                  </div>
+                </div>
+
+                <!-- Primary CTA Button -->
+                <button onclick="openModal('journal-modal')" class="btn-primary mt-4 w-full py-3.5 text-sm font-semibold rounded-full shadow-sm cursor-pointer">
+                  <span class="material-symbols-outlined text-base">edit_note</span>
+                  <span>Log Journal Entry</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Interactive Fetal Kick Counter Widget -->
+            <div id="kick-counter-section" class="card-white p-5 border border-[#ebefe8] relative overflow-hidden shadow-xs">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#7c5357] text-lg">child_care</span>
+                  <h4 class="font-heading text-xs font-bold uppercase tracking-wider text-[#181d19]">Fetal Kick Counter</h4>
+                </div>
+                <span id="kick-timer-display" class="text-xs font-bold font-mono text-[#4a654a] bg-[#ccebc8]/50 px-2 py-0.5 rounded-full">00:00</span>
+              </div>
+
+              <div class="flex items-center justify-around py-3 bg-[#f6fbf4] rounded-2xl border border-[#ebefe8] mb-3">
+                <!-- Large Interactive Baby Foot Tap Button -->
+                <button id="kick-tap-btn" onclick="recordKickMovement()" disabled class="w-16 h-16 rounded-full bg-[#fdc7cb] disabled:opacity-40 text-[#795154] flex flex-col items-center justify-center shadow-sm cursor-pointer transition-all active:scale-90" title="Tap to record movement">
+                  <span class="material-symbols-outlined text-2xl">waving_hand</span>
+                  <span class="text-[9px] font-bold">TAP KICK</span>
+                </button>
+
+                <!-- Kick Counter readout -->
+                <div class="text-center">
+                  <span id="kick-count-display" class="font-heading text-3xl font-extrabold text-[#181d19]">0</span>
+                  <span class="text-[11px] text-on-surface-variant block">Kicks in session</span>
+                </div>
+              </div>
+
+              <button id="kick-toggle-btn" onclick="toggleKickSession()" class="btn-secondary w-full py-2.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">play_arrow</span>
+                <span>Start Kick Session</span>
+              </button>
+            </div>
+
+            <!-- Nurturing Tip Card -->
+            <div class="card-secondary p-5 relative overflow-hidden border border-[#fdc7cb]">
+              <div class="ambient-blob w-32 h-32 bg-white/40 -bottom-6 -right-6"></div>
+              <div class="relative z-10 flex items-start gap-3.5">
+                <div class="w-10 h-10 rounded-2xl bg-white/70 backdrop-blur-md flex items-center justify-center text-[#7c5357] flex-shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                </div>
+                <div>
+                  <span class="text-xs font-bold text-[#795154] uppercase tracking-wider block mb-0.5">Nurturing Tip</span>
+                  <h4 id="dash-tip-title" class="font-heading text-sm font-bold text-[#181d19] mb-1">Folate & Hydration Synergy</h4>
+                  <p id="dash-tip-advice" class="text-xs text-[#434841] leading-relaxed">
+                    At Week 24, your baby's brain and nervous system are growing rapidly. Pairing folate-rich greens with vitamin C enhances absorption.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN (Span 7 on Desktop): Goals, Smart Craving, Combos, Next Dish, Meal Logs -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- 2. Daily Goals Grid (2-column) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <!-- Steps Card -->
+              <div class="card-standard p-4 border border-[#ebefe8] flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="label-sm text-[#434841]">Daily Steps</span>
+                  <div class="w-8 h-8 rounded-full bg-[#8ba889]/25 flex items-center justify-center text-[#243d25]">
+                    <span class="material-symbols-outlined text-base">directions_walk</span>
+                  </div>
+                </div>
+                <div>
+                  <div id="dash-steps-val" class="font-heading text-xl font-bold text-[#181d19] mb-2">6,420 / 8,000</div>
+                  <div class="linear-progress-track h-2.5 bg-[#dfe4dd]">
+                    <div id="dash-steps-bar" class="linear-progress-fill bg-[#4a654a]" style="width: 80%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Water Card with Multi-Volume Quick Log Chips -->
+              <div class="card-standard p-4 border border-[#ebefe8] flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="label-sm text-[#434841]">Hydration Intake</span>
+                  <div class="w-8 h-8 rounded-full bg-[#fdc7cb] flex items-center justify-center text-[#795154]">
+                    <span class="material-symbols-outlined text-base">water_drop</span>
+                  </div>
+                </div>
+                <div>
+                  <div id="dash-water-val" class="font-heading text-xl font-bold text-[#181d19] mb-2">1.5 / 2.5 L</div>
+                  <div class="linear-progress-track h-2.5 bg-[#dfe4dd] mb-2.5">
+                    <div id="dash-water-bar" class="linear-progress-fill bg-[#7c5357]" style="width: 60%;"></div>
+                  </div>
+                  <!-- Quick Log Volume Chips -->
+                  <div class="flex items-center gap-1.5 text-[10px]">
+                    <button onclick="addWaterAmount(0.25)" class="px-2 py-1 bg-white rounded-lg border border-[#ebefe8] hover:bg-[#fdc7cb]/50 font-bold text-[#795154] cursor-pointer" title="Add 250ml glass">
+                      +250ml
+                    </button>
+                    <button onclick="addWaterAmount(0.50)" class="px-2 py-1 bg-white rounded-lg border border-[#ebefe8] hover:bg-[#fdc7cb]/50 font-bold text-[#795154] cursor-pointer" title="Add 500ml bottle">
+                      +500ml
+                    </button>
+                    <button onclick="addWaterAmount(0.20)" class="px-2 py-1 bg-white rounded-lg border border-[#ebefe8] hover:bg-[#fdc7cb]/50 font-bold text-[#795154] cursor-pointer" title="Add 200ml tea">
+                      +200ml
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Active Calories Card (Span 2) -->
+              <div class="sm:col-span-2 card-standard p-4 border border-[#ebefe8] flex items-center justify-between">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-11 h-11 rounded-2xl bg-[#a2a09b]/20 flex items-center justify-center text-[#5f5e5a]">
+                    <span class="material-symbols-outlined text-2xl">local_fire_department</span>
+                  </div>
+                  <div>
+                    <span class="label-sm text-[#434841] block">Total Daily Energy</span>
+                    <span id="dash-cal-val" class="font-heading text-2xl font-bold text-[#181d19]">420 kcal</span>
+                  </div>
+                </div>
+                
+                <!-- Mini Sparkline SVG -->
+                <div class="w-36 h-10">
+                  <svg viewBox="0 0 100 36" class="w-full h-full overflow-visible">
+                    <path d="M0,28 Q15,32 30,18 T60,12 T90,22 T100,6" fill="none" stroke="#5f5e5a" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="100" cy="6" r="3.5" fill="#5f5e5a"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upcoming Appointment & Primary Doctor Quick Card -->
+            <div class="card-white p-4 sm:p-5 border border-[#8ba889] ring-1 ring-[#ccebc8]/50 shadow-xs relative overflow-hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-2xl bg-[#ccebc8]/60 text-[#243d25] flex items-center justify-center flex-shrink-0 shadow-xs">
+                    <span class="material-symbols-outlined text-2xl">event_available</span>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="badge-pill bg-[#fdc7cb] text-[#795154] text-[10px] font-bold">Upcoming Prenatal Visit</span>
+                      <span class="text-[11px] text-[#4a654a] font-bold">Sep 4 • 10:30 AM</span>
+                    </div>
+                    <h4 class="font-heading text-sm font-bold text-[#181d19] mt-0.5">St. Jude Maternal Health (Dr. Evelyn Reed)</h4>
+                    <p class="text-xs text-on-surface-variant line-clamp-1">26-Week Glucose Tolerance & Fundal Height Check</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 self-end sm:self-auto">
+                  <button onclick="openChangeAppointmentModal(1)" class="btn-secondary py-2 px-3 text-xs font-semibold rounded-xl flex items-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">edit_calendar</span>
+                    <span>Change Date</span>
+                  </button>
+                  <button onclick="showView('clinics')" class="btn-primary py-2 px-3 text-xs font-semibold rounded-xl flex items-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">local_hospital</span>
+                    <span>All Clinics</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Relaxation & Womb Soundscape Bar -->
+            <div class="card-low p-4 border border-[#ebefe8] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#fdc7cb]/50 text-[#795154] flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined text-base">graphic_eq</span>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-[#181d19]">Maternal Relaxation Audio</h4>
+                  <p class="text-[11px] text-on-surface-variant">Calming synthesized audio for prenatal calm</p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs">
+                <button onclick="toggleSoundscape('heartbeat')" data-sound="heartbeat" class="sound-chip px-3 py-1.5 rounded-full bg-white border border-[#ebefe8] hover:bg-[#fdc7cb]/40 font-semibold text-xs flex items-center gap-1 cursor-pointer transition-all">
+                  <span>💓</span> Heartbeat (65 BPM)
+                </button>
+                <button onclick="toggleSoundscape('ocean')" data-sound="ocean" class="sound-chip px-3 py-1.5 rounded-full bg-white border border-[#ebefe8] hover:bg-[#ccebc8]/50 font-semibold text-xs flex items-center gap-1 cursor-pointer transition-all">
+                  <span>🌊</span> Ocean Swell
+                </button>
+                <button onclick="stopSoundscape()" class="px-2.5 py-1.5 rounded-full bg-[#ebefe8] hover:bg-[#dfe4dd] text-xs font-bold text-[#434841] cursor-pointer" title="Stop Audio">
+                  <span class="material-symbols-outlined text-sm">stop</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Smart Prenatal Dish & Craving Assistant ("What should I eat?") -->
+            <div class="card-white p-5 border border-[#ebefe8] space-y-3 shadow-xs">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#4a654a] text-lg">psychology_alt</span>
+                  <h4 class="font-heading text-xs font-bold uppercase tracking-wider text-[#181d19]">Craving & Nutrient Booster</h4>
+                </div>
+                <span class="text-[11px] text-on-surface-variant">Tap to suggest</span>
+              </div>
+
+              <!-- Vibe Chips -->
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+                <button onclick="fetchSmartDishes('folate')" data-vibe="folate" class="vibe-chip bg-[#4a654a] text-white px-3 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  🍃 Folate Boost
+                </button>
+                <button onclick="fetchSmartDishes('iron')" data-vibe="iron" class="vibe-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  🩸 Iron Rich
+                </button>
+                <button onclick="fetchSmartDishes('dha')" data-vibe="dha" class="vibe-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  🥑 DHA Brain Food
+                </button>
+                <button onclick="fetchSmartDishes('nausea')" data-vibe="nausea" class="vibe-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  🌱 Gentle Digestion
+                </button>
+                <button onclick="fetchSmartDishes('energy')" data-vibe="energy" class="vibe-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  ⚡ Afternoon Energy
+                </button>
+              </div>
+
+              <!-- Suggested Dishes Carousel -->
+              <div id="smart-dishes-carousel" class="flex items-center gap-3 overflow-x-auto pb-1 pt-1 no-scrollbar">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+
+            <!-- Prenatal Meal Combinations & Power Pairings (Featured on Dashboard) -->
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <h3 class="title-md text-[#181d19] font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[#4a654a]">auto_awesome</span>
+                  <span>Prenatal Power Meal Combinations</span>
+                </h3>
+                <button onclick="showView('nutrition')" class="text-xs font-semibold text-[#4a654a] hover:underline flex items-center gap-0.5 cursor-pointer">
+                  <span>View All Pairings</span>
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </button>
+              </div>
+
+              <!-- 2-col Combos Grid on Dashboard -->
+              <div id="dash-meal-combos-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Injected dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- 3. Next Nourishing Meal Section -->
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <h3 class="title-md text-[#181d19] font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[#4a654a]">restaurant_menu</span>
+                  <span>Next Recommended Single Meal</span>
+                </h3>
+              </div>
+
+              <!-- Container rendered dynamically by JS -->
+              <div id="dash-next-meal-container">
+                <div class="card-standard p-6 text-center text-on-surface-variant animate-pulse">
+                  <p class="body-md">Loading recommended dish...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Today's Logged Meals Section -->
+            <div>
+              <div class="flex items-center justify-between mb-2.5">
+                <h3 class="title-md text-[#181d19] font-bold flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[#4a654a]">history_edu</span>
+                  <span>Today's Meal Log</span>
+                </h3>
+                <span class="text-xs text-on-surface-variant">Real-time sync</span>
+              </div>
+
+              <div id="dash-today-logs-container" class="space-y-2">
+                <!-- Dynamic logs inserted here -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- VIEW 2: ACTIVITY (FULLSCREEN 2-COLUMN) -->
+      <!-- ========================================================= -->
+      <section id="view-activity" data-view="activity" class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full hidden">
+        
+        <!-- Left: Progress & Settings (Span 5) -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- 1. Daily Progress Card -->
+          <div class="card-low p-6 border border-[#ebefe8] relative overflow-hidden">
+            <div class="ambient-blob w-32 h-32 bg-[#4a654a]/10 top-0 right-0"></div>
+            <span class="label-sm text-[#434841] block mb-1">Steps</span>
+            
+            <div class="flex items-baseline gap-2 mb-4">
+              <span class="display-lg text-[#181d19]">6,420</span>
+              <span class="body-md text-[#434841]">/ 8,000</span>
+            </div>
+
+            <!-- Thick 16px Progress Bar -->
+            <div class="w-full h-4 bg-[#dfe4dd] rounded-full overflow-hidden mb-4 p-0.5">
+              <div class="h-full bg-[#4a654a] rounded-full transition-all duration-1000" style="width: 80%;"></div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-[#434841] font-medium">80% of daily goal</span>
+              <button onclick="toggleGoalSettings()" class="btn-secondary py-1.5 px-3.5 text-xs font-semibold rounded-full flex items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">tune</span>
+                <span>Adjust Goals</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Goal Settings Panel (Expandable) -->
+          <div id="goal-settings-panel" class="card-white p-5 border border-[#ebefe8] space-y-4 hidden transition-all">
+            <div class="flex items-center justify-between border-b border-[#ebefe8] pb-2">
+              <h4 class="font-heading text-sm font-bold text-[#181d19]">Adjust Your Daily Targets</h4>
+              <span class="text-xs text-[#4a654a] font-medium">Live sync</span>
+            </div>
+
+            <!-- Daily Steps Slider -->
+            <div>
+              <div class="flex justify-between text-xs font-medium text-[#434841] mb-1.5">
+                <span>Daily Step Goal</span>
+                <span id="slider-steps-readout" class="font-bold text-[#181d19]">8,000</span>
+              </div>
+              <input type="range" min="3000" max="15000" step="500" value="8000" 
+                class="w-full accent-[#4a654a] cursor-pointer"
+                oninput="handleSliderChange('steps', this.value)">
+            </div>
+
+            <!-- Daily Active Calories Slider -->
+            <div>
+              <div class="flex justify-between text-xs font-medium text-[#434841] mb-1.5">
+                <span>Active Calories Goal</span>
+                <span id="slider-cal-readout" class="font-bold text-[#181d19]">500 kcal</span>
+              </div>
+              <input type="range" min="100" max="800" step="50" value="500" 
+                class="w-full accent-[#4a654a] cursor-pointer"
+                oninput="handleSliderChange('calories', this.value)">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Stat Pairs & Weekly Chart (Span 7) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- 3. Stat Pair Grid (2-col) -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="card-standard p-5 border border-[#ebefe8]">
+              <div class="flex justify-between items-start mb-2">
+                <span class="label-sm text-[#434841]">Calories Burned</span>
+                <span class="material-symbols-outlined text-[#7c5357] text-xl">local_fire_department</span>
+              </div>
+              <div class="font-heading text-3xl font-bold text-[#181d19]">420</div>
+              <span class="text-xs text-[#434841]">kcal</span>
+            </div>
+
+            <div class="card-standard p-5 border border-[#ebefe8]">
+              <div class="flex justify-between items-start mb-2">
+                <span class="label-sm text-[#434841]">Active Movement</span>
+                <span class="material-symbols-outlined text-[#4a654a] text-xl">timer</span>
+              </div>
+              <div class="font-heading text-3xl font-bold text-[#181d19]">35</div>
+              <span class="text-xs text-[#434841]">min total</span>
+            </div>
+          </div>
+
+          <!-- 4. Last 7 Days Weekly Step Bar Chart -->
+          <div class="card-white p-6 border border-[#ebefe8] shadow-xs">
+            <div class="flex items-center justify-between mb-5">
+              <h4 class="font-heading text-base font-bold text-[#181d19]">Weekly Step Activity</h4>
+              <span class="text-xs text-on-surface-variant font-medium">Daily Goal: 8,000 steps</span>
+            </div>
+
+            <!-- 7-Column Bar Chart -->
+            <div class="flex items-end justify-between h-44 pt-6 pb-2 border-b border-[#ebefe8]">
+              <!-- Mon -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6">6.1k</div>
+                <div class="chart-bar w-7 bg-[#4a654a]/40 group-hover:bg-[#4a654a]" data-height="76%" style="height: 0%;"></div>
+                <span class="text-xs text-on-surface-variant">Mon</span>
+              </div>
+              <!-- Tue -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6">7.4k</div>
+                <div class="chart-bar w-7 bg-[#4a654a]/70 group-hover:bg-[#4a654a]" data-height="92%" style="height: 0%;"></div>
+                <span class="text-xs text-on-surface-variant">Tue</span>
+              </div>
+              <!-- Wed -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6">5.8k</div>
+                <div class="chart-bar w-7 bg-[#4a654a]/30 group-hover:bg-[#4a654a]" data-height="72%" style="height: 0%;"></div>
+                <span class="text-xs text-on-surface-variant">Wed</span>
+              </div>
+              <!-- Thu -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6">8.2k</div>
+                <div class="chart-bar w-7 bg-[#4a654a]/90 group-hover:bg-[#4a654a]" data-height="100%" style="height: 0%;"></div>
+                <span class="text-xs text-on-surface-variant">Thu</span>
+              </div>
+              <!-- Fri -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6">6.9k</div>
+                <div class="chart-bar w-7 bg-[#4a654a]/50 group-hover:bg-[#4a654a]" data-height="86%" style="height: 0%;"></div>
+                <span class="text-xs text-on-surface-variant">Fri</span>
+              </div>
+              <!-- Sat (Today - Solid with soft glow) -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] font-bold text-[#4a654a] absolute -top-6">6.4k</div>
+                <div class="chart-bar w-7 bg-[#4a654a] shadow-[0_0_16px_rgba(74,101,74,0.4)] ring-2 ring-[#ccebc8]" data-height="80%" style="height: 0%;"></div>
+                <span class="text-xs font-bold text-[#4a654a]">Sat (Today)</span>
+              </div>
+              <!-- Sun -->
+              <div class="flex flex-col items-center gap-2 flex-1 group relative">
+                <div class="text-[11px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6">-</div>
+                <div class="chart-bar w-7 bg-[#dfe4dd]" data-height="15%" style="height: 0%;"></div>
+                <span class="text-xs text-on-surface-variant">Sun</span>
+              </div>
+            </div>
+            <p class="text-xs text-center text-on-surface-variant mt-3">Hover or tap on any day to inspect individual step counts</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- VIEW 3: EXERCISES & CLINICAL MOVEMENT GUIDELINES -->
+      <!-- ========================================================= -->
+      <section id="view-exercises" data-view="exercises" class="space-y-6 w-full hidden">
+        
+        <!-- 1. ACOG Prenatal Exercise Guidelines & Red Flag Alerts -->
+        <div class="card-low p-6 border border-[#ebefe8] shadow-xs space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#ebefe8] pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#4a654a] text-xl">verified</span>
+                <span class="text-xs font-bold text-[#4a654a] uppercase tracking-wider">ACOG & RCOG Clinical Guidelines</span>
+              </div>
+              <h3 class="headline-lg text-lg sm:text-xl font-bold text-[#181d19] mt-0.5">Prenatal Exercise & Movement Safety Blueprint</h3>
+            </div>
+            <span class="badge-pill bg-[#ccebc8] text-[#243d25] text-xs font-bold self-start sm:self-auto">
+              Trimester 2 Target: 150m/week
+            </span>
+          </div>
+
+          <!-- Red Flag Warning Signs Stop Protocol (Expandable/Alert Box) -->
+          <div class="bg-[#ffdad6]/40 border border-[#ffdad6] p-4 rounded-2xl space-y-2">
+            <div class="flex items-center justify-between cursor-pointer" onclick="document.getElementById('exercise-warnings-list').classList.toggle('hidden')">
+              <div class="flex items-center gap-2 text-[#ba1a1a] font-bold text-xs">
+                <span class="material-symbols-outlined text-base">emergency</span>
+                <span>ACOG Red Flag Protocol: When to Stop Exercising Immediately</span>
+              </div>
+              <span class="text-[11px] text-[#ba1a1a] font-semibold underline">Tap to toggle</span>
+            </div>
+            <ul id="exercise-warnings-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 hidden">
+              <!-- Dynamically populated from seedData -->
+            </ul>
+          </div>
+
+          <!-- 5 Golden Rules Grid -->
+          <div>
+            <h4 class="text-xs font-bold text-[#181d19] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[#4a654a] text-base">stars</span>
+              <span>5 Golden Rules of Safe Pregnancy Movement</span>
+            </h4>
+            <div id="exercise-rules-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Studio & Library (2-Column Grid) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+          
+          <!-- LEFT: Interactive Guided Movement Studio (Span 5) -->
+          <div class="lg:col-span-5" id="guided-studio-panel">
+            <div class="card-white p-6 border border-[#ebefe8] text-center relative overflow-hidden shadow-xs h-full flex flex-col justify-between space-y-4">
+              <div>
+                <span class="label-sm text-[#4a654a] font-semibold uppercase tracking-wider block mb-1">Guided Movement Studio</span>
+                <h3 id="studio-exercise-title" class="headline-lg text-lg font-bold text-[#181d19] mb-0.5">Cat-Cow Spine & Sacroiliac Release</h3>
+                <span id="studio-exercise-category" class="text-xs font-medium text-on-surface-variant block mb-2">Mobility • Gentle (5m)</span>
+                <p id="studio-exercise-benefit" class="body-md text-xs text-on-surface-variant line-clamp-2">Gently mobilizes lumbar spine and relieves sacroiliac tension.</p>
+              </div>
+
+              <!-- Animated Breathing Guide Ring -->
+              <div class="relative w-44 h-44 mx-auto my-2 flex items-center justify-center">
+                <div class="w-40 h-40 rounded-full bg-[#ccebc8]/50 border-4 border-[#8ba889] flex flex-col items-center justify-center breathe-animation shadow-sm">
+                  <span id="exercise-timer-text" class="font-heading text-3xl font-extrabold text-[#243d25]">05:00</span>
+                  <span class="text-[11px] font-semibold text-[#4a654a] mt-0.5">Inhale • Exhale</span>
+                </div>
+              </div>
+
+              <!-- Studio Controls -->
+              <div class="space-y-2 pt-2">
+                <button id="exercise-timer-btn" onclick="toggleExerciseTimer()" class="btn-primary w-full py-3.5 text-xs font-bold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+                  <span class="material-symbols-outlined text-base">play_arrow</span>
+                  <span>Start Guided Session</span>
+                </button>
+
+                <div class="flex items-center gap-2">
+                  <button onclick="resetExerciseTimer()" class="btn-secondary flex-1 py-2.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">restart_alt</span>
+                    <span>Reset</span>
+                  </button>
+                  <button onclick="if(state.guidedExercise) logCompletedExercise(state.guidedExercise.id, state.guidedExercise.duration_minutes)" class="btn-secondary flex-1 py-2.5 text-xs font-semibold rounded-xl flex items-center justify-center gap-1 cursor-pointer text-[#4a654a]">
+                    <span class="material-symbols-outlined text-sm">check</span>
+                    <span>Quick Complete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Prenatal Movement Routine Library (Span 7) -->
+          <div class="lg:col-span-7 space-y-4">
+            
+            <!-- Controls Bar: Search & Category Chips -->
+            <div class="space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <h4 class="title-md text-base font-bold text-[#181d19] flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#4a654a]">fitness_center</span>
+                  <span>Prenatal Movement Library</span>
+                </h4>
+                
+                <!-- Search -->
+                <div class="relative w-full sm:w-64">
+                  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
+                  <input type="text" placeholder="Search exercises, cues..." 
+                    oninput="handleExerciseSearch(this.value)"
+                    class="w-full pl-9 pr-3 py-1.5 bg-white rounded-full border border-[#ebefe8] text-xs font-medium text-[#181d19] placeholder:text-[#737971] focus:outline-none focus:border-[#4a654a]">
+                </div>
+              </div>
+
+              <!-- Filter Chips -->
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+                <button onclick="filterExerciseCategory('All')" data-category="All" class="ex-filter-chip bg-[#4a654a] text-white px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  All Routines
+                </button>
+                <button onclick="filterExerciseCategory('Mobility')" data-category="Mobility" class="ex-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  Mobility
+                </button>
+                <button onclick="filterExerciseCategory('Pelvic Floor')" data-category="Pelvic Floor" class="ex-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  Pelvic Floor
+                </button>
+                <button onclick="filterExerciseCategory('Labor Prep')" data-category="Labor Prep" class="ex-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  Labor Prep
+                </button>
+                <button onclick="filterExerciseCategory('Strength')" data-category="Strength" class="ex-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  Strength
+                </button>
+                <button onclick="filterExerciseCategory('Cardio')" data-category="Cardio" class="ex-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                  Cardio
+                </button>
+              </div>
+            </div>
+
+            <!-- Library Grid -->
+            <div id="exercises-library-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- VIEW 4: NUTRITION & DISH HUB (FULLSCREEN GRID) -->
+      <!-- ========================================================= -->
+      <section id="view-nutrition" data-view="nutrition" class="space-y-8 w-full hidden">
+        
+        <!-- Daily Prenatal Macro Intake Bar (Widescreen 4-grid) -->
+        <div class="card-low p-6 border border-[#ebefe8] shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="title-md text-base font-bold text-[#181d19] flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#4a654a]">nutrition</span>
+              <span>Today's Prenatal Nutrition Targets</span>
+            </h3>
+            <span class="badge-pill bg-[#ccebc8] text-[#243d25] text-xs font-semibold">Trimester 2 RDAs</span>
+          </div>
+
+          <!-- 4 Micronutrient / Macro Target Bars -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-2xl border border-[#ebefe8]">
+              <div class="flex justify-between text-xs font-medium text-[#434841] mb-1.5">
+                <span>Calories</span>
+                <span id="nutr-cal-text" class="font-bold text-[#181d19]">420 / 2,200 kcal</span>
+              </div>
+              <div class="linear-progress-track h-2 bg-[#dfe4dd]">
+                <div id="nutr-cal-bar" class="linear-progress-fill bg-[#4a654a]" style="width: 20%;"></div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-[#ebefe8]">
+              <div class="flex justify-between text-xs font-medium text-[#434841] mb-1.5">
+                <span>Protein</span>
+                <span id="nutr-prot-text" class="font-bold text-[#181d19]">14g / 75g</span>
+              </div>
+              <div class="linear-progress-track h-2 bg-[#dfe4dd]">
+                <div id="nutr-prot-bar" class="linear-progress-fill bg-[#8ba889]" style="width: 19%;"></div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-[#ebefe8]">
+              <div class="flex justify-between text-xs font-medium text-[#434841] mb-1.5">
+                <span>Folate (B9)</span>
+                <span id="nutr-fol-text" class="font-bold text-[#243d25]">195µg / 600µg</span>
+              </div>
+              <div class="linear-progress-track h-2 bg-[#dfe4dd]">
+                <div id="nutr-fol-bar" class="linear-progress-fill bg-[#4a654a]" style="width: 32%;"></div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-[#ebefe8]">
+              <div class="flex justify-between text-xs font-medium text-[#434841] mb-1.5">
+                <span>Iron (Fe)</span>
+                <span id="nutr-iron-text" class="font-bold text-[#795154]">3.4mg / 27mg</span>
+              </div>
+              <div class="linear-progress-track h-2 bg-[#dfe4dd]">
+                <div id="nutr-iron-bar" class="linear-progress-fill bg-[#7c5357]" style="width: 13%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section A: Curated Prenatal Power Meal Combinations -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="title-md text-lg font-bold text-[#181d19] flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#4a654a]">auto_awesome</span>
+                <span>Curated Prenatal Meal Combinations & Power Pairings</span>
+              </h3>
+              <p class="text-xs text-on-surface-variant">Scientifically paired main dishes & sides designed for 3x nutrient absorption</p>
+            </div>
+            <span class="hidden sm:inline-block badge-pill bg-[#fdc7cb]/60 text-[#795154] text-xs font-semibold">Synergy Formulated</span>
+          </div>
+
+          <!-- Combinations Grid (3 columns on lg) -->
+          <div id="nutrition-meal-combos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Dynamically populated meal combinations -->
+          </div>
+        </div>
+
+        <!-- Section B: Individual Dish Recipes & Custom Dish Creator -->
+        <div class="space-y-4 pt-4 border-t border-[#ebefe8]">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="title-md text-lg font-bold text-[#181d19] flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#4a654a]">menu_book</span>
+                <span>Individual Recipes Library</span>
+              </h3>
+              <p class="text-xs text-on-surface-variant">Explore standalone pregnancy-tailored recipes and nutritional blueprints</p>
+            </div>
+
+            <!-- Add Custom Dish Button -->
+            <button onclick="openModal('add-dish-modal')" class="btn-primary py-2.5 px-4 text-xs font-semibold rounded-full flex items-center gap-1.5 shadow-xs flex-shrink-0 cursor-pointer" title="Create Custom Dish">
+              <span class="material-symbols-outlined text-base">add</span>
+              <span>New Custom Dish</span>
+            </button>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <!-- Search Bar -->
+            <div class="relative w-full sm:max-w-md">
+              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+              <input type="text" placeholder="Search recipes, nutrients, benefits..." 
+                oninput="handleDishSearch(this.value)"
+                class="w-full pl-10 pr-4 py-2.5 bg-white rounded-full border border-[#ebefe8] text-xs font-medium text-[#181d19] placeholder:text-[#737971] focus:outline-none focus:border-[#4a654a] shadow-xs">
+            </div>
+
+            <!-- Category Chips Bar -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs w-full sm:w-auto">
+              <button onclick="filterCategory('All')" data-category="All" class="filter-chip bg-[#4a654a] text-white px-4 py-2 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                All Dishes
+              </button>
+              <button onclick="filterCategory('Breakfast')" data-category="Breakfast" class="filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-4 py-2 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                Breakfast
+              </button>
+              <button onclick="filterCategory('Lunch')" data-category="Lunch" class="filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-4 py-2 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                Lunch
+              </button>
+              <button onclick="filterCategory('Dinner')" data-category="Dinner" class="filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-4 py-2 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                Dinner
+              </button>
+              <button onclick="filterCategory('Snack')" data-category="Snack" class="filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-4 py-2 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-colors">
+                Snacks
+              </button>
+            </div>
+          </div>
+
+          <!-- Dishes Grid (Widescreen 2-3 col grid) -->
+          <div id="dishes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Dynamically populated dish cards -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- VIEW 5: CLINICS & PRENATAL CARE TEAM DIRECTORY -->
+      <!-- ========================================================= -->
+      <section id="view-clinics" data-view="clinics" class="space-y-6 w-full hidden">
+        
+        <!-- Header Strip & Add Clinic Action -->
+        <div class="card-white p-6 border border-[#ebefe8] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <div class="w-8 h-8 rounded-full bg-[#ccebc8]/70 text-[#243d25] flex items-center justify-center">
+                <span class="material-symbols-outlined text-lg">local_hospital</span>
+              </div>
+              <h2 class="headline-lg text-xl sm:text-2xl font-bold text-[#181d19]">Prenatal Care Team & Clinics</h2>
+            </div>
+            <p class="text-xs sm:text-sm text-on-surface-variant">
+              Keep your obstetricians, midwives, emergency triage hospitals, and imaging specialists organized in one place.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openAddClinicModal()" class="btn-primary py-3 px-4 text-xs font-bold rounded-xl flex items-center gap-2 cursor-pointer shadow-xs whitespace-nowrap">
+              <span class="material-symbols-outlined text-base">add_circle</span>
+              <span>Add New Clinic / Doctor</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="card-low p-4 border border-[#ebefe8] space-y-3">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            
+            <!-- Search Bar -->
+            <div class="relative w-full sm:w-80">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
+              <input 
+                type="text" 
+                placeholder="Search clinic, doctor, or specialty..." 
+                oninput="handleClinicSearch(this.value)"
+                class="w-full pl-9 pr-3 py-2 text-xs bg-white rounded-xl border border-[#ebefe8] focus:border-[#4a654a] focus:outline-none placeholder:text-gray-400"
+              />
+            </div>
+
+            <!-- Clinic Type Filter Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 text-xs">
+              <button onclick="filterClinicType('All')" data-type="All" class="clinic-filter-chip bg-[#4a654a] text-white px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-all">
+                All Providers
+              </button>
+              <button onclick="filterClinicType('OB/GYN')" data-type="OB/GYN" class="clinic-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-all">
+                OB/GYN
+              </button>
+              <button onclick="filterClinicType('Midwifery')" data-type="Midwifery" class="clinic-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-all">
+                Midwifery & Doula
+              </button>
+              <button onclick="filterClinicType('Hospital L&D')" data-type="Hospital L&D" class="clinic-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-all">
+                Hospital L&D (24/7)
+              </button>
+              <button onclick="filterClinicType('Ultrasound Imaging')" data-type="Ultrasound Imaging" class="clinic-filter-chip bg-[#ebefe8] text-on-surface-variant hover:bg-[#dfe4dd] px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap cursor-pointer transition-all">
+                4D Imaging
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Clinics Dynamic Grid -->
+        <div id="clinics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Dynamically populated clinic cards -->
+        </div>
+
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- VIEW 6: PROFILE (FULLSCREEN 2-COLUMN) -->
+      <!-- ========================================================= -->
+      <section id="view-profile" data-view="profile" class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full hidden">
+        
+        <!-- Left Column: Sarah Miller Hero & Baseline Stats (Span 5) -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- 1. Profile Header -->
+          <div class="card-white p-6 text-center border border-[#ebefe8] shadow-xs relative">
+            <div class="relative w-32 h-32 mx-auto mb-3">
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80" alt="Sarah Miller" class="w-full h-full object-cover rounded-full ring-4 ring-[#4a654a]/20 shadow-sm" />
+              <button onclick="openEditProfileModal()" class="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-[#4a654a] text-white flex items-center justify-center shadow-md hover:scale-105 transition-transform cursor-pointer" title="Edit Profile">
+                <span class="material-symbols-outlined text-base">edit</span>
+              </button>
+            </div>
+
+            <h3 id="profile-user-name" class="headline-lg text-2xl font-bold text-[#181d19]">Sarah Miller</h3>
+            <p id="profile-user-week" class="body-lg text-sm text-[#4a654a] font-semibold mt-0.5">Week 24 • Trimester 2</p>
+            
+            <button onclick="openEditProfileModal()" class="btn-secondary text-xs font-semibold py-2 px-4 rounded-xl mt-3 inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
+              <span class="material-symbols-outlined text-sm">tune</span>
+              <span>Edit Profile & Pregnancy Month</span>
+            </button>
+          </div>
+
+          <!-- Supabase Cloud Database Status Card -->
+          <div class="card-white p-4 border border-[#ebefe8] shadow-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#3ecf8e] text-lg font-bold">bolt</span>
+                <h4 class="text-xs font-bold text-[#181d19]">Database Connection</h4>
+              </div>
+              <span id="cloud-status-badge" class="badge-pill bg-[#ebefe8] text-[#434841] text-[11px] font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">database</span>
+                <span>Checking...</span>
+              </span>
+            </div>
+            <p id="cloud-status-details" class="text-[11px] text-on-surface-variant line-clamp-1">
+              Local SQLite Database Active
+            </p>
+          </div>
+
+          <!-- 3. Personal Stats Grid -->
+          <div class="space-y-2.5">
+            <h4 class="title-md text-sm font-bold text-[#181d19]">Personal Health Baseline</h4>
+            
+            <div class="grid grid-cols-2 gap-3">
+              <div class="card-white p-4 border border-[#ebefe8]">
+                <span class="label-sm text-[#434841] block">Current Weight</span>
+                <span class="font-heading text-xl font-bold text-[#181d19]">142 lbs</span>
+              </div>
+
+              <div class="card-white p-4 border border-[#ebefe8]">
+                <span class="label-sm text-[#434841] block">Height</span>
+                <span class="font-heading text-xl font-bold text-[#181d19]">5' 6"</span>
+              </div>
+
+              <div class="col-span-2 card-white p-4 border border-[#ebefe8] flex items-center justify-between">
+                <div>
+                  <span class="label-sm text-[#434841] block">Age</span>
+                  <span class="font-heading text-xl font-bold text-[#181d19]">31 years</span>
+                </div>
+                <span class="badge-pill bg-[#ccebc8] text-[#243d25] text-xs font-semibold">Low Risk Baseline</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Journey Progress, Preferences & Account (Span 7) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- 2. Your Journey Card -->
+          <div class="card-low p-6 border border-[#ebefe8]">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-heading text-base font-bold text-[#181d19]">Your Pregnancy Journey</h4>
+              <span class="badge-pill bg-[#ccebc8] text-[#243d25] text-xs font-semibold">Due: Nov 15, 2026</span>
+            </div>
+
+            <!-- Journey Bar -->
+            <div class="w-full h-3 bg-[#dfe4dd] rounded-full overflow-hidden mb-3">
+              <div class="h-full bg-[#4a654a] rounded-full" style="width: 60%;"></div>
+            </div>
+
+            <div class="flex justify-between text-xs text-on-surface-variant font-medium">
+              <span>Week 1</span>
+              <span class="font-bold text-[#4a654a]">Week 24 (Current)</span>
+              <span>Week 40</span>
+            </div>
+          </div>
+
+          <!-- 4. Preferences Section -->
+          <div class="space-y-2.5">
+            <h4 class="title-md text-sm font-bold text-[#181d19]">Preferences</h4>
+            
+            <div class="card-white divide-y divide-[#ebefe8] border border-[#ebefe8] overflow-hidden">
+              <div class="p-4 flex items-center justify-between">
+                <div>
+                  <h5 class="text-xs font-bold text-[#181d19]">Daily Insights</h5>
+                  <span class="text-[11px] text-on-surface-variant">Receive morning tips & dish recommendations</span>
+                </div>
+                <input type="checkbox" checked class="w-5 h-5 accent-[#4a654a] rounded cursor-pointer">
+              </div>
+
+              <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-[#f6fbf4] transition-colors">
+                <span class="text-xs font-medium text-[#181d19]">Language</span>
+                <div class="flex items-center gap-1 text-xs text-on-surface-variant">
+                  <span>English</span>
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </div>
+              </div>
+
+              <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-[#f6fbf4] transition-colors">
+                <span class="text-xs font-medium text-[#181d19]">Measurement Units</span>
+                <div class="flex items-center gap-1 text-xs text-on-surface-variant">
+                  <span>Imperial (lbs, ft)</span>
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Account Section -->
+          <div class="card-white divide-y divide-[#ebefe8] border border-[#ebefe8] overflow-hidden">
+            <button onclick="exportHealthData()" class="w-full p-4 flex items-center justify-between hover:bg-[#f6fbf4] text-left transition-colors cursor-pointer">
+              <div class="flex items-center gap-3 text-xs font-medium text-[#181d19]">
+                <span class="material-symbols-outlined text-lg text-[#4a654a]">ios_share</span>
+                <span>Export Health Data (JSON Summary)</span>
+              </div>
+              <span class="material-symbols-outlined text-sm text-on-surface-variant">chevron_right</span>
+            </button>
+
+            <button onclick="showToast('Privacy policy: Data stored locally on your device.', 'shield')" class="w-full p-4 flex items-center justify-between hover:bg-[#f6fbf4] text-left transition-colors cursor-pointer">
+              <div class="flex items-center gap-3 text-xs font-medium text-[#181d19]">
+                <span class="material-symbols-outlined text-lg text-[#434841]">lock</span>
+                <span>Privacy Policy</span>
+              </div>
+              <span class="material-symbols-outlined text-sm text-on-surface-variant">open_in_new</span>
+            </button>
+
+            <button onclick="showToast('Log out action (demo mode)', 'logout')" class="w-full p-4 flex items-center justify-between hover:bg-[#ffdad6]/20 text-left transition-colors text-error cursor-pointer">
+              <div class="flex items-center gap-3 text-xs font-bold text-[#ba1a1a]">
+                <span class="material-symbols-outlined text-lg">logout</span>
+                <span>Log Out</span>
+              </div>
+            </button>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- FIXED BOTTOM NAVIGATION BAR (Mobile & Floating Island) -->
+    <!-- ========================================================= -->
+    <nav class="glass-nav">
+      <!-- Home / Dashboard -->
+      <button onclick="showView('dashboard')" data-view="dashboard" class="nav-tab-item active">
+        <div class="nav-icon-container">
+          <span class="material-symbols-outlined text-2xl">home</span>
+        </div>
+        <span class="label-sm text-[10px]">Home</span>
+      </button>
+
+      <!-- Activity -->
+      <button onclick="showView('activity')" data-view="activity" class="nav-tab-item">
+        <div class="nav-icon-container">
+          <span class="material-symbols-outlined text-2xl">directions_walk</span>
+        </div>
+        <span class="label-sm text-[10px]">Activity</span>
+      </button>
+
+      <!-- Exercises -->
+      <button onclick="showView('exercises')" data-view="exercises" class="nav-tab-item">
+        <div class="nav-icon-container">
+          <span class="material-symbols-outlined text-2xl">self_improvement</span>
+        </div>
+        <span class="label-sm text-[10px]">Exercises</span>
+      </button>
+
+      <!-- Nutrition & Dishes -->
+      <button onclick="showView('nutrition')" data-view="nutrition" class="nav-tab-item">
+        <div class="nav-icon-container">
+          <span class="material-symbols-outlined text-2xl">restaurant</span>
+        </div>
+        <span class="label-sm text-[10px]">Nutrition</span>
+      </button>
+
+      <!-- Clinics & Doctors -->
+      <button onclick="showView('clinics')" data-view="clinics" class="nav-tab-item">
+        <div class="nav-icon-container">
+          <span class="material-symbols-outlined text-2xl">local_hospital</span>
+        </div>
+        <span class="label-sm text-[10px]">Clinics</span>
+      </button>
+
+      <!-- Profile -->
+      <button onclick="showView('profile')" data-view="profile" class="nav-tab-item">
+        <div class="nav-icon-container">
+          <span class="material-symbols-outlined text-2xl">person</span>
+        </div>
+        <span class="label-sm text-[10px]">Profile</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 1: NOTIFICATION & ALERT CENTER DRAWER -->
+  <!-- ========================================================= -->
+  <div id="notifications-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('notifications-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#4a654a] text-xl">notifications</span>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Notifications & Alerts</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="markAllNotificationsRead()" class="text-xs font-bold text-[#4a654a] hover:underline cursor-pointer">
+            Mark all read
+          </button>
+          <button onclick="closeModal('notifications-modal')" class="p-1 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="notification-list" class="space-y-2.5 max-h-96 overflow-y-auto pr-1">
+        <!-- Dynamically injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 2: RECIPE DETAILS VIEWER -->
+  <!-- ========================================================= -->
+  <div id="recipe-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('recipe-modal')">
+    <div class="modal-sheet relative">
+      <div class="modal-drag-handle"></div>
+      <div id="recipe-modal-content">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 3: ADD CUSTOM DISH FORM -->
+  <!-- ========================================================= -->
+  <div id="add-dish-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('add-dish-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Add Custom Prenatal Dish</h3>
+          <p class="text-xs text-on-surface-variant">Saves directly to your SQLite dish database</p>
+        </div>
+        <button onclick="closeModal('add-dish-modal')" class="p-1.5 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form onsubmit="submitNewDish(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Dish Name *</label>
+          <input type="text" name="name" required placeholder="e.g. Spinach & Goat Cheese Frittata" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] focus:border-[#4a654a] outline-none text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Meal Category</label>
+            <select name="category" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch" selected>Lunch</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Snack">Snack</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Prep Time (min)</label>
+            <input type="number" name="prep_time" value="15" min="1" max="180" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Calories</label>
+            <input type="number" name="calories" value="380" required 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Protein (g)</label>
+            <input type="number" name="protein" value="18" step="0.1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Carbs (g)</label>
+            <input type="number" name="carbs" value="35" step="0.1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Fat (g)</label>
+            <input type="number" name="fat" value="14" step="0.1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Folate (µg)</label>
+            <input type="number" name="folate" value="160" step="1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Iron (mg)</label>
+            <input type="number" name="iron" value="3.5" step="0.1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Calcium (mg)</label>
+            <input type="number" name="calcium" value="120" step="1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">DHA (mg)</label>
+            <input type="number" name="dha" value="0" step="1" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Trimester Best For</label>
+            <select name="trimester" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+              <option value="All Trimesters">All Trimesters</option>
+              <option value="Trimester 1">Trimester 1</option>
+              <option value="Trimester 2" selected>Trimester 2</option>
+              <option value="Trimester 3">Trimester 3</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Dietary Tags</label>
+            <input type="text" name="tags" placeholder="e.g. High Folate, Vegetarian" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Photo URL (or Preset)</label>
+          <input type="url" name="image_url" value="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Pregnancy Health Benefit Description</label>
+          <textarea name="description" rows="2" placeholder="Why this dish nurtures you and your baby..." 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs"></textarea>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Ingredients (one per line)</label>
+          <textarea name="ingredients" rows="3" placeholder="1 cup fresh spinach&#10;2 organic eggs&#10;1/4 cup goat cheese" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs"></textarea>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Preparation Steps (one per line)</label>
+          <textarea name="steps" rows="3" placeholder="Whisk eggs with a pinch of sea salt.&#10;Sauté spinach until wilted.&#10;Pour eggs and cook through thoroughly (160°F+)." 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3.5 text-xs font-semibold rounded-xl mt-2 cursor-pointer">
+          Save Dish to Database
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 4: JOURNAL ENTRY MODAL -->
+  <!-- ========================================================= -->
+  <div id="journal-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('journal-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Week 24 Journal Entry</h3>
+          <p class="text-xs text-on-surface-variant">Capture your feelings, baby kicks, and gratitude</p>
+        </div>
+        <button onclick="closeModal('journal-modal')" class="p-1.5 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-bold text-[#181d19] block mb-1.5">How are you feeling today?</label>
+          <div class="grid grid-cols-4 gap-2 text-center text-xs">
+            <button onclick="showToast('Feeling Energized ✨', 'favorite')" class="p-2.5 bg-[#ccebc8]/50 hover:bg-[#ccebc8] rounded-2xl border border-[#b0ceae] font-medium cursor-pointer">
+              <span class="text-xl block mb-0.5">🌸</span>Energized
+            </button>
+            <button onclick="showToast('Feeling Calm 🌿', 'favorite')" class="p-2.5 bg-[#ebefe8] hover:bg-[#dfe4dd] rounded-2xl border border-[#c3c8bf] font-medium cursor-pointer">
+              <span class="text-xl block mb-0.5">🌿</span>Calm
+            </button>
+            <button onclick="showToast('Feeling Tender 🤍', 'favorite')" class="p-2.5 bg-[#fdc7cb]/50 hover:bg-[#fdc7cb] rounded-2xl border border-[#secondary] font-medium cursor-pointer">
+              <span class="text-xl block mb-0.5">🤍</span>Tender
+            </button>
+            <button onclick="showToast('Feeling Tired 🌙', 'favorite')" class="p-2.5 bg-[#ebefe8] hover:bg-[#dfe4dd] rounded-2xl border border-[#c3c8bf] font-medium cursor-pointer">
+              <span class="text-xl block mb-0.5">🌙</span>Tired
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-[#181d19] block mb-1.5">Baby Kicks & Moments</label>
+          <textarea rows="3" placeholder="Felt gentle flutters this morning after having breakfast..." 
+            class="w-full p-3 bg-[#f6fbf4] rounded-2xl border border-[#ebefe8] focus:border-[#4a654a] outline-none text-xs"></textarea>
+        </div>
+
+        <button onclick="showToast('Journal entry saved! 🌸', 'check_circle'); closeModal('journal-modal');" class="btn-primary w-full py-3 text-xs font-semibold rounded-2xl cursor-pointer">
+          Save Journal Note
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 5: EXERCISE DETAILS & FORM VIEWER -->
+  <!-- ========================================================= -->
+  <div id="exercise-details-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('exercise-details-modal')">
+    <div class="modal-sheet relative">
+      <div class="modal-drag-handle"></div>
+      <div id="exercise-modal-content">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 6: ADD NEW CLINIC / HEALTHCARE PROVIDER -->
+  <!-- ========================================================= -->
+  <div id="add-clinic-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('add-clinic-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Add Clinic or Healthcare Provider</h3>
+          <p class="text-xs text-on-surface-variant">Add an obstetrician, midwife, hospital, or ultrasound clinic</p>
+        </div>
+        <button onclick="closeModal('add-clinic-modal')" class="p-1.5 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form id="add-clinic-form" onsubmit="submitNewClinic(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Clinic / Hospital Name *</label>
+          <input type="text" name="name" required placeholder="e.g. Evergreen Maternal Health Center" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Doctor / Midwife Name</label>
+            <input type="text" name="doctor_name" placeholder="e.g. Dr. Maya Patel, MD" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Provider Specialty</label>
+            <input type="text" name="specialty" placeholder="e.g. Lead Obstetrician / Perinatology" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Category / Type</label>
+            <select name="clinic_type" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+              <option value="OB/GYN">OB/GYN</option>
+              <option value="Midwifery">Midwifery & Doula</option>
+              <option value="Hospital L&D">Hospital L&D (24/7)</option>
+              <option value="Ultrasound Imaging">4D Fetal Imaging</option>
+              <option value="Pelvic Physio">Pelvic Floor Therapy</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Office Phone</label>
+            <input type="tel" name="phone" placeholder="(555) 234-8901" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">24/7 Emergency Line</label>
+            <input type="tel" name="emergency_phone" placeholder="(555) 911-4911" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Physical Address</label>
+          <input type="text" name="address" placeholder="e.g. 742 Evergreen Medical Plaza, Seattle, WA" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Next Appointment (Date & Time)</label>
+            <input type="text" name="next_appointment" placeholder="e.g. 2026-09-04 10:30 AM" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Appointment Purpose</label>
+            <input type="text" name="appointment_purpose" placeholder="e.g. 26-Week Glucose Screening" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Notes & Instructions</label>
+          <textarea name="notes" rows="2" placeholder="e.g. Fast 2 hours before glucose drink. Bring urine sample kit." 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Website URL</label>
+            <input type="url" name="website" placeholder="https://..." 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Photo URL (Optional)</label>
+            <input type="url" name="image_url" placeholder="https://images.unsplash.com/..." 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="add-is-primary" name="is_primary" class="w-4 h-4 accent-[#4a654a] rounded cursor-pointer" />
+          <label for="add-is-primary" class="font-medium text-[#181d19] cursor-pointer">Set as Primary Care Clinic</label>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3.5 text-xs font-semibold rounded-xl mt-2 cursor-pointer shadow-xs">
+          Save Clinic to Directory 🏥
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 7: EDIT / CHANGE CLINIC DATA -->
+  <!-- ========================================================= -->
+  <div id="edit-clinic-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('edit-clinic-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Edit Clinic Details</h3>
+          <p class="text-xs text-on-surface-variant">Update doctor name, contacts, or appointment schedule</p>
+        </div>
+        <button onclick="closeModal('edit-clinic-modal')" class="p-1.5 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form id="edit-clinic-form" onsubmit="submitEditClinic(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" name="clinic_id" />
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Clinic / Hospital Name *</label>
+          <input type="text" name="name" required class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Doctor / Midwife Name</label>
+            <input type="text" name="doctor_name" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Specialty</label>
+            <input type="text" name="specialty" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Type</label>
+            <select name="clinic_type" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs">
+              <option value="OB/GYN">OB/GYN</option>
+              <option value="Midwifery">Midwifery & Doula</option>
+              <option value="Hospital L&D">Hospital L&D (24/7)</option>
+              <option value="Ultrasound Imaging">4D Fetal Imaging</option>
+              <option value="Pelvic Physio">Pelvic Floor Therapy</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Phone</label>
+            <input type="tel" name="phone" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Emergency Phone</label>
+            <input type="tel" name="emergency_phone" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Address</label>
+          <input type="text" name="address" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Next Appointment</label>
+            <input type="text" name="next_appointment" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Appointment Purpose</label>
+            <input type="text" name="appointment_purpose" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Notes</label>
+          <textarea name="notes" rows="2" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Website</label>
+            <input type="url" name="website" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Photo URL</label>
+            <input type="url" name="image_url" class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="edit-is-primary" name="is_primary" class="w-4 h-4 accent-[#4a654a] rounded cursor-pointer" />
+          <label for="edit-is-primary" class="font-medium text-[#181d19] cursor-pointer">Primary Care Clinic</label>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3.5 text-xs font-semibold rounded-xl mt-2 cursor-pointer shadow-xs">
+          Update Clinic Details ✨
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 8: CHANGE APPOINTMENT SCHEDULE -->
+  <!-- ========================================================= -->
+  <div id="change-appointment-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('change-appointment-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Change Appointment Date</h3>
+          <p id="change-app-clinic-name" class="text-xs text-[#4a654a] font-semibold mt-0.5">Clinic Name</p>
+        </div>
+        <button onclick="closeModal('change-appointment-modal')" class="p-1.5 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form id="change-appointment-form" onsubmit="submitChangeAppointment(event)" class="space-y-3.5 text-xs">
+        <input type="hidden" name="clinic_id" />
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">New Appointment Date & Time *</label>
+          <input type="text" name="next_appointment" required placeholder="e.g. 2026-09-12 11:00 AM" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Visit Purpose / Exam Description</label>
+          <input type="text" name="appointment_purpose" placeholder="e.g. 28-Week Rhogam Shot & 3D Ultrasound" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Visit Notes / Preparations</label>
+          <textarea name="notes" rows="2" placeholder="e.g. Arrive 15 mins early for paperwork." 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs"></textarea>
+        </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 9: EDIT USER PROFILE & PREGNANCY TIMELINE -->
+  <!-- ========================================================= -->
+  <div id="edit-profile-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('edit-profile-modal')">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="headline-lg text-lg font-bold text-[#181d19]">Edit Profile & Pregnancy Journey</h3>
+          <p class="text-xs text-on-surface-variant">Update your month, gestational week, due date, and personal baseline</p>
+        </div>
+        <button onclick="closeModal('edit-profile-modal')" class="p-1.5 rounded-full hover:bg-[#ebefe8] text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <form id="edit-profile-form" onsubmit="submitEditProfile(event)" class="space-y-4 text-xs">
+        
+        <!-- Live Synchronized Milestone Preview Banner -->
+        <div class="bg-gradient-to-r from-[#ccebc8]/60 via-[#f6fbf4] to-[#fdc7cb]/50 p-4 rounded-2xl border border-[#8ba889]/30 flex items-center justify-between shadow-2xs">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#4a654a] text-white flex items-center justify-center font-bold text-base shadow-xs">
+              🌽
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="edit-profile-week-display" class="font-heading text-sm font-bold text-[#181d19]">Week 24</span>
+                <span id="edit-profile-month-display" class="badge-pill bg-[#4a654a] text-white text-[10px] font-bold">Month 6</span>
+                <span id="edit-profile-trimester-display" class="text-[11px] text-[#4a654a] font-semibold">Trimester 2</span>
+              </div>
+              <p class="text-[11px] text-[#434841] mt-0.5">
+                Baby is currently the size of <strong id="edit-profile-baby-preview" class="text-[#243d25]">an ear of corn</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1">Your Full Name</label>
+          <input type="text" name="name" required placeholder="e.g. Sarah Miller" 
+            class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+        </div>
+
+        <!-- Pregnancy Month Selector (Month 1 to 9) -->
+        <div>
+          <label class="font-bold text-[#181d19] block mb-1.5">Pregnancy Month (Select 1–9)</label>
+          <div class="grid grid-cols-3 sm:grid-cols-9 gap-1.5 text-center text-xs">
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="1" onchange="handleProfileMonthChange(1)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M1</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="2" onchange="handleProfileMonthChange(2)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M2</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="3" onchange="handleProfileMonthChange(3)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M3</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="4" onchange="handleProfileMonthChange(4)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M4</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="5" onchange="handleProfileMonthChange(5)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M5</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="6" onchange="handleProfileMonthChange(6)" checked class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M6</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="7" onchange="handleProfileMonthChange(7)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M7</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="8" onchange="handleProfileMonthChange(8)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M8</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="pregnancy_month" value="9" onchange="handleProfileMonthChange(9)" class="peer hidden" />
+              <div class="p-2 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] peer-checked:bg-[#4a654a] peer-checked:text-white font-bold text-[11px] hover:border-[#8ba889] transition-all">M9</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Precise Gestational Week Slider (Week 1–40) -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold text-[#181d19]">Exact Pregnancy Week (1–40)</label>
+            <span class="text-xs font-bold text-[#4a654a]">Slide to adjust</span>
+          </div>
+          <input type="range" name="pregnancy_week" min="1" max="40" value="24" 
+            oninput="handleProfileWeekChange(this.value)" 
+            class="w-full accent-[#4a654a] cursor-pointer h-2 bg-[#dfe4dd] rounded-lg" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Estimated Due Date</label>
+            <input type="text" name="due_date" placeholder="e.g. Nov 15, 2026" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Baby Size Comparison Description</label>
+            <input type="text" name="baby_comparison" placeholder="e.g. an ear of corn" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Current Weight (lbs)</label>
+            <input type="number" step="0.5" name="weight_lbs" placeholder="142" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Height</label>
+            <input type="text" name="height" placeholder="5' 6&quot;" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+          <div>
+            <label class="font-bold text-[#181d19] block mb-1">Maternal Age</label>
+            <input type="number" name="age" placeholder="31" 
+              class="w-full p-2.5 bg-[#f6fbf4] rounded-xl border border-[#ebefe8] outline-none text-xs" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3.5 text-xs font-semibold rounded-xl mt-2 cursor-pointer shadow-xs">
+          Save & Update Pregnancy Timeline 🌸
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- FLOATING AI DOULA CHATBOT BUTTON & EXPANDABLE DRAWER -->
+  <!-- ========================================================= -->
+  
+  <!-- Floating FAB Button -->
+  <button id="ai-chat-fab" onclick="toggleChatDrawer()" class="fixed bottom-24 right-4 sm:bottom-6 sm:right-6 z-50 p-3.5 rounded-full bg-[#4a654a] text-white shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer ring-4 ring-[#ccebc8]/50 group" title="Ask Bloom AI Doula">
+    <span class="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">psychology_alt</span>
+    <span class="hidden sm:inline-block text-xs font-bold pr-1">Ask AI Doula</span>
+    <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#fdc7cb] border-2 border-white animate-pulse"></span>
+  </button>
+
+  <!-- Expandable AI Doula Chat Drawer -->
+  <div id="ai-chat-drawer" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] h-[540px] max-h-[85vh] rounded-3xl bg-white/95 backdrop-blur-2xl border border-[#ebefe8] shadow-2xl flex-col overflow-hidden hidden animate-scaleUp">
+    
+    <!-- Chat Header -->
+    <div class="p-4 bg-[#4a654a] text-white flex items-center justify-between flex-shrink-0 shadow-xs">
+      <div class="flex items-center gap-3">
+        <div class="relative w-9 h-9 rounded-full bg-[#ccebc8] text-[#243d25] flex items-center justify-center font-bold shadow-xs">
+          <span class="material-symbols-outlined text-xl">spa</span>
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#3ecf8e] ring-2 ring-white"></span>
+        </div>
+        <div>
+          <h4 class="font-heading text-sm font-bold leading-tight">Bloom AI Doula</h4>
+          <span class="text-[10px] text-[#ccebc8] font-medium flex items-center gap-1">
+            <span>●</span> Online • ACOG Clinical Grounding
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button onclick="toggleChatDrawer()" class="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors cursor-pointer" title="Minimize Chat">
+          <span class="material-symbols-outlined text-lg">expand_more</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Message Stream -->
+    <div id="chat-messages-list" class="flex-1 p-4 overflow-y-auto space-y-3.5 bg-[#f6fbf4]/60">
+      <!-- Injected dynamically via JS -->
+    </div>
+
+    <!-- Input Form & Quick Action Bar -->
+    <form id="chat-input-form" onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-[#ebefe8] flex items-center gap-2 flex-shrink-0">
+      <input 
+        id="chat-input-text"
+        type="text" 
+        autocomplete="off"
+        placeholder="Ask about foods, cramps, contractions..." 
+        class="flex-1 px-3.5 py-2.5 bg-[#f6fbf4] rounded-2xl border border-[#ebefe8] focus:border-[#4a654a] focus:outline-none text-xs placeholder:text-gray-400"
+      />
+      <button type="submit" class="w-10 h-10 rounded-2xl bg-[#4a654a] text-white flex items-center justify-center hover:bg-[#3d533d] active:scale-95 transition-transform cursor-pointer shadow-xs" title="Send Question">
+        <span class="material-symbols-outlined text-base">send</span>
+      </button>
+    </form>
+  </div>
+
+  <script src="public/app.js"></script>
+</body>
+</html>
