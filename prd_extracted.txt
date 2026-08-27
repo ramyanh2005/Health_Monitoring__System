@@ -1,0 +1,243 @@
+﻿VITALITY
+Senior Wellness Companion App
+Product Requirements Document (PRD)
+Document Owner
+Product Management
+Status
+Draft v1.0
+Date
+August 25, 2026
+Platform
+Mobile (iOS / Android)
+Related Screens
+Daily Dashboard, Daily Meals & Photos, Suggested Exercises, More Suggested Exercises, Progress Dashboard
+1. Overview
+Vitality is a mobile wellness companion designed for senior members to manage daily nutrition, hydration, light-impact exercise, medication reminders, and long-term health progress in one place. The product surfaces a small number of daily actions — log a meal, log water, start a suggested exercise, check vitals — inside a calm, high-contrast, low-friction interface suited to older adults, some of whom may be managing chronic conditions or mobility limitations.
+This PRD documents the requirements for five core mobile screens currently represented in design mockups: the Daily Dashboard, Daily Meals & Photos, Suggested Exercises, More Suggested Exercises, and the Progress Dashboard.
+1.1 Problem Statement
+Seniors often struggle to keep a consistent, safe, low-impact fitness routine without personalized guidance.
+Nutrition and hydration tracking tools on the market are complex, dense, and not designed for older or vision-impaired users.
+Families and caregivers lack a simple, at-a-glance view of a senior's daily health activity and milestones.
+Existing fitness apps assume high-intensity goals (step counts, calorie deficits) that are inappropriate or discouraging for the senior demographic.
+1.2 Goals & Objectives
+Provide a single daily home screen summarizing meals, exercise, hydration, and vitals for the day.
+Recommend safe, low-impact exercises tailored to senior mobility and fitness levels.
+Make meal and hydration logging effortless (photo-based logging, one-tap water add).
+Visualize weekly/monthly progress and celebrate milestones to reinforce adherence.
+Provide fast access to safety-critical actions (medications, heart rate, emergency).
+1.3 Target Users
+Primary: Senior members (65+) managing their own wellness routine independently.
+Secondary: Adult children / caregivers who may monitor or assist with the account.
+Tertiary: Care coordinators at senior-living or wellness programs (future consideration).
+2. Scope — Screens & Features
+2.1 Daily Dashboard (Home)
+The landing screen after login. Gives a warm, personalized greeting and a snapshot of the day's health activity.
+ID
+Requirement
+Priority
+DASH-1
+Display a personalized greeting with the member's first name and current date.
+Must
+DASH-2
+Show "Today's Summary" card with a short encouraging status message.
+Must
+DASH-3
+Display calories burned for the day in a highlighted callout card, including remaining amount to reach the daily goal.
+Must
+DASH-4
+Show three key daily-progress rings/metrics: steps, water intake, and calories, each with current value vs. goal.
+Must
+DASH-5
+Provide a "Log Activity" quick-action button from the summary card.
+Should
+DASH-6
+Provide a Quick Actions row with at minimum: Medications, Heart Rate, Diet Log, and Emergency.
+Must
+DASH-7
+Emergency quick action must be visually distinct (e.g., red icon) and reachable within one tap from Home.
+Must
+DASH-8
+Persistent left-hand navigation (or bottom nav on small screens) with Vitality branding, Dashboard, Exercises, Meals, Progress, Settings, and account/notification icons.
+Must
+2.2 Daily Meals & Photos
+Allows members to track meals and hydration for the day, with an emphasis on photo-based, low-effort logging.
+ID
+Requirement
+Priority
+MEAL-1
+Provide a "Track Your Plate" module allowing the member to take or upload a photo of a meal for automatic or assisted logging.
+Must
+MEAL-2
+Support two entry methods: "Take a Photo" (camera capture) and "Upload from Gallery."
+Must
+MEAL-3
+Display a Hydration tracker showing glasses of water consumed vs. a daily goal, with an "Add Glass" one-tap control.
+Must
+MEAL-4
+List "Today's Meals" grouped by meal type (breakfast, lunch, dinner, snack) with photo thumbnail, name, short description, and calorie count.
+Must
+MEAL-5
+Each logged meal entry links to a "View Recipe" detail page.
+Should
+MEAL-6
+Support adding a new meal entry outside the three/four standard meal slots (e.g., snacks).
+Should
+MEAL-7
+Persist meal photos and nutrition data to the member's daily and historical log for use in Progress Dashboard analytics.
+Must
+2.3 Suggested Exercises
+Presents a daily exercise goal and a curated list of low-impact activities recommended for the member.
+ID
+Requirement
+Priority
+EX-1
+Display a "Daily Goal" progress ring showing active minutes completed vs. the day's target.
+Must
+EX-2
+List "Suggested Activities" as cards, each with: activity name, duration, short benefit description, difficulty tag (e.g., Easy / Medium), and a "Start Exercise" call-to-action.
+Must
+EX-3
+Default suggested set should include gentle, senior-appropriate activities (e.g., Chair Yoga, Morning Stretch, Tai Chi, Water Aerobics).
+Must
+EX-4
+Difficulty tags must use accessible color coding with text labels, not color alone.
+Must
+EX-5
+Provide a "View More Exercises" / navigation path into the extended exercise catalog.
+Must
+EX-6
+"Start Exercise" opens guided instructions and/or a session timer appropriate to the activity.
+Should
+2.4 More Suggested Exercises (Extended Catalog)
+A browsable catalog of additional low-impact activities beyond the daily suggestions, organized as an image-led grid.
+ID
+Requirement
+Priority
+CAT-1
+Provide a "Back to Exercises" navigation control returning to the primary Suggested Exercises screen.
+Must
+CAT-2
+Display exercises in a photo-card grid: image, activity name, one-line benefit summary, and "Start Exercise" button.
+Must
+CAT-3
+Catalog should span varied low-impact modalities (e.g., Resistance Band Training, Balance & Stability, Gentle Stretching, Power Walking, Seated Pilates, Swimming Laps).
+Must
+CAT-4
+Support filtering/browsing by category or body focus (future enhancement).
+Could
+CAT-5
+Each activity detail should be reachable and startable in two taps or fewer from this screen.
+Should
+2.5 Progress Dashboard
+Aggregated view of health data over time, letting members and caregivers see trends and celebrate achievements.
+ID
+Requirement
+Priority
+PROG-1
+Provide a "Your Weekly Summary" panel summarizing overall movement and hydration trends in plain language.
+Must
+PROG-2
+Support toggling the summary time range between Daily, Weekly, and Monthly views.
+Must
+PROG-3
+Display key metric cards for Steps, Water, and Calories, each with a trend indicator (e.g., mini line chart or progress ring) and comparison to goal.
+Must
+PROG-4
+Provide a "Milestones Achieved" module celebrating streaks or goals reached (e.g., "7-Day Step Streak") with supporting imagery and a short congratulatory message.
+Should
+PROG-5
+Data shown must reconcile with entries logged via Meals, Exercises, and manual/quick-action logs.
+Must
+PROG-6
+Provide accessible, exportable/shareable summary suitable for a caregiver or physician (future enhancement).
+Could
+3. Navigation & Information Architecture
+All primary screens share a persistent left-hand navigation rail (desktop/tablet) or bottom tab bar (mobile) with the following top-level destinations, consistent with the mockups:
+Dashboard — Home / Daily Dashboard
+Exercises — Suggested Exercises and extended catalog
+Meals — Daily Meals & Photos
+Progress — Progress Dashboard
+Settings — account and app preferences
+The member's name, membership tier ("Senior Member"), and avatar are surfaced consistently in the top-right header across all screens, alongside notification and account icons.
+4. User Stories
+As a...
+I want to...
+So that...
+Senior member
+see a single home screen summarizing today's meals, water, steps, and calories
+I know at a glance whether I'm on track for the day
+Senior member
+log a meal by taking a photo of my plate
+I don't have to manually search for and enter food items
+Senior member
+add a glass of water with one tap
+hydration logging doesn't interrupt my day
+Senior member
+see exercises that match my fitness level
+I can stay active safely without injury
+Senior member
+start a suggested exercise directly from the list
+I can begin activity with minimal steps or confusion
+Senior member
+view my weekly progress and milestones
+I feel motivated to keep going
+Senior member
+reach the emergency action quickly from the home screen
+I can get help fast if something goes wrong
+Caregiver / family member
+view a senior's activity and milestone summary
+I can check on their wellbeing without intruding
+5. Non-Functional Requirements
+5.1 Accessibility
+Minimum body text size equivalent to 16pt with support for OS-level dynamic type / font scaling.
+Color contrast must meet WCAG 2.1 AA at minimum, given the older-adult user base.
+All interactive targets (buttons, cards) minimum 44x44pt tap area.
+Status/difficulty indicators must not rely on color alone — pair with text or icon.
+Full screen-reader (VoiceOver/TalkBack) support for all primary flows.
+5.2 Performance
+Dashboard and Progress screens should load cached data in under 1 second, with live sync completing within 3 seconds on a standard connection.
+Photo-based meal logging should support offline capture with background sync when connectivity resumes.
+5.3 Privacy & Security
+Health, meal-photo, and biometric data must be encrypted at rest and in transit.
+Caregiver access to a member's data requires explicit, revocable member consent.
+Compliant with applicable health-data privacy regulations for the target market (e.g., HIPAA considerations where applicable).
+5.4 Reliability
+Emergency quick action must function even in degraded network conditions (e.g., fallback to device-level emergency call).
+Logged data (meals, exercise, hydration) must not be lost on app crash or backgrounding; use local persistence with sync-on-reconnect.
+6. Success Metrics
+Metric
+Target
+Daily Active Usage (DAU/MAU)
+≥ 40% of registered members active daily within 90 days of launch
+Meal logging completion rate
+≥ 3 meals logged per active user per day on average
+Exercise start rate
+≥ 50% of members who view Suggested Exercises start at least one session weekly
+7-day activity streak rate
+≥ 30% of active members reach a 7-day milestone within first month
+Emergency action reliability
+100% successful trigger rate in QA and production monitoring
+Accessibility audit score
+Pass WCAG 2.1 AA automated + manual audit prior to launch
+7. Assumptions & Constraints
+Members have a compatible smartphone (iOS 15+ / Android 10+) and basic camera access permissions.
+Exercise content (video/instructions) is either produced in-house or licensed from a certified senior-fitness content provider.
+Calorie and nutrition estimation from meal photos may rely on a third-party food-recognition API; accuracy is best-effort, not medical-grade.
+Medication reminders integrate with data the member enters manually; the app does not currently verify prescriptions.
+7.1 Out of Scope (this release)
+Telehealth / live video consultation with clinicians.
+Wearable device integration (e.g., smartwatches) — planned for a future phase.
+Social / community features (friends, leaderboards).
+Caregiver companion app (dedicated caregiver-side experience).
+8. Open Questions
+What data source powers step counts — phone sensors, manual entry, or future wearable integration?
+What is the exact behavior of the Emergency action — direct 911/emergency-services call, caregiver alert, or both?
+Who defines the personalized daily exercise/calorie/water goals — a clinician, onboarding questionnaire, or configurable defaults?
+Is caregiver account linking in scope for this release or a fast-follow?
+9. Appendix — Reference Mockups
+This PRD is derived from the following mobile UI mockups (referenced by screen title as labeled in the design file):
+Daily Meals & Photos (Mobile)
+Suggested Exercises (Mobile)
+More Suggested Exercises
+Progress Dashboard
+Daily Dashboard
