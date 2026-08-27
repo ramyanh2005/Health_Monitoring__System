@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitalHealth - Guided Onboarding & Health Profile</title>
+  <meta name="description" content="VitalHealth personal health monitoring onboarding wizard and baseline health profile setup.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- App Wrapper -->
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Vital<strong>Health</strong></span>
+          <span class="brand-badge">Clinical Baseline</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="draft-indicator" id="draftIndicator" title="Auto-save status">
+          <span class="draft-dot"></span>
+          <span class="draft-text" id="draftStatusText">Draft auto-saved</span>
+        </div>
+        <button id="metricsModalBtn" class="btn-ghost" title="View Onboarding Funnel & SQLite Database">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <span>Metrics & DB</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Wizard Screen Container -->
+    <main class="wizard-container" id="wizardContainer">
+      
+      <!-- Dynamic Progress Section -->
+      <section class="progress-section" id="progressSection">
+        <div class="progress-top">
+          <!-- Circular Progress Meter -->
+          <div class="circular-progress-wrap">
+            <svg class="circular-chart" viewBox="0 0 36 36">
+              <path class="circle-bg"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path class="circle-fill" id="circleFillPath"
+                stroke-dasharray="25, 100"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+            <div class="circular-label">
+              <span class="step-num" id="circularStepText">1</span>
+              <span class="step-total" id="circularTotalText">of 4</span>
+            </div>
+          </div>
+
+          <div class="progress-details">
+            <div class="step-subtag" id="stepSubtag">STEP 1 • DEMOGRAPHICS</div>
+            <h1 class="step-heading" id="stepHeading">Basic Information</h1>
+            <p class="step-desc" id="stepDesc">Let's establish your baseline identity before tailoring your health profile.</p>
+          </div>
+        </div>
+
+        <!-- Linear Progress Track -->
+        <div class="linear-progress-bar">
+          <div class="progress-track">
+            <div class="progress-bar-fill" id="linearProgressBar"></div>
+          </div>
+          <div class="step-nodes" id="stepNodesContainer">
+            <!-- Dynamically populated step pills -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Wizard Card Form Area -->
+      <div class="card-flow-wrapper">
+        
+        <!-- STEP 1: Basic Info -->
+        <div class="step-panel active" id="stepPanel1" data-step="1">
+          <div class="form-group">
+            <label for="fullNameInput" class="form-label">
+              Full Name <span class="required-star">*</span>
+            </label>
+            <div class="input-icon-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input 
+                type="text" 
+                id="fullNameInput" 
+                class="form-input" 
+                placeholder="e.g. Jane Doe" 
+                maxlength="100"
+                autocomplete="name"
+              >
+            </div>
+            <div class="field-feedback" id="fullNameFeedback">Please enter your full name (1-100 characters).</div>
+          </div>
+
+          <div class="form-group mt-6">
+            <label class="form-label">
+              Biological Gender <span class="required-star">*</span>
+              <span class="field-hint">Used for physiological baseline & health risk calibration</span>
+            </label>
+            
+            <div class="tile-grid gender-tile-grid">
+              <!-- Female Option -->
+              <div class="select-tile" id="tileGenderFemale" data-value="Female">
+                <div class="tile-radio-circle"></div>
+                <div class="tile-icon-box female">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="9" r="6"/>
+                    <path d="M12 15v7M9 19h6"/>
+                  </svg>
+                </div>
+                <div class="tile-content">
+                  <div class="tile-title">Female</div>
+                  <div class="tile-subtitle">Includes specialized maternal health calibration</div>
+                </div>
+              </div>
+
+              <!-- Male Option -->
+              <div class="select-tile" id="tileGenderMale" data-value="Male">
+                <div class="tile-radio-circle"></div>
+                <div class="tile-icon-box male">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="10" cy="14" r="6"/>
+                    <path d="M19 5l-4.8 4.8M19 5h-5M19 5v5"/>
+                  </svg>
+                </div>
+                <div class="tile-content">
+                  <div class="tile-title">Male</div>
+                  <div class="tile-subtitle">Proceeds directly to vitals & biometric setup</div>
+                </div>
+              </div>
+            </div>
+            <div class="field-feedback" id="genderFeedback">Please select your biological gender.</div>
+          </div>
+
+          <!-- Step 1 Navigation -->
+          <div class="step-footer">
+            <div></div> <!-- empty spacer -->
+            <button id="btnStep1Next" class="btn-primary" disabled>
+              <span>Next Step</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- STEP 1.5: Maternal Status (Conditional for Female) -->
+        <div class="step-panel" id="stepPanel1_5" data-step="1.5">
+          <div class="panel-alert info-alert">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>Maternal wellness context allows tailored biometric ranges and nutritional guidance.</span>
+          </div>
+
+          <div class="form-group mt-4">
+            <label class="form-label">
+              Maternal Care Status <span class="required-star">*</span>
+            </label>
+            
+            <div class="radio-card-list">
+              <!-- Pregnant -->
+              <div class="radio-card" data-maternal="Pregnant">
+                <div class="radio-bullet"></div>
+                <div class="radio-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a5 5 0 0 1 5 5v2a6 6 0 0 1-3 5.196V19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-4.804A6 6 0 0 1 6 9V7a5 5 0 0 1 5-5h1z"/>
+                  </svg>
+                </div>
+                <div class="radio-card-body">
+                  <div class="radio-card-title">Pregnant</div>
+                  <div class="radio-card-desc">Currently expecting; calibrates trimesters & vital safety ranges</div>
+                </div>
+              </div>
+
+              <!-- Postpartum -->
+              <div class="radio-card" data-maternal="Postpartum">
+                <div class="radio-bullet"></div>
+                <div class="radio-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                  </svg>
+                </div>
+                <div class="radio-card-body">
+                  <div class="radio-card-title">Postpartum</div>
+                  <div class="radio-card-desc">Within 12 months after delivery; recovery & lactation tracking</div>
+                </div>
+              </div>
+
+              <!-- Neither -->
+              <div class="radio-card" data-maternal="Neither">
+                <div class="radio-bullet"></div>
+                <div class="radio-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M9 12l2 2 4-4"/>
+                  </svg>
+                </div>
+                <div class="radio-card-body">
+                  <div class="radio-card-title">Neither / Not Applicable</div>
+                  <div class="radio-card-desc">Standard physiological tracking without maternal adjustments</div>
+                </div>
+              </div>
+            </div>
+            <div class="field-feedback" id="maternalFeedback">Please choose an option to continue.</div>
+          </div>
+
+          <!-- Step 1.5 Navigation -->
+          <div class="step-footer">
+            <button id="btnStep1_5Back" class="btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Back</span>
+            </button>
+            <button id="btnStep1_5Next" class="btn-primary" disabled>
+              <span>Continue</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- STEP 2: Vitals -->
+        <div class="step-panel" id="stepPanel2" data-step="2">
+          
+          <!-- Grid of Numeric Vitals -->
+          <div class="vitals-input-grid">
+            
+            <!-- Age -->
+            <div class="vital-card">
+              <div class="vital-header">
+                <span class="vital-name">Age <span class="required-star">*</span></span>
+                <span class="vital-unit">years</span>
+              </div>
+              <div class="vital-input-row">
+                <input 
+                  type="number" 
+                  id="vitalAge" 
+                  class="vital-number-input" 
+                  placeholder="45" 
+                  min="1" 
+                  max="120"
+                >
+              </div>
+              <div class="vital-slider-wrap">
+                <input type="range" id="sliderAge" min="1" max="120" value="45" class="range-slider">
+              </div>
+              <div class="field-feedback" id="ageFeedback">Valid range: 1 - 120 years.</div>
+            </div>
+
+            <!-- Height -->
+            <div class="vital-card">
+              <div class="vital-header">
+                <span class="vital-name">Height <span class="required-star">*</span></span>
+                <span class="vital-unit">cm</span>
+              </div>
+              <div class="vital-input-row">
+                <input 
+                  type="number" 
+                  id="vitalHeight" 
+                  class="vital-number-input" 
+                  placeholder="175" 
+                  min="50" 
+                  max="250"
+                  step="0.5"
+                >
+              </div>
+              <div class="vital-slider-wrap">
+                <input type="range" id="sliderHeight" min="50" max="250" value="175" class="range-slider">
+              </div>
+              <div class="field-feedback" id="heightFeedback">Valid range: 50 - 250 cm.</div>
+            </div>
+
+            <!-- Weight -->
+            <div class="vital-card">
+              <div class="vital-header">
+                <span class="vital-name">Weight <span class="required-star">*</span></span>
+                <span class="vital-unit">kg</span>
+              </div>
+              <div class="vital-input-row">
+                <input 
+                  type="number" 
+                  id="vitalWeight" 
+                  class="vital-number-input" 
+                  placeholder="70" 
+                  min="2" 
+                  max="300"
+                  step="0.5"
+                >
+              </div>
+              <div class="vital-slider-wrap">
+                <input type="range" id="sliderWeight" min="2" max="300" value="70" class="range-slider">
+              </div>
+              <div class="field-feedback" id="weightFeedback">Valid range: 2 - 300 kg.</div>
+            </div>
+
+            <!-- Step Length (Optional) -->
+            <div class="vital-card optional-vital">
+              <div class="vital-header">
+                <span class="vital-name">Step Length <span class="opt-tag">Optional</span></span>
+                <span class="vital-unit">cm</span>
+              </div>
+              <div class="vital-input-row">
+                <input 
+                  type="number" 
+                  id="vitalStepLength" 
+                  class="vital-number-input" 
+                  placeholder="75" 
+                  min="20" 
+                  max="150"
+                  step="0.5"
+                >
+              </div>
+              <div class="vital-slider-wrap">
+                <input type="range" id="sliderStepLength" min="20" max="150" value="75" class="range-slider">
+              </div>
+              <div class="field-feedback" id="stepLengthFeedback">Range: 20 - 150 cm if provided.</div>
+            </div>
+
+          </div>
+
+          <!-- Live BMI Gauge Card -->
+          <div class="bmi-calc-card" id="bmiCard">
+            <div class="bmi-left">
+              <div class="bmi-label">Calculated Body Mass Index (BMI)</div>
+              <div class="bmi-value-row">
+                <span class="bmi-number" id="bmiNumber">22.9</span>
+                <span class="bmi-badge" id="bmiCategoryBadge">Normal Weight</span>
+              </div>
+              <p class="bmi-note" id="bmiNote">Calculated automatically from your height and weight in real-time.</p>
+            </div>
+            <div class="bmi-gauge-bar">
+              <div class="gauge-segments">
+                <span class="seg seg-under" title="Underweight (&lt;18.5)"></span>
+                <span class="seg seg-normal" title="Normal (18.5 - 24.9)"></span>
+                <span class="seg seg-over" title="Overweight (25 - 29.9)"></span>
+                <span class="seg seg-obese" title="Obese (≥30)"></span>
+              </div>
+              <div class="gauge-needle" id="gaugeNeedle" style="left: 45%;"></div>
+            </div>
+          </div>
+
+          <!-- Step 2 Navigation -->
+          <div class="step-footer">
+            <button id="btnStep2Back" class="btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Back</span>
+            </button>
+            <button id="btnStep2Next" class="btn-primary" disabled>
+              <span>Next Step</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- STEP 3: Health Status -->
+        <div class="step-panel" id="stepPanel3" data-step="3">
+          
+          <div class="form-group">
+            <label class="form-label">
+              How do you feel? <span class="required-star">*</span>
+              <span class="field-hint">Your current self-perceived overall wellbeing</span>
+            </label>
+            
+            <div class="wellbeing-grid">
+              <!-- Healthy -->
+              <div class="wellbeing-card" id="wellbeingHealthy" data-value="Healthy">
+                <div class="wellbeing-radio"></div>
+                <div class="wellbeing-icon healthy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                  </svg>
+                </div>
+                <div class="wellbeing-content">
+                  <div class="wellbeing-title">Healthy</div>
+                  <div class="wellbeing-desc">Generally feeling good with no immediate concerns.</div>
+                </div>
+              </div>
+
+              <!-- Unhealthy -->
+              <div class="wellbeing-card" id="wellbeingUnhealthy" data-value="Unhealthy">
+                <div class="wellbeing-radio"></div>
+                <div class="wellbeing-icon unhealthy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                </div>
+                <div class="wellbeing-content">
+                  <div class="wellbeing-title">Unhealthy</div>
+                  <div class="wellbeing-desc">Currently managing a condition or feeling unwell.</div>
+                </div>
+              </div>
+            </div>
+            <div class="field-feedback" id="wellbeingFeedback">Please indicate how you currently feel.</div>
+          </div>
+
+          <!-- Conditional Problem Section (Revealed when Unhealthy) -->
+          <div class="condition-reveal-box" id="conditionRevealBox">
+            <div class="form-group mt-4">
+              <label for="conditionInput" class="form-label">
+                What type of problem are you suffering from? <span class="required-star">*</span>
+              </label>
+
+              <!-- Quick Tag Suggestions -->
+              <div class="condition-tags-wrap">
+                <span class="tags-label">Quick select:</span>
+                <div class="tag-chips" id="conditionChips">
+                  <button type="button" class="chip-btn" data-tag="Hypertension">Hypertension</button>
+                  <button type="button" class="chip-btn" data-tag="Type 2 Diabetes">Type 2 Diabetes</button>
+                  <button type="button" class="chip-btn" data-tag="Asthma">Asthma</button>
+                  <button type="button" class="chip-btn" data-tag="Chronic Back Pain">Chronic Back Pain</button>
+                  <button type="button" class="chip-btn" data-tag="Thyroid Disorder">Thyroid Disorder</button>
+                  <button type="button" class="chip-btn" data-tag="High Cholesterol">High Cholesterol</button>
+                </div>
+              </div>
+
+              <textarea 
+                id="conditionInput" 
+                class="form-textarea" 
+                rows="3" 
+                placeholder="e.g. Hypertension, Diabetes, Chronic Back Pain..."
+                maxlength="500"
+              ></textarea>
+              <div class="field-feedback" id="conditionFeedback">Please describe the condition or health issue you are managing.</div>
+            </div>
+          </div>
+
+          <!-- Disability Status Toggle Switch -->
+          <div class="disability-toggle-card mt-6">
+            <div class="toggle-text-wrap">
+              <div class="toggle-main-title">Disability Status</div>
+              <div class="toggle-sub-desc">Do you have any physical or cognitive disabilities?</div>
+            </div>
+            <label class="switch-toggle" for="disabilityToggle">
+              <input type="checkbox" id="disabilityToggle">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+
+          <!-- Conditional Disability Notes -->
+          <div class="disability-details-box" id="disabilityDetailsBox">
+            <div class="form-group mt-3">
+              <label for="disabilityInput" class="form-label">Disability Details (Optional)</label>
+              <input 
+                type="text" 
+                id="disabilityInput" 
+                class="form-input" 
+                placeholder="e.g. Mobility impairment, hearing assistance, visual contrast needs"
+                maxlength="300"
+              >
+            </div>
+          </div>
+
+          <!-- Step 3 Navigation (Resolving PRD missing CTA issue) -->
+          <div class="step-footer">
+            <button id="btnStep3Back" class="btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Back</span>
+            </button>
+            <button id="btnStep3Next" class="btn-primary" disabled>
+              <span>Continue to Allergies</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- STEP 4: Allergies & Finalize Profile -->
+        <div class="step-panel" id="stepPanel4" data-step="4">
+          
+          <!-- Allergies Section -->
+          <div class="allergy-setup-card">
+            <div class="allergy-top-row">
+              <div>
+                <label class="form-label mb-0">Do you have any known allergies? <span class="required-star">*</span></label>
+                <div class="field-hint">Medications, food allergens, environmental triggers</div>
+              </div>
+              <div class="segmented-yes-no">
+                <button type="button" class="seg-btn" id="allergyNoBtn" data-value="false">No</button>
+                <button type="button" class="seg-btn" id="allergyYesBtn" data-value="true">Yes</button>
+              </div>
+            </div>
+
+            <!-- Conditional Allergy Details (Resolving PRD Gap) -->
+            <div class="allergy-details-reveal" id="allergyDetailsReveal">
+              <div class="mt-4">
+                <label class="form-label">Select or Type Known Allergies:</label>
+                <div class="allergy-tag-chips" id="allergyChips">
+                  <button type="button" class="chip-btn" data-allergy="Penicillin">Penicillin</button>
+                  <button type="button" class="chip-btn" data-allergy="Peanuts">Peanuts</button>
+                  <button type="button" class="chip-btn" data-allergy="Pollen">Pollen</button>
+                  <button type="button" class="chip-btn" data-allergy="Shellfish">Shellfish</button>
+                  <button type="button" class="chip-btn" data-allergy="Latex">Latex</button>
+                  <button type="button" class="chip-btn" data-allergy="Sulfa Drugs">Sulfa Drugs</button>
+                  <button type="button" class="chip-btn" data-allergy="Dairy / Lactose">Dairy / Lactose</button>
+                </div>
+                <input 
+                  type="text" 
+                  id="allergyInput" 
+                  class="form-input mt-2" 
+                  placeholder="e.g. Penicillin, Pollen, Peanuts..."
+                  maxlength="500"
+                >
+                <div class="field-feedback" id="allergyFeedback">Please specify your known allergies.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Primary Goal Selector -->
+          <div class="primary-goal-card mt-5">
+            <div class="goal-header">
+              <div>
+                <span class="goal-label">Primary Health & Monitoring Focus</span>
+                <div class="goal-selected-display" id="goalSelectedDisplay">Manage Blood Pressure</div>
+              </div>
+              <button type="button" id="btnChangeGoal" class="btn-sm-ghost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+                <span>Change Focus</span>
+              </button>
+            </div>
+
+            <!-- Goal Options Selector (collapsible) -->
+            <div class="goal-options-grid" id="goalOptionsGrid">
+              <div class="goal-pill active" data-goal="Manage Blood Pressure">Manage Blood Pressure</div>
+              <div class="goal-pill" data-goal="Cardiovascular Fitness">Cardiovascular Fitness</div>
+              <div class="goal-pill" data-goal="Weight Management">Weight Management</div>
+              <div class="goal-pill" data-goal="Preventative Longevity">Preventative Longevity</div>
+              <div class="goal-pill" data-goal="Sleep & Recovery">Sleep & Recovery</div>
+              <div class="goal-pill" data-goal="Postpartum Health">Postpartum Health</div>
+            </div>
+          </div>
+
+          <!-- Profile Summary Review Panel (with inline Edit jump links) -->
+          <div class="summary-review-card mt-6">
+            <div class="summary-card-header">
+              <div class="summary-title-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <span class="summary-heading">Profile Summary Review</span>
+              </div>
+              <span class="summary-sub">Confirm your baseline details before final submission</span>
+            </div>
+
+            <div class="summary-sections-grid">
+              
+              <!-- Section 1: Demographics -->
+              <div class="summary-group-card">
+                <div class="group-card-header">
+                  <span class="group-title">Identity & Demographics</span>
+                  <button type="button" class="btn-link-edit" onclick="app.jumpToStep(1)">Edit</button>
+                </div>
+                <div class="group-items">
+                  <div class="sum-row"><span class="sum-lbl">Name:</span> <strong id="sumName">-</strong></div>
+                  <div class="sum-row"><span class="sum-lbl">Gender:</span> <span id="sumGender">-</span></div>
+                  <div class="sum-row" id="sumMaternalRow" style="display:none;"><span class="sum-lbl">Maternal:</span> <span id="sumMaternal">-</span></div>
+                </div>
+              </div>
+
+              <!-- Section 2: Vitals & BMI -->
+              <div class="summary-group-card">
+                <div class="group-card-header">
+                  <span class="group-title">Biometrics & Vitals</span>
+                  <button type="button" class="btn-link-edit" onclick="app.jumpToStep(2)">Edit</button>
+                </div>
+                <div class="group-items">
+                  <div class="sum-row"><span class="sum-lbl">Age:</span> <strong id="sumAge">-</strong></div>
+                  <div class="sum-row"><span class="sum-lbl">Height / Weight:</span> <span id="sumHeightWeight">-</span></div>
+                  <div class="sum-row"><span class="sum-lbl">Calculated BMI:</span> <span id="sumBmi" class="sum-badge">-</span></div>
+                  <div class="sum-row"><span class="sum-lbl">Step Length:</span> <span id="sumStepLength">-</span></div>
+                </div>
+              </div>
+
+              <!-- Section 3: Health Status -->
+              <div class="summary-group-card">
+                <div class="group-card-header">
+                  <span class="group-title">Health Wellbeing & Status</span>
+                  <button type="button" class="btn-link-edit" onclick="app.jumpToStep(3)">Edit</button>
+                </div>
+                <div class="group-items">
+                  <div class="sum-row"><span class="sum-lbl">Feeling:</span> <strong id="sumWellbeing">-</strong></div>
+                  <div class="sum-row"><span class="sum-lbl">Conditions:</span> <span id="sumCondition">-</span></div>
+                  <div class="sum-row"><span class="sum-lbl">Disability:</span> <span id="sumDisability">None reported</span></div>
+                </div>
+              </div>
+
+              <!-- Section 4: Allergies -->
+              <div class="summary-group-card">
+                <div class="group-card-header">
+                  <span class="group-title">Allergies & Risk Factors</span>
+                  <button type="button" class="btn-link-edit" onclick="app.jumpToStep(4)">Edit</button>
+                </div>
+                <div class="group-items">
+                  <div class="sum-row"><span class="sum-lbl">Allergies:</span> <strong id="sumAllergies">-</strong></div>
+                  <div class="sum-row"><span class="sum-lbl">Primary Focus:</span> <span id="sumGoal">Manage Blood Pressure</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Step 4 Navigation -->
+          <div class="step-footer">
+            <button id="btnStep4Back" class="btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Back</span>
+            </button>
+            <button id="btnCompleteSetup" class="btn-primary btn-complete">
+              <span id="completeBtnText">Complete Setup</span>
+              <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+
+    <!-- POST-ONBOARDING SUCCESS & DASHBOARD VIEW -->
+    <section class="dashboard-view" id="dashboardView" style="display: none;">
+      
+      <!-- Congratulations Banner -->
+      <div class="success-hero-banner">
+        <div class="success-check-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        </div>
+        <h2 class="hero-title">Onboarding Complete!</h2>
+        <p class="hero-sub">Welcome to VitalHealth, <strong id="dashUserName">Jane Doe</strong>. Your clinical baseline has been calibrated and saved to the database.</p>
+        
+        <div class="hero-actions">
+          <button id="dashExportJsonBtn" class="btn-secondary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            <span>Download Health Record</span>
+          </button>
+          <button id="dashNewOnboardBtn" class="btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>New Profile Setup</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dashboard Cards Grid -->
+      <div class="dash-grid mt-6">
+        
+        <!-- Score Card -->
+        <div class="dash-card">
+          <div class="card-tag">CLINICAL SCORE</div>
+          <div class="vitality-score-wrap">
+            <div class="score-circle">
+              <span class="score-number" id="dashVitalityScore">94</span>
+              <span class="score-lbl">Vitality</span>
+            </div>
+            <div class="score-insights">
+              <h3 class="score-title" id="dashScoreTitle">Excellent Baseline</h3>
+              <p class="score-desc" id="dashScoreDesc">Biometrics calibrated for personalized health alerts.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vitals Overview Card -->
+        <div class="dash-card">
+          <div class="card-tag">BIOMETRIC PROFILE</div>
+          <div class="dash-vitals-row">
+            <div class="dash-vital-item">
+              <span class="dv-label">Age</span>
+              <strong class="dv-val" id="dashAge">-</strong>
+            </div>
+            <div class="dash-vital-item">
+              <span class="dv-label">Height</span>
+              <strong class="dv-val" id="dashHeight">-</strong>
+            </div>
+            <div class="dash-vital-item">
+              <span class="dv-label">Weight</span>
+              <strong class="dv-val" id="dashWeight">-</strong>
+            </div>
+            <div class="dash-vital-item">
+              <span class="dv-label">BMI</span>
+              <strong class="dv-val" id="dashBmi">-</strong>
+            </div>
+          </div>
+          <div class="dash-goal-row mt-3">
+            <span class="goal-tag">Target: <strong id="dashGoal">Manage Blood Pressure</strong></span>
+          </div>
+        </div>
+
+        <!-- Tailored Clinical Recommendations -->
+        <div class="dash-card dash-card-wide">
+          <div class="card-tag">PERSONALIZED CLINICAL RECOMMENDATIONS</div>
+          <div class="recommendations-list" id="dashRecList">
+            <!-- Dynamically populated recommendations based on health profile -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <!-- METRICS & SQLITE DATABASE INSPECTOR MODAL -->
+  <div class="modal-backdrop" id="metricsModalBackdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <h2>Onboarding Analytics & SQLite Explorer</h2>
+        </div>
+        <button id="closeMetricsModal" class="btn-close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- PRD Section 9 Success Metrics Overview -->
+        <div class="analytics-stat-grid">
+          <div class="stat-card">
+            <div class="stat-lbl">Completion Rate</div>
+            <div class="stat-val" id="metricCompletionRate">0%</div>
+            <div class="stat-sub">PRD Section 9 Goal: &gt;85%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Avg Completion Time</div>
+            <div class="stat-val" id="metricAvgTime">0s</div>
+            <div class="stat-sub">Low friction baseline</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Vitals Completeness</div>
+            <div class="stat-val" id="metricVitalsPct">100%</div>
+            <div class="stat-sub">Complete biometric rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Stored Profiles</div>
+            <div class="stat-val" id="metricProfilesCount">0</div>
+            <div class="stat-sub">In SQLite Database</div>
+          </div>
+        </div>
+
+        <!-- Funnel Step Breakdown -->
+        <div class="funnel-container mt-5">
+          <div class="funnel-title">Onboarding Funnel Step Drop-off Tracker</div>
+          <div class="funnel-bars" id="funnelBarsContainer">
+            <!-- Dynamically populated step drop-off bars -->
+          </div>
+        </div>
+
+        <!-- Live Database Records Inspector -->
+        <div class="db-table-container mt-6">
+          <div class="db-table-header">
+            <h3>SQLite `profiles` Table Live Records</h3>
+            <input type="text" id="dbSearchInput" placeholder="Filter by name, condition..." class="db-search-input">
+          </div>
+          <div class="table-scroll">
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Full Name</th>
+                  <th>Gender</th>
+                  <th>Maternal</th>
+                  <th>Age</th>
+                  <th>BMI</th>
+                  <th>Wellbeing / Condition</th>
+                  <th>Allergies</th>
+                  <th>Goal</th>
+                  <th>Created At</th>
+                </tr>
+              </thead>
+              <tbody id="dbTableBody">
+                <!-- Records populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button id="refreshMetricsBtn" class="btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          <span>Refresh Data</span>
+        </button>
+        <button id="closeMetricsModalFooter" class="btn-primary btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="/static/app.js"></script>
+</body>
+</html>
