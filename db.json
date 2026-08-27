@@ -1,0 +1,19 @@
+{
+  "dailyLogs": {
+    "2026-08-27": {
+      "waterIntake": 4000,
+      "loggedWorkouts": [
+        {
+          "type": "Yoga",
+          "duration": 30,
+          "timestamp": "10:40 am"
+        },
+        {
+          "type": "Joint Mobilization",
+          "duration": 10,
+          "timestamp": "10:40 am"
+        }
+      ]
+    }
+  }
+}

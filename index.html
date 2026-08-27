@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Post-Recovery & Health Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15.5h-2v-6h2v6zm0-8h-2v-2h2v2z"/>
+                    </svg>
+                </div>
+                <h2>Aura</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-item active" data-tab="overview">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                    <span>Overview</span>
+                </a>
+                <a href="#water" class="nav-item" data-tab="water">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                    <span>Water Tracker</span>
+                </a>
+                <a href="#exercise" class="nav-item" data-tab="exercise">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v8H2zm4 0v8m4-8v8m4-8v8"/></svg>
+                    <span>Exercise Log</span>
+                </a>
+                <a href="#meals" class="nav-item" data-tab="meals">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span>Meal Advisor</span>
+                </a>
+                <a href="#scanner" class="nav-item" data-tab="scanner">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    <span>AI Food Scanner</span>
+                </a>
+            </nav>
+            <div class="user-profile-summary">
+                <div class="avatar">U</div>
+                <div class="info">
+                    <h4>Active User</h4>
+                    <p>Post-Recovery Plan</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-title">
+                    <p class="date-today" id="currentDate">Thursday, August 27</p>
+                    <h1 id="welcomeText">Recovery Dashboard</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="date-picker-wrap">
+                        <label for="dashboardDatePicker">Log Date:</label>
+                        <input type="date" id="dashboardDatePicker" class="form-control date-picker-input">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tab Content Containers -->
+            <div class="tab-content active" id="tab-overview">
+                <div class="dashboard-grid">
+                    <!-- Welcome Card -->
+                    <div class="grid-card col-span-3 welcome-hero">
+                        <div class="hero-text">
+                            <h2>Welcome back to your recovery path!</h2>
+                            <p>Here is your health snapshot for today. Keep up the good work by hitting your water targets and logging exercises.</p>
+                        </div>
+                        <div class="hero-badge">Aura AI Active</div>
+                    </div>
+
+                    <!-- Water Quick Card -->
+                    <div class="grid-card glass-card clickable-card" onclick="switchTab('water')">
+                        <div class="card-header">
+                            <h3>Water Intake</h3>
+                            <div class="card-icon water-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                            </div>
+                        </div>
+                        <div class="card-value">
+                            <span id="overview-water-val">0.0</span> <small>/ 3.0 L</small>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill water-bar" id="overview-water-progress" style="width: 0%"></div>
+                        </div>
+                        <p class="card-footer">Click to view details or log drink</p>
+                    </div>
+
+                    <!-- Exercise Quick Card -->
+                    <div class="grid-card glass-card clickable-card" onclick="switchTab('exercise')">
+                        <div class="card-header">
+                            <h3>Exercise logged</h3>
+                            <div class="card-icon exercise-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v8H2zm4 0v8m4-8v8m4-8v8"/></svg>
+                            </div>
+                        </div>
+                        <div class="card-value">
+                            <span id="overview-exercise-val">0</span> <small>mins</small>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill exercise-bar" id="overview-exercise-progress" style="width: 0%"></div>
+                        </div>
+                        <p class="card-footer">Click to start tracking activities</p>
+                    </div>
+
+                    <!-- Food Quick Card -->
+                    <div class="grid-card glass-card clickable-card" onclick="switchTab('scanner')">
+                        <div class="card-header">
+                            <h3>AI Food Scanner</h3>
+                            <div class="card-icon scanner-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            </div>
+                        </div>
+                        <div class="scanner-preview-placeholder">
+                            <div class="pulse-ring"></div>
+                            <span>Launch Camera Scan</span>
+                        </div>
+                        <p class="card-footer">Check if your meal matches your plan</p>
+                    </div>
+
+                    <!-- Analytics Progress Chart Card -->
+                    <div class="grid-card col-span-3 glass-card">
+                        <div class="card-header">
+                            <h3>Weekly Recovery Analytics</h3>
+                            <span class="badge" style="background: rgba(0, 242, 254, 0.1); color: var(--primary);">7-Day Trend</span>
+                        </div>
+                        <div class="chart-workspace" style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Meal Plan Recommendation Card -->
+                    <div class="grid-card col-span-3 glass-card">
+                        <div class="card-header">
+                            <h3>Today's Recommended Meals</h3>
+                            <button class="btn btn-secondary btn-sm" onclick="switchTab('meals')">View Custom Meals</button>
+                        </div>
+                        <div class="overview-meals">
+                            <div class="overview-meal-item">
+                                <span class="meal-tag breakfast">Breakfast</span>
+                                <div class="meal-desc">
+                                    <h4 id="overview-breakfast-title">Oatmeal with Almonds & Berries</h4>
+                                    <p id="overview-breakfast-nut">380 kcal | Protein: 12g</p>
+                                </div>
+                            </div>
+                            <div class="overview-meal-item">
+                                <span class="meal-tag lunch">Lunch</span>
+                                <div class="meal-desc">
+                                    <h4 id="overview-lunch-title">Grilled Chicken Caesar Salad</h4>
+                                    <p id="overview-lunch-nut">450 kcal | Protein: 35g</p>
+                                </div>
+                            </div>
+                            <div class="overview-meal-item">
+                                <span class="meal-tag dinner">Dinner</span>
+                                <div class="meal-desc">
+                                    <h4 id="overview-dinner-title">Baked Salmon with Quinoa & Asparagus</h4>
+                                    <p id="overview-dinner-nut">520 kcal | Protein: 42g</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Water Tracker Section -->
+            <div class="tab-content" id="tab-water">
+                <div class="detail-container">
+                    <div class="glass-card main-detail-card">
+                        <div class="card-header">
+                            <h2>Water Intake Tracker</h2>
+                            <div class="target-badge">Daily Target: 3.0 Liters</div>
+                        </div>
+                        
+                        <div class="water-tracker-workspace">
+                            <!-- Animated glass -->
+                            <div class="water-glass-container">
+                                <div class="water-glass">
+                                    <div class="water-liquid" id="liquid-level">
+                                        <div class="wave"></div>
+                                        <div class="wave"></div>
+                                    </div>
+                                    <span class="water-percentage" id="water-percent-label">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="water-controls">
+                                <div class="stat-group">
+                                    <div class="big-stat"><span id="water-current-liter">0.00</span><span class="unit">L</span></div>
+                                    <div class="sub-stat">Logged for selected date</div>
+                                </div>
+
+                                <div class="quick-add-grid">
+                                    <button class="btn btn-water" onclick="addWater(250)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                                        +250ml <small>(Glass)</small>
+                                    </button>
+                                    <button class="btn btn-water" onclick="addWater(500)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                                        +500ml <small>(Bottle)</small>
+                                    </button>
+                                    <button class="btn btn-water" onclick="addWater(750)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                                        +750ml <small>(Large Bottle)</small>
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="resetWater()">Reset Today</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise Log Section -->
+            <div class="tab-content" id="tab-exercise">
+                <div class="detail-container">
+                    <div class="glass-card main-detail-card">
+                        <div class="card-header">
+                            <h2>Exercise & Activity Log</h2>
+                            <div class="target-badge">Daily Target: 30 Mins</div>
+                        </div>
+
+                        <div class="exercise-grid">
+                            <!-- Log a new workout -->
+                            <div class="exercise-form-panel">
+                                <h3>Track New Activity</h3>
+                                <form id="exerciseForm" onsubmit="handleExerciseSubmit(event)">
+                                    <div class="form-group">
+                                        <label for="workoutType">Activity Type</label>
+                                        <select id="workoutType" class="form-control">
+                                            <option value="Walking">Walking (Light Recovery)</option>
+                                            <option value="Yoga">Yoga & Stretching</option>
+                                            <option value="Cycling">Light Cycling</option>
+                                            <option value="Jogging">Jogging / Cardio</option>
+                                            <option value="Strength">Strength / Resistance</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="workoutDuration">Duration (minutes)</label>
+                                        <input type="number" id="workoutDuration" class="form-control" min="1" max="180" value="15" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Add Activity</button>
+                                </form>
+
+                                <div class="timer-section">
+                                    <h4>Or Use Active Session Timer</h4>
+                                    <div class="timer-display" id="timerDisplay">00:00</div>
+                                    <div class="timer-controls">
+                                        <button class="btn btn-secondary" id="timerStartBtn" onclick="toggleWorkoutTimer()">Start Timer</button>
+                                        <button class="btn btn-danger" id="timerSaveBtn" onclick="saveTimerWorkout()" style="display:none;">Save Activity</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recommendations and list of exercises logged -->
+                            <div class="exercise-list-panel">
+                                <h3>Logged Activities</h3>
+                                <div class="exercise-history-list" id="exerciseHistory">
+                                    <div class="empty-state">No activities logged for selected date yet.</div>
+                                </div>
+
+                                <div class="workout-suggestions-panel">
+                                    <h3>Suggested Recovery Workouts</h3>
+                                    <div class="suggestions-list">
+                                        <div class="suggestion-item">
+                                            <div class="suggestion-meta">
+                                                <strong>Joint Mobilization</strong>
+                                                <span>10 Mins • Low Intensity</span>
+                                            </div>
+                                            <button class="btn btn-sm btn-primary" onclick="quickLogWorkout('Joint Mobilization', 10)">Quick Log</button>
+                                        </div>
+                                        <div class="suggestion-item">
+                                            <div class="suggestion-meta">
+                                                <strong>Deep Breathing & Yoga Stretch</strong>
+                                                <span>15 Mins • Very Low Intensity</span>
+                                            </div>
+                                            <button class="btn btn-sm btn-primary" onclick="quickLogWorkout('Yoga Stretch', 15)">Quick Log</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meal Advisor Section -->
+            <div class="tab-content" id="tab-meals">
+                <div class="detail-container">
+                    <div class="glass-card main-detail-card">
+                        <div class="card-header meal-header-wrap">
+                            <div>
+                                <h2>Meal Suggestions Advisor</h2>
+                                <p>Personalized dietary planning matched with your current recovery stage</p>
+                            </div>
+                            <div class="filter-controls">
+                                <label for="dietPreference">Diet Filter:</label>
+                                <select id="dietPreference" class="form-control inline-select" onchange="loadSuggestedMeals()">
+                                    <option value="balanced">Balanced / High-Protein</option>
+                                    <option value="keto">Keto / Low-Carb</option>
+                                    <option value="vegan">Vegan / Plant-Based</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="meals-cards-grid">
+                            <!-- Breakfast Card -->
+                            <div class="meal-card glass-card">
+                                <div class="meal-header bg-breakfast">
+                                    <h3>Breakfast</h3>
+                                </div>
+                                <div class="meal-body">
+                                    <h4 id="meal-breakfast-title">Oatmeal with Berries</h4>
+                                    <p class="meal-calories" id="meal-breakfast-kcal">380 kcal</p>
+                                    <p class="meal-desc-text" id="meal-breakfast-desc">Perfect balance of complex carbohydrates and healthy dietary fiber to keep you full and stable.</p>
+                                    <ul class="nutrients-breakdown">
+                                        <li><strong>Protein:</strong> <span id="meal-breakfast-prot">12g</span></li>
+                                        <li><strong>Carbs:</strong> <span id="meal-breakfast-carb">55g</span></li>
+                                        <li><strong>Fats:</strong> <span id="meal-breakfast-fat">8g</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Lunch Card -->
+                            <div class="meal-card glass-card">
+                                <div class="meal-header bg-lunch">
+                                    <h3>Lunch</h3>
+                                </div>
+                                <div class="meal-body">
+                                    <h4 id="meal-lunch-title">Grilled Chicken Salad</h4>
+                                    <p class="meal-calories" id="meal-lunch-kcal">450 kcal</p>
+                                    <p class="meal-desc-text" id="meal-lunch-desc">Lean protein with high-micronutrient leafy greens to aid muscle repair and post-op tissue recovery.</p>
+                                    <ul class="nutrients-breakdown">
+                                        <li><strong>Protein:</strong> <span id="meal-lunch-prot">35g</span></li>
+                                        <li><strong>Carbs:</strong> <span id="meal-lunch-carb">15g</span></li>
+                                        <li><strong>Fats:</strong> <span id="meal-lunch-fat">14g</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Dinner Card -->
+                            <div class="meal-card glass-card">
+                                <div class="meal-header bg-dinner">
+                                    <h3>Dinner</h3>
+                                </div>
+                                <div class="meal-body">
+                                    <h4 id="meal-dinner-title">Baked Salmon & Quinoa</h4>
+                                    <p class="meal-calories" id="meal-dinner-kcal">520 kcal</p>
+                                    <p class="meal-desc-text" id="meal-dinner-desc">Rich in omega-3 fatty acids which combat systemic inflammation and promote healthy cardiac activity.</p>
+                                    <ul class="nutrients-breakdown">
+                                        <li><strong>Protein:</strong> <span id="meal-dinner-prot">42g</span></li>
+                                        <li><strong>Carbs:</strong> <span id="meal-dinner-carb">38g</span></li>
+                                        <li><strong>Fats:</strong> <span id="meal-dinner-fat">20g</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Food Scanner Section -->
+            <div class="tab-content" id="tab-scanner">
+                <div class="detail-container">
+                    <div class="glass-card main-detail-card">
+                        <div class="card-header">
+                            <h2>AI Food Scanner</h2>
+                            <p>Verify if a food choice matches your diet by utilizing visual analysis</p>
+                        </div>
+
+                        <div class="scanner-grid">
+                            <!-- Left: Video feed or Fallbacks -->
+                            <div class="scanner-viewport-panel glass-card">
+                                <div class="scanner-viewport">
+                                    <!-- Camera Stream -->
+                                    <video id="videoFeed" autoplay playsinline class="video-preview hidden"></video>
+                                    
+                                    <!-- Rendered captured frame -->
+                                    <canvas id="photoCanvas" class="hidden"></canvas>
+                                    
+                                    <!-- Fallback / Static placeholder UI -->
+                                    <div class="viewport-placeholder" id="viewportPlaceholder">
+                                        <div class="placeholder-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                                        </div>
+                                        <p id="cameraStatusMsg">Camera starting...</p>
+                                        <button class="btn btn-primary btn-sm" onclick="startCamera()">Access Camera</button>
+                                    </div>
+
+                                    <!-- Scanning Laser Overlay -->
+                                    <div class="scan-laser hidden" id="scanLaser"></div>
+                                </div>
+
+                                <div class="scanner-actions">
+                                    <div style="display: flex; gap: 1rem; width: 100%; flex-wrap: wrap;">
+                                        <button class="btn btn-primary" id="captureBtn" onclick="captureAndAnalyze()" disabled style="flex: 1; min-width: 140px;">Capture & Analyze</button>
+                                        <button class="btn btn-secondary" onclick="triggerFileSelect()" style="flex: 1; min-width: 140px;">Upload Image File</button>
+                                    </div>
+                                    <input type="file" id="imageFileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                                    
+                                    <div class="alternative-inputs">
+                                        <span>Or choose from Demo Gallery to test scanner:</span>
+                                        <div class="demo-chips">
+                                            <button class="chip" onclick="simulateDemoFood('avocado_salad')">Avocado Salad</button>
+                                            <button class="chip" onclick="simulateDemoFood('pepperoni_pizza')">Pepperoni Pizza</button>
+                                            <button class="chip" onclick="simulateDemoFood('grilled_salmon')">Grilled Salmon</button>
+                                            <button class="chip" onclick="simulateDemoFood('glazed_donut')">Glazed Donut</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Report and Status -->
+                            <div class="scanner-results-panel glass-card">
+                                <h3>AI Analysis Output</h3>
+
+                                <!-- Ready State -->
+                                <div class="status-indicator-box ready" id="analysisReadyState">
+                                    <div class="pulse-indicator green"></div>
+                                    <span>AI Camera Agent is idle. Waiting for image input...</span>
+                                </div>
+
+                                <!-- Scanning/Loader State -->
+                                <div class="status-indicator-box hidden" id="analysisScanningState">
+                                    <div class="spinner"></div>
+                                    <div class="scanning-step-list">
+                                        <p class="scan-step font-weight-bold" id="step1">Initializing backend scanner connection...</p>
+                                        <p class="scan-step text-muted" id="step2">Uploading frame payload...</p>
+                                        <p class="scan-step text-muted" id="step3">Running AI computer vision assessment...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Result State -->
+                                <div class="analysis-report hidden" id="analysisResultState">
+                                    <div class="report-header" id="reportHeader">
+                                        <div class="verdict-icon">✓</div>
+                                        <div>
+                                            <h4 id="reportFoodTitle">Fresh Avocado Salad</h4>
+                                            <span class="badge" id="reportVerdictBadge">Approved</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="report-content">
+                                        <div class="nutrient-ribbon">
+                                            <div class="ribbon-item">
+                                                <small>Calories</small>
+                                                <strong id="reportCal">280 kcal</strong>
+                                            </div>
+                                            <div class="ribbon-item">
+                                                <small>Protein</small>
+                                                <strong id="reportProt">6g</strong>
+                                            </div>
+                                            <div class="ribbon-item">
+                                                <small>Carbs</small>
+                                                <strong id="reportCarbs">12g</strong>
+                                            </div>
+                                        </div>
+
+                                        <div class="nutrition-details">
+                                            <h5>Aura AI Assessment:</h5>
+                                            <p id="reportExplanation">This meal is rich in monounsaturated fats from avocado and micronutrients from fresh salad greens. Highly approved for post-recovery.</p>
+                                            
+                                            <div class="dietary-compliance" id="complianceBox">
+                                                <strong>Dietary Recommendation:</strong> Correct choice! Meets guidelines.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
