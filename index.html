@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Male Unhealthy Dashboard | Metabolic Recovery & Health Tracker</title>
+  <meta name="description" content="Personalized health, calorie, steps, hydration, nutrition, and condition-based specialist directory dashboard designed for men's metabolic health recovery.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-layout">
+
+    <!-- Top Sticky Navbar -->
+    <header class="top-navbar" id="mainNavbar">
+      <div class="brand-wrapper">
+        <div class="brand-icon">
+          <i class="fa-solid fa-heart-pulse"></i>
+        </div>
+        <div>
+          <h1 class="brand-title">
+            MALE HEALTH RECOVERY
+            <span class="brand-badge" id="riskLevelBadge">ACTION NEEDED</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Men's Health Recovery Score Badge -->
+        <div class="recovery-score-badge" id="recoveryScoreBtn" title="Your overall daily health recovery compliance score">
+          <div class="recovery-pulse"></div>
+          <div class="score-text-group">
+            <span class="score-label">Recovery Index</span>
+            <span class="score-val" id="topRecoveryScoreVal">84 / 100</span>
+          </div>
+        </div>
+
+        <!-- Date Selector -->
+        <div class="date-selector-group">
+          <button class="btn-secondary" id="prevDayBtn" title="Previous Day"><i class="fa-solid fa-chevron-left"></i></button>
+          <span id="currentDateDisplay" style="font-weight: 700; font-size: 13px; min-width: 120px; text-align: center;">Today, Aug 26</span>
+          <button class="btn-secondary" id="nextDayBtn" title="Next Day"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Theme Switcher -->
+        <button class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
+        </button>
+
+        <!-- Sound Chime Toggle -->
+        <button class="btn-icon" id="soundToggleBtn" title="Toggle Audio Feedback" aria-label="Toggle Audio">
+          <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+        </button>
+
+        <!-- Edit Profile & Vitals -->
+        <button class="btn-secondary" id="editProfileBtn">
+          <i class="fa-solid fa-user-gear"></i> Profile & Vitals
+        </button>
+
+        <!-- Export Medical Report -->
+        <button class="btn-primary" id="exportReportBtn">
+          <i class="fa-solid fa-file-medical"></i> Export Report
+        </button>
+      </div>
+    </header>
+
+    <!-- Health Vitals & Risk Warning Banner -->
+    <section class="glass-panel health-vitals-banner" id="vitalsBanner">
+      <div class="profile-identity">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80" alt="Marcus Vance" class="user-avatar" id="bannerAvatar">
+        <div class="user-meta">
+          <h2>
+            <span id="bannerUserName">Marcus Vance</span>
+            <span class="risk-tag" id="bannerRiskTag">METABOLIC FOCUS</span>
+          </h2>
+          <p class="user-subinfo" id="bannerDemographics">39 yrs • Male • 180 cm • 91.5 kg (Goal: 80 kg)</p>
+        </div>
+      </div>
+
+      <!-- BMI Box -->
+      <div class="vital-stat-box">
+        <div class="vital-label"><i class="fa-solid fa-weight-scale"></i> Body Mass (BMI)</div>
+        <div class="vital-val" id="vitalBmiVal">28.2 <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">kg/m²</span></div>
+        <span class="vital-status status-warning" id="vitalBmiStatus">Overweight</span>
+      </div>
+
+      <!-- Blood Pressure -->
+      <div class="vital-stat-box">
+        <div class="vital-label"><i class="fa-solid fa-heart-pulse"></i> Blood Pressure</div>
+        <div class="vital-val" id="vitalBpVal">138/88 <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">mmHg</span></div>
+        <span class="vital-status status-danger" id="vitalBpStatus">Pre-Hypertension</span>
+      </div>
+
+      <!-- Fasting Blood Sugar -->
+      <div class="vital-stat-box">
+        <div class="vital-label"><i class="fa-solid fa-droplet"></i> Fasting Glucose</div>
+        <div class="vital-val" id="vitalGlucoseVal">114 <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">mg/dL</span></div>
+        <span class="vital-status status-warning" id="vitalGlucoseStatus">Pre-Diabetic Range</span>
+      </div>
+
+      <!-- Triglycerides / Lipid -->
+      <div class="vital-stat-box">
+        <div class="vital-label"><i class="fa-solid fa-vial"></i> Triglycerides</div>
+        <div class="vital-val" id="vitalTriglyceridesVal">215 <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">mg/dL</span></div>
+        <span class="vital-status status-danger" id="vitalTriglyceridesStatus">Elevated Lipids</span>
+      </div>
+
+      <!-- Quick Action -->
+      <div class="vitals-action">
+        <button class="btn-chip" id="openConditionFinderQuickBtn" style="width: 100%; padding: 10px; background: rgba(168, 85, 247, 0.15); border-color: var(--accent-purple); color: #d8b4fe;">
+          <i class="fa-solid fa-user-doctor"></i> View Specialists
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 1: CORE 3 DAILY TARGETS -->
+    <div class="section-header-wrap">
+      <div>
+        <h2 class="section-title">
+          <span class="section-title-icon"><i class="fa-solid fa-bullseye" style="color: var(--accent-cyan);"></i></span>
+          Today's Core Targets
+        </h2>
+        <p class="section-subtitle">Real-time tracking of calories burned, step movement, and vital hydration targets</p>
+      </div>
+    </div>
+
+    <section class="core-targets-grid">
+
+      <!-- 1. Calories to Burn Today Card -->
+      <div class="glass-panel target-card calories-card" id="caloriesCard">
+        <div>
+          <div class="card-top-bar">
+            <span class="target-type-badge calories-badge">
+              <i class="fa-solid fa-fire-flame-curved"></i> Calories to Burn
+            </span>
+            <button class="btn-icon" id="openAddWorkoutModalBtn" title="Log Workout / Activity" style="width: 32px; height: 32px;">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+
+          <div class="target-card-body">
+            <div class="metric-numbers">
+              <div class="target-headline">Today's Target</div>
+              <div class="primary-stat">
+                <span id="calorieTargetVal">650</span>
+                <span class="stat-unit">kcal</span>
+              </div>
+
+              <div class="metric-breakdown-row">
+                <div class="breakdown-item">
+                  <span class="breakdown-label">Burned</span>
+                  <span class="breakdown-val highlight-burn" id="caloriesBurnedVal">380 kcal</span>
+                </div>
+                <div class="breakdown-item" style="border-left: 1px solid var(--border-color); padding-left: 10px;">
+                  <span class="breakdown-label">Remaining</span>
+                  <span class="breakdown-val highlight-remaining" id="caloriesRemainingVal">270 kcal</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SVG Circular Gauge -->
+            <div class="radial-progress-container">
+              <svg class="progress-ring" width="100" height="100">
+                <circle class="progress-ring-bg" stroke-width="8" fill="transparent" r="42" cx="50" cy="50" />
+                <circle class="progress-ring-circle" id="calorieProgressCircle" stroke="url(#calGrad)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50" />
+                <defs>
+                  <linearGradient id="calGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f97316" />
+                    <stop offset="100%" stop-color="#dc2626" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="ring-text-overlay">
+                <span class="ring-percent" id="caloriePercentVal">58%</span>
+                <span class="ring-subtext">Burned</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Log Chips -->
+        <div class="card-quick-actions">
+          <button class="btn-chip calories-chip" data-burn="100">+100 kcal (Walk)</button>
+          <button class="btn-chip calories-chip" data-burn="250">+250 kcal (HIIT)</button>
+          <button class="btn-chip calories-chip" data-burn="350">+350 kcal (Weights)</button>
+        </div>
+      </div>
+
+      <!-- 2. Steps Today Card -->
+      <div class="glass-panel target-card steps-card" id="stepsCard">
+        <div>
+          <div class="card-top-bar">
+            <span class="target-type-badge steps-badge">
+              <i class="fa-solid fa-shoe-prints"></i> Steps Today
+            </span>
+            <button class="btn-icon" id="openAddStepsModalBtn" title="Log Steps" style="width: 32px; height: 32px;">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+
+          <div class="target-card-body">
+            <div class="metric-numbers">
+              <div class="target-headline">Daily Step Goal</div>
+              <div class="primary-stat">
+                <span id="stepsTargetVal">10,000</span>
+                <span class="stat-unit">steps</span>
+              </div>
+
+              <div class="metric-breakdown-row">
+                <div class="breakdown-item">
+                  <span class="breakdown-label">Completed</span>
+                  <span class="breakdown-val highlight-steps" id="stepsCompletedVal">6,420</span>
+                </div>
+                <div class="breakdown-item" style="border-left: 1px solid var(--border-color); padding-left: 10px;">
+                  <span class="breakdown-label">Remaining</span>
+                  <span class="breakdown-val highlight-remaining" id="stepsRemainingVal">3,580</span>
+                </div>
+                <div class="breakdown-item" style="border-left: 1px solid var(--border-color); padding-left: 10px;">
+                  <span class="breakdown-label">Dist</span>
+                  <span class="breakdown-val" id="stepsDistanceVal">4.9 km</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SVG Circular Gauge -->
+            <div class="radial-progress-container">
+              <svg class="progress-ring" width="100" height="100">
+                <circle class="progress-ring-bg" stroke-width="8" fill="transparent" r="42" cx="50" cy="50" />
+                <circle class="progress-ring-circle" id="stepsProgressCircle" stroke="url(#stepGrad)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50" />
+                <defs>
+                  <linearGradient id="stepGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10b981" />
+                    <stop offset="100%" stop-color="#0d9488" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="ring-text-overlay">
+                <span class="ring-percent" id="stepsPercentVal">64%</span>
+                <span class="ring-subtext">Done</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Steps Chips -->
+        <div class="card-quick-actions">
+          <button class="btn-chip steps-chip" data-steps="500">+500 steps</button>
+          <button class="btn-chip steps-chip" data-steps="1500">+1,500 steps</button>
+          <button class="btn-chip steps-chip" data-steps="3000">+3,000 steps</button>
+        </div>
+      </div>
+
+      <!-- 3. Water Target Today Card -->
+      <div class="glass-panel target-card water-card" id="waterCard">
+        <div>
+          <div class="card-top-bar">
+            <span class="target-type-badge water-badge">
+              <i class="fa-solid fa-bottle-water"></i> Water Target Today
+            </span>
+            <button class="btn-icon" id="openCustomWaterBtn" title="Custom Water Amount" style="width: 32px; height: 32px;">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+
+          <div class="target-card-body">
+            <div class="metric-numbers">
+              <div class="target-headline">Hydration Target</div>
+              <div class="primary-stat">
+                <span id="waterTargetVal">3,500</span>
+                <span class="stat-unit">mL</span>
+              </div>
+
+              <div class="metric-breakdown-row">
+                <div class="breakdown-item">
+                  <span class="breakdown-label">Current Intake</span>
+                  <span class="breakdown-val highlight-water" id="waterCurrentVal">2,250 mL</span>
+                </div>
+                <div class="breakdown-item" style="border-left: 1px solid var(--border-color); padding-left: 10px;">
+                  <span class="breakdown-label">Remaining</span>
+                  <span class="breakdown-val highlight-remaining" id="waterRemainingVal">1,250 mL</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Water Flask Visual -->
+            <div class="water-flask-visual" id="waterFlask">
+              <div class="water-wave-layer" id="waterWaveLevel" style="height: 64%;"></div>
+              <div class="water-percent-overlay" id="waterPercentVal">64%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Water Log Chips -->
+        <div class="card-quick-actions">
+          <button class="btn-chip water-chip" data-water="250"><i class="fa-solid fa-glass-water"></i> +250 mL</button>
+          <button class="btn-chip water-chip" data-water="500"><i class="fa-solid fa-bottle-water"></i> +500 mL</button>
+          <button class="btn-chip water-chip" data-water="750"><i class="fa-solid fa-flask"></i> +750 mL</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: MEAL SUGGESTIONS & MEAL TRACKING -->
+    <div class="section-header-wrap">
+      <div>
+        <h2 class="section-title">
+          <span class="section-title-icon"><i class="fa-solid fa-utensils" style="color: var(--accent-emerald);"></i></span>
+          Metabolic Meal Suggestions
+        </h2>
+        <p class="section-subtitle">Clinically crafted meals designed to reverse fatty liver, lower triglycerides, and balance blood glucose</p>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-secondary" id="openCustomMealModalBtn">
+          <i class="fa-solid fa-plus"></i> Add Custom Meal
+        </button>
+        <div class="meal-filter-tabs">
+          <button class="meal-tab-btn active" data-filter="all">All</button>
+          <button class="meal-tab-btn" data-filter="breakfast">Breakfast</button>
+          <button class="meal-tab-btn" data-filter="lunch">Lunch</button>
+          <button class="meal-tab-btn" data-filter="snacks">Snacks</button>
+          <button class="meal-tab-btn" data-filter="dinner">Dinner</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Meals Grid -->
+    <div class="meal-suggestions-grid" id="mealSuggestionsContainer">
+      <!-- Populated dynamically by app.js -->
+    </div>
+
+    <!-- Today's Logged Meals Summary -->
+    <div class="today-logged-summary" id="todayLoggedSummaryWrap">
+      <div class="logged-header">
+        <h4><i class="fa-solid fa-clipboard-list" style="color: var(--accent-cyan);"></i> Today's Logged Meals (<span id="loggedCountDisplay">2</span> items)</h4>
+        <div style="font-size: 13px; color: var(--text-secondary);">
+          Total Intake: <strong style="color: var(--accent-flame); font-size: 15px;" id="totalIntakeCalories">960 kcal</strong>
+        </div>
+      </div>
+      <div class="logged-items-feed" id="loggedMealsFeed">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+    <!-- SECTION 3: FOOD PLATE PHOTO TRACKER -->
+    <div class="section-header-wrap" style="margin-top: 36px;">
+      <div>
+        <h2 class="section-title">
+          <span class="section-title-icon"><i class="fa-solid fa-camera" style="color: #38bdf8;"></i></span>
+          Food Plate Photo Scanner & Gallery
+        </h2>
+        <p class="section-subtitle">Take or upload a photo of your meal plate to verify portions and track nutritional quality</p>
+      </div>
+    </div>
+
+    <section class="food-plate-container">
+      <!-- Uploader Card -->
+      <div class="plate-uploader-card">
+        <div class="dropzone-area" id="foodDropzone">
+          <i class="fa-solid fa-cloud-arrow-up dropzone-icon" style="color: var(--accent-cyan);"></i>
+          <h4 class="dropzone-title">Upload Food Plate Photo</h4>
+          <p class="dropzone-sub">Drag & drop your meal photo here, or browse from device</p>
+          <input type="file" id="foodFileInput" accept="image/*" style="display: none;">
+        </div>
+
+        <div class="upload-action-buttons">
+          <button class="btn-secondary" id="browsePhotoBtn">
+            <i class="fa-solid fa-folder-open"></i> Browse File
+          </button>
+          <button class="btn-primary" id="openCameraModalBtn">
+            <i class="fa-solid fa-camera"></i> Take Photo
+          </button>
+        </div>
+
+        <!-- Meal Type Selector for Photo -->
+        <div class="meal-tag-selector">
+          <label>Assign to Meal Type:</label>
+          <div class="tag-select-options">
+            <button class="tag-pill-btn active" data-type="breakfast">Breakfast</button>
+            <button class="tag-pill-btn" data-type="lunch">Lunch</button>
+            <button class="tag-pill-btn" data-type="snacks">Snacks</button>
+            <button class="tag-pill-btn" data-type="dinner">Dinner</button>
+          </div>
+        </div>
+
+        <!-- Meal Name Input for Photo -->
+        <div class="form-group" style="margin-top: 14px; margin-bottom: 0;">
+          <label style="font-size: 11px;">Plate Description (Optional)</label>
+          <input type="text" id="photoMealNameInput" class="form-control" placeholder="e.g. Scrambled eggs with avocado" style="padding: 8px 12px; font-size: 13px;">
+        </div>
+      </div>
+
+      <!-- Food Plates Gallery Feed -->
+      <div class="plates-gallery-feed" id="platesGalleryFeed">
+        <!-- Populated dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- SECTION 4: DOCTORS & CLINICS DIRECTORY -->
+    <div class="section-header-wrap" style="margin-top: 36px;">
+      <div>
+        <h2 class="section-title">
+          <span class="section-title-icon"><i class="fa-solid fa-user-doctor" style="color: var(--accent-purple);"></i></span>
+          Specialist Doctors & Medical Clinics
+        </h2>
+        <p class="section-subtitle">Find verified cardiologists, hepatologists, endocrinologists & diagnostic centers tailored to your health conditions</p>
+      </div>
+    </div>
+
+    <section class="glass-panel" style="padding: 24px; margin-bottom: 30px;">
+      <!-- Search & Condition Selector -->
+      <div class="condition-search-bar">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon-pos"></i>
+          <input type="text" id="conditionSearchInput" placeholder="Search by disease, symptom, or doctor name (e.g. Fatty Liver, Hypertension, Testosterone, Diabetes)...">
+        </div>
+      </div>
+
+      <!-- Condition Pills Filter -->
+      <div class="conditions-pills-scroll" id="conditionsPillsContainer">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Condition Summary Card -->
+      <div id="selectedConditionSummary" style="margin-bottom: 20px; padding: 14px 18px; border-radius: var(--radius-md); background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25);">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Doctors and Clinics Grid -->
+      <div class="doctors-clinics-grid">
+        <!-- Doctors Column -->
+        <div>
+          <h3 style="font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-stethoscope" style="color: var(--accent-purple);"></i> Recommended Specialist Doctors
+          </h3>
+          <div id="doctorsListContainer">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Clinics Column -->
+        <div>
+          <h3 style="font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-hospital" style="color: var(--accent-cyan);"></i> Diagnostic Labs & Specialized Clinics
+          </h3>
+          <div id="clinicsListContainer">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: DAILY PROGRESS & ANALYTICS -->
+    <div class="section-header-wrap" style="margin-top: 36px;">
+      <div>
+        <h2 class="section-title">
+          <span class="section-title-icon"><i class="fa-solid fa-chart-line" style="color: var(--accent-flame);"></i></span>
+          Daily Progress & Health Trajectory
+        </h2>
+        <p class="section-subtitle">Track day-by-day consistency across calories, steps, water, and meal nutrition</p>
+      </div>
+
+      <div class="date-selector-group">
+        <button class="btn-chip" id="chartRange7Days" style="background: rgba(6, 182, 212, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">Past 7 Days</button>
+        <button class="btn-chip" id="chartRange14Days">Past 14 Days</button>
+        <button class="btn-chip" id="chartRange30Days">Past 30 Days</button>
+      </div>
+    </div>
+
+    <section class="progress-analytics-container">
+      <div class="chart-cards-grid">
+        <!-- Chart 1: Calories Burned vs Target -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title"><i class="fa-solid fa-fire" style="color: var(--accent-flame);"></i> Calorie Burn Trajectory</h4>
+            <span style="font-size: 11px; color: var(--text-secondary);">Target: 650 kcal</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="caloriesTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Daily Steps Performance -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title"><i class="fa-solid fa-person-walking" style="color: var(--accent-emerald);"></i> Step Activity Trajectory</h4>
+            <span style="font-size: 11px; color: var(--text-secondary);">Target: 10,000 steps</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="stepsTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Hydration Compliance -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title"><i class="fa-solid fa-droplet" style="color: #38bdf8;"></i> Daily Hydration Volume (mL)</h4>
+            <span style="font-size: 11px; color: var(--text-secondary);">Target: 3,500 mL</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="waterTrendChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Meal Calorie & Macro Balance -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4 class="chart-title"><i class="fa-solid fa-chart-pie" style="color: var(--accent-purple);"></i> Nutritional Intake & Recovery Score</h4>
+            <span style="font-size: 11px; color: var(--text-secondary);">Avg: 1,980 kcal</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="recoveryScoreTrendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak & Milestones Row -->
+      <div class="streak-milestones-row">
+        <div class="milestone-box">
+          <div class="milestone-icon" style="color: var(--accent-flame);"><i class="fa-solid fa-fire-burner"></i></div>
+          <div class="milestone-info">
+            <h5>Active Streak</h5>
+            <div class="milestone-val">6 Days In A Row</div>
+          </div>
+        </div>
+
+        <div class="milestone-box">
+          <div class="milestone-icon" style="color: var(--accent-emerald);"><i class="fa-solid fa-award"></i></div>
+          <div class="milestone-info">
+            <h5>Weekly Steps</h5>
+            <div class="milestone-val" id="weeklyStepsTotal">67,460 Steps</div>
+          </div>
+        </div>
+
+        <div class="milestone-box">
+          <div class="milestone-icon" style="color: #38bdf8;"><i class="fa-solid fa-heart-circle-check"></i></div>
+          <div class="milestone-info">
+            <h5>Total Water</h5>
+            <div class="milestone-val" id="weeklyWaterTotal">21.8 Liters</div>
+          </div>
+        </div>
+
+        <div class="milestone-box">
+          <div class="milestone-icon" style="color: var(--accent-purple);"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="milestone-info">
+            <h5>Metabolic Improvement</h5>
+            <div class="milestone-val">+18% Efficiency</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div> <!-- End .app-layout -->
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Log Custom Workout Modal -->
+  <div class="modal-backdrop" id="workoutModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-fire-flame-curved" style="color: var(--accent-flame);"></i> Log Workout / Calorie Burn</h3>
+        <button class="btn-close-modal" data-close="workoutModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Select Preset Workout</label>
+          <select id="workoutPresetSelect" class="form-control">
+            <option value="">-- Choose Workout Preset --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Workout Name</label>
+          <input type="text" id="workoutNameInput" class="form-control" placeholder="e.g. Morning Outdoor Jog">
+        </div>
+        <div class="form-group">
+          <label>Calories Burned (kcal)</label>
+          <input type="number" id="workoutCaloriesInput" class="form-control" placeholder="e.g. 300" min="10" max="3000">
+        </div>
+        <div class="form-group">
+          <label>Additional Steps (Optional)</label>
+          <input type="number" id="workoutStepsInput" class="form-control" placeholder="e.g. 3500" min="0" max="50000">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="workoutModal">Cancel</button>
+        <button class="btn-primary" id="saveWorkoutBtn">Add to Burned Today</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Log Steps Modal -->
+  <div class="modal-backdrop" id="stepsModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-shoe-prints" style="color: var(--accent-emerald);"></i> Log Step Count</h3>
+        <button class="btn-close-modal" data-close="stepsModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Steps to Add</label>
+          <input type="number" id="manualStepsInput" class="form-control" placeholder="e.g. 2000" min="50" max="100000">
+        </div>
+        <div class="form-group">
+          <label>Activity Note</label>
+          <input type="text" id="stepsNoteInput" class="form-control" placeholder="e.g. Evening walk in the park">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="stepsModal">Cancel</button>
+        <button class="btn-primary" id="saveStepsBtn">Add Steps</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Custom Water Modal -->
+  <div class="modal-backdrop" id="waterModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-droplet" style="color: #38bdf8;"></i> Log Custom Hydration</h3>
+        <button class="btn-close-modal" data-close="waterModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Water Volume (mL)</label>
+          <input type="number" id="customWaterInput" class="form-control" placeholder="e.g. 400" min="50" max="5000">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="waterModal">Cancel</button>
+        <button class="btn-primary" id="saveWaterBtn">Add Water</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Add Custom Meal Modal -->
+  <div class="modal-backdrop" id="customMealModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-utensils" style="color: var(--accent-emerald);"></i> Add Custom Meal</h3>
+        <button class="btn-close-modal" data-close="customMealModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Meal Type</label>
+          <select id="customMealTypeSelect" class="form-control">
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch" selected>Lunch</option>
+            <option value="snacks">Snack</option>
+            <option value="dinner">Dinner</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Meal Name</label>
+          <input type="text" id="customMealTitleInput" class="form-control" placeholder="e.g. Grilled Salmon Salad">
+        </div>
+        <div class="form-group">
+          <label>Estimated Calories (kcal)</label>
+          <input type="number" id="customMealCaloriesInput" class="form-control" placeholder="e.g. 450" min="10" max="3000">
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <div class="form-group">
+            <label>Protein (g)</label>
+            <input type="number" id="customMealProteinInput" class="form-control" placeholder="35">
+          </div>
+          <div class="form-group">
+            <label>Carbs (g)</label>
+            <input type="number" id="customMealCarbsInput" class="form-control" placeholder="20">
+          </div>
+          <div class="form-group">
+            <label>Fats (g)</label>
+            <input type="number" id="customMealFatsInput" class="form-control" placeholder="15">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="customMealModal">Cancel</button>
+        <button class="btn-primary" id="saveCustomMealBtn">Add Meal to Today</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Camera Photo Capture Modal -->
+  <div class="modal-backdrop" id="cameraModal">
+    <div class="modal-window" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-camera" style="color: #38bdf8;"></i> Take Food Plate Photo</h3>
+        <button class="btn-close-modal" data-close="cameraModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div id="cameraStreamWrap" style="position: relative; width: 100%; height: 320px; background: #000; border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <video id="cameraVideo" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+          <canvas id="cameraCanvas" style="display: none;"></canvas>
+          <div id="cameraStatusMsg" style="position: absolute; color: white; font-size: 13px; background: rgba(0,0,0,0.7); padding: 8px 14px; border-radius: var(--radius-sm);">
+            Initializing camera...
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">Ensure your food plate is well-lit for accurate AI nutritional evaluation.</p>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <button class="btn-secondary" id="switchCameraBtn"><i class="fa-solid fa-arrows-rotate"></i> Switch Camera</button>
+        <button class="btn-primary" id="capturePhotoBtn"><i class="fa-solid fa-camera"></i> Snap & Scan Plate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Doctor Appointment Booking Modal -->
+  <div class="modal-backdrop" id="bookDoctorModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-calendar-check" style="color: var(--accent-purple);"></i> Book Medical Consultation</h3>
+        <button class="btn-close-modal" data-close="bookDoctorModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div id="bookingDoctorHeader" style="display: flex; gap: 14px; align-items: center; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <!-- Doctor mini info populated dynamically -->
+        </div>
+        <div class="form-group">
+          <label>Select Preferred Slot</label>
+          <select id="bookingSlotSelect" class="form-control">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Consultation Type</label>
+          <select id="bookingTypeSelect" class="form-control">
+            <option value="In-Person Clinical Visit">In-Person Clinic Visit</option>
+            <option value="Secure HD Telehealth Video">Secure HD Telehealth Video</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Chief Health Concern / Symptoms</label>
+          <textarea id="bookingNotesInput" class="form-control" rows="3" placeholder="Describe symptoms (e.g. elevated ALT liver enzymes, high BP readings, morning fatigue, glucose spikes)..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="bookDoctorModal">Cancel</button>
+        <button class="btn-primary" id="confirmBookingBtn" style="background: linear-gradient(135deg, #a855f7, #6366f1);">Confirm Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Profile & Vitals Modal -->
+  <div class="modal-backdrop" id="profileModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-gear" style="color: var(--accent-cyan);"></i> Edit Health Profile & Targets</h3>
+        <button class="btn-close-modal" data-close="profileModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="profNameInput" class="form-control" value="Marcus Vance">
+          </div>
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" id="profAgeInput" class="form-control" value="39">
+          </div>
+          <div class="form-group">
+            <label>Height (cm)</label>
+            <input type="number" id="profHeightInput" class="form-control" value="180">
+          </div>
+          <div class="form-group">
+            <label>Current Weight (kg)</label>
+            <input type="number" id="profWeightInput" class="form-control" value="91.5" step="0.1">
+          </div>
+          <div class="form-group">
+            <label>Blood Pressure</label>
+            <input type="text" id="profBpInput" class="form-control" value="138/88 mmHg">
+          </div>
+          <div class="form-group">
+            <label>Fasting Glucose (mg/dL)</label>
+            <input type="number" id="profGlucoseInput" class="form-control" value="114">
+          </div>
+        </div>
+
+        <h4 style="font-size: 13px; text-transform: uppercase; color: var(--text-muted); margin: 16px 0 10px 0;">Daily Target Goals</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+          <div class="form-group">
+            <label>Calorie Burn Goal</label>
+            <input type="number" id="profCalorieTargetInput" class="form-control" value="650">
+          </div>
+          <div class="form-group">
+            <label>Step Goal</label>
+            <input type="number" id="profStepTargetInput" class="form-control" value="10000">
+          </div>
+          <div class="form-group">
+            <label>Water Goal (mL)</label>
+            <input type="number" id="profWaterTargetInput" class="form-control" value="3500">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="profileModal">Cancel</button>
+        <button class="btn-primary" id="saveProfileBtn">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Printable Medical Report Modal -->
+  <div class="modal-backdrop" id="reportModal">
+    <div class="modal-window" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-medical" style="color: var(--accent-cyan);"></i> Men's Health Recovery Medical Summary</h3>
+        <button class="btn-close-modal" data-close="reportModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="printableReportContent">
+        <!-- Generated dynamically for export -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="reportModal">Close</button>
+        <button class="btn-primary" id="printReportBtn"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- App Logic Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
