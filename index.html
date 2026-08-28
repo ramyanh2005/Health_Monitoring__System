@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlowFemme - Female Wellness & Fitness Hub ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    :root {
+      --primary: #f43f5e;
+      --lavender: #8b5cf6;
+      --bg: linear-gradient(135deg, #fdf4f5 0%, #f5f3ff 50%, #f0fdf4 100%);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .landing-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      padding: 3.5rem 2.5rem;
+      max-width: 580px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px -10px rgba(236, 72, 153, 0.15), 0 12px 24px -10px rgba(139, 92, 246, 0.12);
+    }
+    .logo-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fb7185 0%, #8b5cf6 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35);
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      margin-bottom: 0.8rem;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      color: #64748b;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .features-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 2.2rem;
+    }
+    .feature-pill {
+      background: #fdf2f8;
+      color: #f43f5e;
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-enter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 1rem 1.8rem;
+      background: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 100%);
+      color: #fff;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(244, 63, 94, 0.35);
+      transition: all 0.25s ease;
+    }
+    .btn-enter:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(244, 63, 94, 0.45);
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-card">
+    <div class="logo-badge"><i class="fa-solid fa-spa"></i></div>
+    <h1>Welcome to <span>GlowFemme</span></h1>
+    <p>Your personalized positive lifestyle, fitness, nutrition, cycle balance, and hydration wellness dashboard.</p>
+    
+    <div class="features-pill-row">
+      <div class="feature-pill"><i class="fa-solid fa-fire"></i> Calories & Steps</div>
+      <div class="feature-pill"><i class="fa-solid fa-glass-water"></i> Hydration</div>
+      <div class="feature-pill"><i class="fa-solid fa-heart"></i> Flo Cycle</div>
+      <div class="feature-pill"><i class="fa-solid fa-bowl-food"></i> Food Plates</div>
+      <div class="feature-pill"><i class="fa-solid fa-wind"></i> 4-7-8 Breathe</div>
+    </div>
+
+    <a href="healthy-dashboard.html" class="btn-enter">
+      Open Wellness Dashboard <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
+</body>
+</html>
