@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Female Wellness & Fitness Dashboard ✨</title>
+  <!-- Google Fonts: Outfit (modern feminine headers) & Inter (crisp body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="assets/css/healthy.css" />
+</head>
+<body>
+
+  <!-- SVG Gradient Definitions -->
+  <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f43f5e" />
+        <stop offset="50%" stop-color="#8b5cf6" />
+        <stop offset="100%" stop-color="#38bdf8" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- TOP NAVBAR -->
+  <header class="navbar">
+    <a href="healthy-dashboard.html" class="nav-brand">
+      <div class="brand-icon"><i class="fa-solid fa-spa"></i></div>
+      <div class="brand-name">GlowFemme Wellness</div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#overview" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="#fitness" class="nav-link"><i class="fa-solid fa-person-running"></i> Fitness</a></li>
+      <li><a href="#nutrition" class="nav-link"><i class="fa-solid fa-bowl-food"></i> Nutrition</a></li>
+      <li><a href="#menstrual" class="nav-link"><i class="fa-solid fa-heart"></i> Cycle Balance</a></li>
+      <li><a href="#mindfulness" class="nav-link"><i class="fa-solid fa-moon"></i> Sleep & Mind</a></li>
+      <li><a href="#reports" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a></li>
+    </ul>
+
+    <div class="nav-user">
+      <div class="quick-pill">
+        <i class="fa-solid fa-droplet" style="color: var(--soft-blue);"></i> 1.75L Hydrated
+      </div>
+      <div class="user-avatar-btn" onclick="openProfileModal()" title="View & Edit Profile">
+        <img id="nav-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Sophia Profile" />
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN DASHBOARD CONTAINER -->
+  <main class="container" id="overview">
+
+    <!-- HERO GREETING & MOTIVATION -->
+    <section class="hero-banner">
+      <div class="hero-greeting">
+        <h1>Good Morning, <span id="header-user-name">Sophia</span>! 🌸</h1>
+        <p class="hero-quote">
+          <i class="fa-solid fa-quote-left" style="color: var(--primary-pink); opacity: 0.6;"></i>
+          "Honor your body, nurture your mind, and radiate positive energy today."
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-hero btn-hero-primary" onclick="store.addWater(250)">
+          <i class="fa-solid fa-plus"></i> +250ml Water
+        </button>
+        <button class="btn-hero btn-hero-secondary" onclick="openPhotoUploadModal()">
+          <i class="fa-solid fa-camera"></i> Snap Food Plate
+        </button>
+        <button class="btn-hero btn-hero-secondary" onclick="toggleBreathing()">
+          <i class="fa-solid fa-wind"></i> 4-7-8 Breathe
+        </button>
+      </div>
+    </section>
+
+    <!-- ROW 1: WELLNESS SCORE & TODAY'S 3 KEY METRICS -->
+    <div class="grid-4">
+      <!-- 1. Daily Wellness Score -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-pink"><i class="fa-solid fa-sparkles"></i></div>
+            Wellness Score
+          </div>
+          <span class="quick-pill" style="font-size:0.75rem;">Optimal</span>
+        </div>
+        <div class="wellness-score-box">
+          <div class="score-ring-container">
+            <svg class="score-ring-svg" viewBox="0 0 140 140">
+              <circle class="score-ring-bg" cx="70" cy="70" r="60"></circle>
+              <circle id="score-ring-circle" class="score-ring-progress" cx="70" cy="70" r="60"></circle>
+            </svg>
+            <div class="score-inner-text">
+              <span class="score-val" id="val-wellness-score">92</span>
+              <span class="score-label">Points</span>
+            </div>
+          </div>
+        </div>
+        <div class="progress-meta" style="margin-top: 14px; text-align: center; justify-content: center; color: var(--mint); font-weight: 700;">
+          <i class="fa-solid fa-arrow-trend-up" style="margin-right: 4px;"></i> +5% higher than last week!
+        </div>
+      </section>
+
+      <!-- 2. Calories to Burn Today -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-peach"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            Calories Burned
+          </div>
+          <button class="card-action-btn" onclick="store.burnCalories(50)">+50 kcal</button>
+        </div>
+        <div>
+          <span class="metric-main-val" id="val-cal-burned">450</span>
+          <span class="metric-unit">/ 600 kcal</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div id="bar-cal-progress" class="progress-bar-fill" style="width: 75%; background: var(--peach-gradient);"></div>
+          </div>
+          <div class="progress-meta">
+            <span>Remaining</span>
+            <strong id="val-cal-remaining">150 kcal</strong>
+          </div>
+        </div>
+        <div class="metric-sub-row">
+          <span>Target: <strong>600 kcal</strong></span>
+          <span>Status: <strong style="color:var(--mint);">On Track 🔥</strong></span>
+        </div>
+      </section>
+
+      <!-- 3. Steps Today -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-lavender"><i class="fa-solid fa-shoe-prints"></i></div>
+            Steps Today
+          </div>
+          <button class="card-action-btn" onclick="store.addSteps(500)">+500 steps</button>
+        </div>
+        <div>
+          <span class="metric-main-val" id="val-steps">8,420</span>
+          <span class="metric-unit">/ 10k</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div id="bar-steps-progress" class="progress-bar-fill" style="width: 84%; background: var(--lavender-gradient);"></div>
+          </div>
+          <div class="progress-meta">
+            <span>Distance: <strong id="val-distance">6.1 km</strong></span>
+            <span id="val-steps-remaining">1,580 to go</span>
+          </div>
+        </div>
+        <div class="metric-sub-row">
+          <span>Active time: <strong>54 mins</strong></span>
+          <span>Pace: <strong>5.2 km/h</strong></span>
+        </div>
+      </section>
+
+      <!-- 4. Water Target Today -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-blue"><i class="fa-solid fa-glass-water-droplet"></i></div>
+            Hydration Target
+          </div>
+          <button class="card-action-btn" onclick="store.addWater(-250)" title="Decrease">Undo</button>
+        </div>
+        <div>
+          <span class="metric-main-val" id="val-water">1.75 L</span>
+          <span class="metric-unit">/ 2.50 L</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div id="bar-water-progress" class="progress-bar-fill" style="width: 70%; background: var(--blue-gradient);"></div>
+          </div>
+          <div class="progress-meta">
+            <span>Remaining</span>
+            <strong id="val-water-remaining">0.75 L required</strong>
+          </div>
+        </div>
+        <div class="water-controls">
+          <button class="btn-water" onclick="store.addWater(250)">+250 ml</button>
+          <button class="btn-water" onclick="store.addWater(500)">+500 ml</button>
+          <button class="btn-water" onclick="store.addWater(1000)">+1.0 L</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ROW 2: MENSTRUAL WELLNESS (FLO STYLE) & FITNESS STUDIO -->
+    <div class="grid-2" id="menstrual">
+      <!-- Menstrual & Hormone Balance (Flo App Style) -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-pink"><i class="fa-solid fa-feather-pointed"></i></div>
+            Menstrual Wellness & Cycle
+          </div>
+          <span class="cycle-status-pill" id="val-cycle-phase">Ovulation Window 🌸</span>
+        </div>
+        <div class="cycle-card-body">
+          <div class="cycle-circle-widget">
+            <span class="cycle-phase-tag">Current Cycle</span>
+            <span class="cycle-day-num" id="val-cycle-day">Day 14</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">High Fertility Window</span>
+          </div>
+
+          <div class="cycle-phases-bar">
+            <div class="phase-segment" style="background:#f43f5e;" title="Menstruation (Days 1-5)"></div>
+            <div class="phase-segment" style="background:#fb7185;" title="Follicular (Days 6-12)"></div>
+            <div class="phase-segment active" style="background:#a855f7;" title="Ovulation (Days 13-16)"></div>
+            <div class="phase-segment" style="background:#38bdf8;" title="Luteal (Days 17-28)"></div>
+          </div>
+          <div class="phase-labels">
+            <span>Menstrual</span>
+            <span>Follicular</span>
+            <span style="color:var(--lavender); font-weight:700;">Ovulation</span>
+            <span>Luteal</span>
+          </div>
+
+          <div class="cycle-tip-box">
+            <strong>🌸 Hormone & Energy Insight:</strong>
+            <p id="val-cycle-tip" style="margin-top:2px;">Your estrogen is peaking! Ideal time for high-energy dance, strength workouts, and creative vitality!</p>
+          </div>
+
+          <div class="metric-sub-row" style="width: 100%;">
+            <span>Next Period: <strong id="val-next-period">In 14 Days</strong></span>
+            <span>Mood: <strong>Radiant & Focused ✨</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fitness & Workout Studio (Nike Training Club Style) -->
+      <section class="card" id="fitness">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-lavender"><i class="fa-solid fa-dumbbell"></i></div>
+            Fitness Studio & Activities
+          </div>
+          <span class="quick-pill" style="background:var(--mint-light); color:var(--mint); border-color:var(--mint);">
+            🔥 5-Day Active Streak
+          </span>
+        </div>
+
+        <!-- Activity Filter Chips -->
+        <div class="activity-chips">
+          <button class="activity-chip active" onclick="selectActivity('Vinyasa Yoga', this)"><i class="fa-solid fa-spa"></i> Yoga</button>
+          <button class="activity-chip" onclick="selectActivity('Mat Pilates', this)"><i class="fa-solid fa-person-praying"></i> Pilates</button>
+          <button class="activity-chip" onclick="selectActivity('Dance Cardio', this)"><i class="fa-solid fa-music"></i> Dance</button>
+          <button class="activity-chip" onclick="selectActivity('Power Walking', this)"><i class="fa-solid fa-person-walking"></i> Walking</button>
+          <button class="activity-chip" onclick="selectActivity('Outdoor Run', this)"><i class="fa-solid fa-person-running"></i> Running</button>
+          <button class="activity-chip" onclick="selectActivity('Sculpt & Strength', this)"><i class="fa-solid fa-dumbbell"></i> Strength</button>
+          <button class="activity-chip" onclick="selectActivity('Full Stretch', this)"><i class="fa-solid fa-child-reaching"></i> Stretch</button>
+          <button class="activity-chip" onclick="selectActivity('Spin Cycling', this)"><i class="fa-solid fa-bicycle"></i> Cycling</button>
+        </div>
+
+        <!-- Workout Live Tracker Box -->
+        <div class="workout-live-box">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--lavender); font-weight: 700; text-transform: uppercase;">Active Session</div>
+            <h3 id="selected-activity-label" style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--text-main);">Vinyasa Yoga Flow</h3>
+            <div id="workout-live-cal" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">0 kcal burned</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="workout-timer-val" id="workout-timer-val">00:00</div>
+            <button class="btn-timer-toggle" id="btn-timer-toggle" onclick="toggleWorkoutTimer()" title="Start/Pause Workout">
+              <i class="fa-solid fa-play"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="metric-sub-row" style="margin-top: 14px;">
+          <span>Weekly Workouts: <strong>4 / 5 completed</strong></span>
+          <span>Total Active Mins: <strong>210 mins</strong></span>
+        </div>
+      </section>
+    </div>
+
+    <!-- ROW 3: NUTRITION & FOOD PLATE PHOTO -->
+    <div class="grid-2-1" id="nutrition">
+      <!-- Nutrition & Suggested Meals -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-mint"><i class="fa-solid fa-carrot"></i></div>
+            Nutrition & Daily Meal Suggestions
+          </div>
+          <button class="btn-hero-primary" style="padding: 6px 14px; font-size: 0.82rem;" onclick="openAddMealModal()">
+            <i class="fa-solid fa-plus"></i> Add Meal
+          </button>
+        </div>
+
+        <!-- Daily Macronutrients -->
+        <div class="nutrition-macros">
+          <div class="macro-box">
+            <div class="macro-val" id="macro-calories" style="color: var(--primary-pink);">1620 / 2000</div>
+            <div class="macro-name">Calories (kcal)</div>
+          </div>
+          <div class="macro-box">
+            <div class="macro-val" id="macro-protein" style="color: var(--lavender);">82g / 95g</div>
+            <div class="macro-name">Protein</div>
+          </div>
+          <div class="macro-box">
+            <div class="macro-val" id="macro-carbs" style="color: var(--peach);">175g / 210g</div>
+            <div class="macro-name">Carbs</div>
+          </div>
+          <div class="macro-box">
+            <div class="macro-val" id="macro-fats" style="color: var(--mint);">48g / 58g</div>
+            <div class="macro-name">Healthy Fats</div>
+          </div>
+        </div>
+
+        <!-- Meal Suggestions Grid with Add Meal -->
+        <div class="meal-cards-grid" id="meals-container">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Food Plate Photo Uploader & Gallery -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-peach"><i class="fa-solid fa-camera-retro"></i></div>
+            Today's Food Plates
+          </div>
+          <button class="card-action-btn" onclick="openPhotoUploadModal()">+ Upload</button>
+        </div>
+
+        <!-- Clickable Photo Upload Trigger -->
+        <div class="food-photo-zone" onclick="openPhotoUploadModal()">
+          <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--primary-pink); margin-bottom: 6px;"></i>
+          <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">Snap or Upload Meal Photo</p>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Track your healthy plate visually!</span>
+        </div>
+
+        <!-- Food Plate Gallery -->
+        <div class="food-gallery" id="food-plate-gallery">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </section>
+    </div>
+
+    <!-- ROW 4: SLEEP, MINDFULNESS/MOOD & HEALTHY HABITS -->
+    <div class="grid-3" id="mindfulness">
+      <!-- 1. Sleep & Recovery -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-lavender"><i class="fa-solid fa-moon"></i></div>
+            Sleep & Recovery
+          </div>
+          <span class="quick-pill" style="background:var(--lavender-light); color:var(--lavender);">92% Deep Rest</span>
+        </div>
+        <div>
+          <span class="metric-main-val" id="val-sleep-hours">8.2 hrs</span>
+          <span class="metric-unit">Last Night</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 88%; background: var(--lavender-gradient);"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="val-sleep-score">92% Sleep Quality</span>
+            <span>Target: 8.0 hrs</span>
+          </div>
+        </div>
+        <div class="metric-sub-row">
+          <span id="val-sleep-times">🌙 10:45 PM - ☀️ 07:00 AM</span>
+          <span>Deep Sleep: <strong>2h 15m</strong></span>
+        </div>
+      </section>
+
+      <!-- 2. Mood & 4-7-8 Breathing -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-mint"><i class="fa-solid fa-spa"></i></div>
+            Mindfulness & Breathing
+          </div>
+          <span class="card-action-btn" onclick="toggleBreathing()">Guide</span>
+        </div>
+
+        <div class="breathe-container">
+          <div class="breathe-circle" id="breathe-circle" onclick="toggleBreathing()">
+            <span id="breathe-text">Start Breath 🌸</span>
+          </div>
+        </div>
+
+        <!-- Mood Selector -->
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-top: 6px;">How are you feeling?</div>
+        <div class="mood-selector">
+          <button class="mood-btn selected" onclick="setMoodSelection('Radiant', this)">🌟<span>Radiant</span></button>
+          <button class="mood-btn" onclick="setMoodSelection('Calm', this)">🧘‍♀️<span>Calm</span></button>
+          <button class="mood-btn" onclick="setMoodSelection('Happy', this)">😊<span>Happy</span></button>
+          <button class="mood-btn" onclick="setMoodSelection('Energetic', this)">⚡<span>Active</span></button>
+          <button class="mood-btn" onclick="setMoodSelection('Tired', this)">🌙<span>Resting</span></button>
+        </div>
+      </section>
+
+      <!-- 3. Healthy Habits & Streaks -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-peach"><i class="fa-solid fa-circle-check"></i></div>
+            Healthy Habits Streaks
+          </div>
+          <span class="quick-pill" style="background:var(--peach-light); color:var(--peach);">🔥 14d Glow</span>
+        </div>
+
+        <div class="habits-list" id="habits-container">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </section>
+    </div>
+
+    <!-- ROW 5: BMI & FITNESS BODY COMPOSITION + ACHIEVEMENTS BADGES -->
+    <div class="grid-2">
+      <!-- BMI Fitness Gauge -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-blue"><i class="fa-solid fa-weight-scale"></i></div>
+            BMI & Healthy Weight Fitness
+          </div>
+          <span class="quick-pill" style="background:var(--mint-light); color:var(--mint); border-color:var(--mint);">
+            Healthy Balance ✨
+          </span>
+        </div>
+
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span class="metric-main-val" id="val-bmi">20.7</span>
+          <span class="metric-unit">BMI • Optimal Vitality</span>
+        </div>
+
+        <!-- Aesthetic Gradient BMI Meter -->
+        <div class="bmi-visual-meter">
+          <div class="bmi-bar-gradient"></div>
+          <div class="bmi-marker" id="bmi-marker-pin" style="left: 42%;"></div>
+        </div>
+        <div class="bmi-legend">
+          <span>Active Light</span>
+          <span style="color: var(--mint); font-weight: 700;">Healthy Balance (18.5 - 24.9)</span>
+          <span>Athletic Strength</span>
+        </div>
+
+        <div class="metric-sub-row" style="margin-top: 18px;">
+          <span>Current: <strong>58.5 kg</strong></span>
+          <span>Target Goal: <strong>56.0 kg</strong></span>
+          <span id="val-weight-status" style="color: var(--primary-pink); font-weight: 700;">2.5 kg to healthy goal</span>
+        </div>
+      </section>
+
+      <!-- Achievements & Badges -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-title-icon icon-pink"><i class="fa-solid fa-trophy"></i></div>
+            Wellness Achievements
+          </div>
+          <span class="quick-pill" style="background:var(--pink-light); color:var(--primary-pink);">6 Unlocked</span>
+        </div>
+
+        <div class="badges-grid">
+          <div class="badge-item">
+            <div class="badge-icon">🏅</div>
+            <div class="badge-name">10K Steps Queen</div>
+            <div class="badge-desc">7 Days Hit</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">💧</div>
+            <div class="badge-name">Hydra Glow</div>
+            <div class="badge-desc">2.5L Water Streak</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">🧘‍♀️</div>
+            <div class="badge-name">Zen Master</div>
+            <div class="badge-desc">10 Yoga Sessions</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">🥗</div>
+            <div class="badge-name">Nutri Beauty</div>
+            <div class="badge-desc">Clean Meals Log</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">😴</div>
+            <div class="badge-name">Sleep Champion</div>
+            <div class="badge-desc">8h Rest Hit</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-icon">🌸</div>
+            <div class="badge-name">Cycle Harmony</div>
+            <div class="badge-desc">In Sync with Flo</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ROW 6: INTERACTIVE REPORTS & CHARTS -->
+    <section class="card" id="reports">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-title-icon icon-lavender"><i class="fa-solid fa-chart-column"></i></div>
+          Wellness & Fitness Analytics
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button class="activity-chip report-tab-btn active" onclick="switchReportTab('weekly', this)">Weekly</button>
+          <button class="activity-chip report-tab-btn" onclick="switchReportTab('monthly', this)">Monthly</button>
+          <button class="activity-chip report-tab-btn" onclick="switchReportTab('yearly', this)">Yearly</button>
+        </div>
+      </div>
+      <div style="height: 280px; position: relative;">
+        <canvas id="reportsChart"></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- 1. Add Meal Modal -->
+  <div class="modal-overlay" id="modal-add-meal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🥗 Add Meal to Log</h3>
+        <button class="btn-close-modal" onclick="closeAddMealModal()">&times;</button>
+      </div>
+      <form id="form-add-meal" onsubmit="handleAddMealSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Meal Type</label>
+          <select id="meal-type-select" class="form-select">
+            <option value="Breakfast">🍳 Breakfast</option>
+            <option value="Lunch">🥗 Lunch</option>
+            <option value="Snacks">🍓 Snacks</option>
+            <option value="Dinner">🍲 Dinner</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Meal Name & Ingredients</label>
+          <input type="text" id="meal-input-name" class="form-input" placeholder="e.g. Avocado Toast with chia seeds" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estimated Calories (kcal)</label>
+          <input type="number" id="meal-input-cal" class="form-input" placeholder="e.g. 350" required />
+        </div>
+        <button type="submit" class="btn-submit">Add to Meal Plan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Photo Upload Modal -->
+  <div class="modal-overlay" id="modal-photo-upload">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">📸 Upload Food Plate Photo</h3>
+        <button class="btn-close-modal" onclick="closePhotoUploadModal()">&times;</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Upload from Device</label>
+        <input type="file" accept="image/*" class="form-input" onchange="handlePhotoUpload(event)" />
+      </div>
+      <div style="text-align:center; margin: 10px 0; color:var(--text-muted); font-size:0.8rem;">— OR ENTER IMAGE URL —</div>
+      <form id="form-photo-url" onsubmit="handlePhotoUrlSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Image Web URL</label>
+          <input type="url" id="photo-url-input" class="form-input" placeholder="https://..." required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Caption / Calorie Tag</label>
+          <input type="text" id="photo-tag-input" class="form-input" placeholder="e.g. Fresh Mango Chia Bowl • 280 kcal" />
+        </div>
+        <button type="submit" class="btn-submit">Save Plate Photo</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Profile Modal -->
+  <div class="modal-overlay" id="modal-profile">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">👤 Your Wellness Profile</h3>
+        <button class="btn-close-modal" onclick="closeProfileModal()">&times;</button>
+      </div>
+      <form onsubmit="handleProfileSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="prof-name" class="form-input" required />
+        </div>
+        <div class="form-group" style="display:flex; gap:10px;">
+          <div style="flex:1;">
+            <label class="form-label">Age</label>
+            <input type="number" id="prof-age" class="form-input" required />
+          </div>
+          <div style="flex:1;">
+            <label class="form-label">Height (cm)</label>
+            <input type="number" id="prof-height" class="form-input" required />
+          </div>
+        </div>
+        <div class="form-group" style="display:flex; gap:10px;">
+          <div style="flex:1;">
+            <label class="form-label">Weight (kg)</label>
+            <input type="number" step="0.1" id="prof-weight" class="form-input" required />
+          </div>
+          <div style="flex:1;">
+            <label class="form-label">Target Weight (kg)</label>
+            <input type="number" step="0.1" id="prof-target" class="form-input" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Activity Level</label>
+          <select id="prof-activity" class="form-select">
+            <option value="Lightly Active">Lightly Active</option>
+            <option value="Moderately Active">Moderately Active</option>
+            <option value="Very Active">Very Active (Athlete)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-submit">Save Profile Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT ENGINE -->
+  <script src="assets/js/wellness.js"></script>
+</body>
+</html>
